@@ -429,6 +429,13 @@ class DeployTest(GameOpsTest):
         self.assertEqual(self.calls, [])
         self.assertEqual(self.worktrees(), 1)
 
+    def test_missing_hostinger_cli_blocks_before_building(self):
+        with patch.object(gameops.shutil, "which", return_value=None):
+            report = gameops.deploy(self.hub, self.modules, "alpha")
+        self.assertIn("CLI hostinger ausente", "\n".join(report["blocking"]))
+        self.assertEqual(report["steps"], [])
+        self.assertEqual(self.worktrees(), 1)
+
     def test_module_without_deploy_or_with_unknown_keys_is_refused(self):
         with self.assertRaisesRegex(ValueError, "sem deploy"):
             gameops.deploy(self.hub, [dict(self.modules[0], deploy=None)], "alpha")

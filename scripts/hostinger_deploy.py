@@ -27,7 +27,7 @@ import urllib.request
 import zipfile
 
 CHUNK = 16 * 1024 * 1024
-SKIP = {".DS_Store"}
+SKIP = {".DS_Store", ".gitignore", ".gitattributes", ".gitmodules", ".vercelignore", ".npmrc", ".nvmrc"}
 PRIVATE_DIRS = {".git", "node_modules", ".vercel"}
 
 BASE = """# Gerado de {src} para Hostinger (LiteSpeed). Não editar à mão.

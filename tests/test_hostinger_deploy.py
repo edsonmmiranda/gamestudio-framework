@@ -85,7 +85,7 @@ class BuildTests(unittest.TestCase):
             self.write(rel)
         self.write(".vercelignore", "# comentário\ndocs/\nAGENTS.md\n*.psd\n")
         names = [p.relative_to(self.project).as_posix() for p in deploy.build_files(self.project, self.project)]
-        self.assertEqual(names, [".vercelignore", "index.html", "js/game.js"])
+        self.assertEqual(names, ["index.html", "js/game.js"])
         self.write("dist/index.html")
         self.write("dist/docs/manual.md")
         dist_names = [p.relative_to(self.project / "dist").as_posix()

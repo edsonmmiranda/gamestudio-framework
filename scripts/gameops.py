@@ -780,6 +780,10 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
     head = run_git(repo, "rev-parse", "HEAD")
     report = {"repository": label, "domain": config["domain"], "commit": head[:7], "mode": "dry-run" if dry_run else "deploy",
               "blocking": [], "info": [], "steps": [], "result": None}
+    if publish is None and not dry_run and shutil.which("hostinger") is None:
+        report["blocking"].append("CLI hostinger ausente nesta máquina: brew install hostinger/tap/hostinger e "
+                                  "hostinger login (o envio usa a sessão dela; nenhum token fica no workspace)")
+        return report
     upstream = publish_range(repo)
     if not (upstream and is_ancestor(repo, head, upstream)):
         message = f"HEAD {head[:7]} ainda não está em {upstream or 'origin'}; publique o commit antes do deploy"
