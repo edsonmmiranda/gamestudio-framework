@@ -79,6 +79,19 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(sorted(z.namelist()), [".htaccess", "assets/a.js", "index.html"])
             self.assertEqual(z.read(".htaccess"), b"# gerado")
 
+    def test_project_root_build_never_ships_git_env_dependencies_or_ignored_files(self):
+        for rel in ("index.html", "js/game.js", ".git", ".env", ".env.local", "node_modules/x/i.js",
+                    ".vercel/project.json", "docs/notas.md", "AGENTS.md", "art/fonte.psd"):
+            self.write(rel)
+        self.write(".vercelignore", "# comentário\ndocs/\nAGENTS.md\n*.psd\n")
+        names = [p.relative_to(self.project).as_posix() for p in deploy.build_files(self.project, self.project)]
+        self.assertEqual(names, [".vercelignore", "index.html", "js/game.js"])
+        self.write("dist/index.html")
+        self.write("dist/docs/manual.md")
+        dist_names = [p.relative_to(self.project / "dist").as_posix()
+                      for p in deploy.build_files(self.project / "dist", self.project)]
+        self.assertEqual(dist_names, ["docs/manual.md", "index.html"], "o .vercelignore só vale para a raiz")
+
     def test_htaccess_shipped_in_build_wins(self):
         dist = self.project / "dist"
         self.write("dist/index.html")

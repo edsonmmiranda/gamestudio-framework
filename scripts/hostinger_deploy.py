@@ -11,6 +11,7 @@ usage: hostinger_deploy.py --domain rabisco.net [--project .] [--dist dist/clien
                            [--spa] [--origin 82.180.153.55] [--dry-run | --verify-only]
 """
 import argparse
+import fnmatch
 import hashlib
 import json
 import os
@@ -27,6 +28,7 @@ import zipfile
 
 CHUNK = 16 * 1024 * 1024
 SKIP = {".DS_Store"}
+PRIVATE_DIRS = {".git", "node_modules", ".vercel"}
 
 BASE = """# Gerado de {src} para Hostinger (LiteSpeed). Não editar à mão.
 Options -Indexes
@@ -103,13 +105,37 @@ def resolve_dist(project: Path, cfg: dict, dist: str | None) -> Path:
     return (project / (dist or cfg.get("outputDirectory") or "dist")).resolve()
 
 
-def build_files(dist: Path) -> list[Path]:
-    return sorted(p for p in dist.rglob("*") if p.is_file() and p.name not in SKIP)
+def ignore_patterns(project: Path) -> list[str]:
+    """Padrões do .vercelignore, que a Vercel já respeitava quando o build era a raiz do projeto."""
+    path = project / ".vercelignore"
+    lines = path.read_text().splitlines() if path.is_file() else []
+    return [line.strip().strip("/") for line in lines if line.strip() and not line.lstrip().startswith(("#", "!"))]
 
 
-def make_zip(dist: Path, htaccess: str | None, out: Path) -> int:
+def ignored(rel: str, patterns: list[str]) -> bool:
+    parts = rel.split("/")
+    prefixes = ["/".join(parts[:i]) for i in range(1, len(parts) + 1)]
+    return any(fnmatch.fnmatch(prefix, pattern) or fnmatch.fnmatch(parts[i], pattern)
+               for i, prefix in enumerate(prefixes) for pattern in patterns)
+
+
+def build_files(dist: Path, project: Path | None = None) -> list[Path]:
+    """Nunca publica Git, ambiente, dependências ou vínculo da Vercel, mesmo quando o build é a raiz."""
+    patterns = ignore_patterns(project) if project and dist.resolve() == project.resolve() else []
+    files = []
+    for p in dist.rglob("*"):
+        rel = p.relative_to(dist).as_posix()
+        parts = rel.split("/")
+        if (not p.is_file() or p.name in SKIP or any(part in PRIVATE_DIRS for part in parts)
+                or any(part.startswith(".env") for part in parts) or ignored(rel, patterns)):
+            continue
+        files.append(p)
+    return sorted(files)
+
+
+def make_zip(dist: Path, htaccess: str | None, out: Path, project: Path | None = None) -> int:
     """A .htaccess shipped in the build wins over the generated one."""
-    files = build_files(dist)
+    files = build_files(dist, project)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:
         for p in files:
             z.write(p, p.relative_to(dist).as_posix())
@@ -229,7 +255,7 @@ def main(argv=None):
     dist = resolve_dist(project, cfg, a.dist)
     if not (dist / "index.html").is_file():
         sys.exit(f"build ausente: {dist}/index.html (rode o build antes)")
-    files = build_files(dist)
+    files = build_files(dist, project)
     paths = sample(files, dist, a.sample)
     if a.verify_only:
         problems = verify(a.domain, dist, paths, a.origin)
@@ -237,7 +263,7 @@ def main(argv=None):
         return 0 if not problems else 2
     htaccess = htaccess_from_vercel(cfg, "vercel.json", a.spa)
     out = Path(tempfile.gettempdir()) / f"{a.domain.replace('.', '_')}_{time.strftime('%Y%m%d_%H%M%S')}.zip"
-    n = make_zip(dist, htaccess, out)
+    n = make_zip(dist, htaccess, out, project)
     print(f"zip: {n} arquivos, {out.stat().st_size / 1e6:.1f} MB · build {dist.relative_to(project) if dist.is_relative_to(project) else dist}")
     if a.dry_run:
         print(htaccess)
