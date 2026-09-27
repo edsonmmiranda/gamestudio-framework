@@ -11,7 +11,7 @@ existia no áudio e sumia na abertura. Texto no disco não é mix ouvido.
 Áudio AAA não é quantidade de arquivos. É mix: o jogador ouve a causa, o
 efeito e o espaço, e o silêncio também informa. A referência do jogo define a
 estética. Restrições a estilos e fornecedores pertencem à configuração local;
-origem, licença, integridade e adequação ao consumidor continuam obrigatórias.
+origem, integridade e adequação ao consumidor continuam no recibo.
 
 `context --focus audio` seleciona esta receita. `roles <projeto>` lê os
 papéis que o código declara (`const SOUNDS` ou `sounds.json`) e os arquivos
@@ -120,13 +120,12 @@ Ordem:
 1. Consumidor e evento já existentes no jogo.
 2. `shared/sfx` no laboratório, se a pasta existir na raiz de `--root`.
 3. Acervo do próprio projeto (com crédito e licença já registrados).
-4. Download ou síntese **somente** com lacuna, licença compatível e
-   registro de origem. Geração externa distingue preview de asset
-   aprovado; não torna o fornecedor obrigatório.
+4. Download ou síntese com lacuna e registro de origem. Geração externa
+   distingue preview de asset aprovado; não torna o fornecedor obrigatório.
 
 Adapte pitch, volume e envelope no canônico antes de duplicar o arquivo.
 Trocar um wav sem atualizar pivot rítmico, ducking ou interrupção é
-regressão. Conteúdo baixado não ganha licença nova pelo reuso.
+regressão.
 
 Registre a direção sonora no design system. Gravação, síntese, chip/lo-fi e outros
 estilos são escolhas do projeto; consulte a política local antes de importar.

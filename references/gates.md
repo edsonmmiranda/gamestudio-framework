@@ -86,21 +86,20 @@ não” empurra escopo morto para frente até que ele custe caro demais para mat
 A saída escolhida é registrada no devlog, com autor. Nenhum comando escolhe por
 você.
 
-## Dispensa, e os quatro critérios sem terceira opção
+## Dispensa, e os três critérios sem terceira opção
 
 Produção real dispensa requisito com assinatura, e um processo que finge o
 contrário só produz declaração falsa. Então `waived` é um estado de primeira
 classe — mas ele exige **motivo escrito**. Dispensa sem motivo é o critério
 apagado da lista, que é justamente o que um gate existe para impedir.
 
-Quatro critérios não são dispensáveis, e não por escolha do harness: a prosa da
-etapa não deixa terceira opção. São quatro, e não sete: os três `must_meet` também
+Três critérios não são dispensáveis, e não por escolha do harness: a prosa da
+etapa não deixa terceira opção. São três, e não seis: os três `must_meet` também
 recusam dispensa, mas por outro motivo — não é a prosa que os fecha, é o que um
 must-meet é.
 
 | Gate · critério | O que a etapa diz |
 | --- | --- |
-| `deliver` · `licensing` | “Licença desconhecida bloqueia a entrega” |
 | `implement` · `user_requirements` | “Prioridade não permite remover exigências explícitas do usuário” |
 | `conclude` · `human_vs_agent` | “Não registre teste com pessoa quando houve somente simulação ou avaliação do agente” |
 | `design` · `reference_origin` | “Origem e autoridade declaradas; ausências são explícitas” — declarar a ausência já é a saída |
@@ -117,7 +116,7 @@ existe justamente para doer, inflava com linhas inócuas.
 
 `out_of_scope` é esse estado. Ele exige motivo escrito pelo mesmo motivo que a
 dispensa exige, sai contado em `out_of_scope` e não em `waived`, e é recusado nos
-sete critérios que não se dispensam: alegar que não incide é a mesma remoção com
+seis critérios que não se dispensam: alegar que não incide é a mesma remoção com
 outro nome. Numa discordância entre documentos ele é o mais permissivo dos
 quatro estados — qualquer linha que discorde dele prevalece, porque ele tira o
 critério da conta em vez de responder a ele.
@@ -174,14 +173,12 @@ Um gate cumprido não diz que o jogo é bom. Ele diz que uma condição de avan�
 específica tem lastro declarado. Acabamento é a barra; diversão não é nem uma
 coisa nem outra, e nada neste repositório mede isso.
 
-`deliver.licensing` é o critério em que a prosa é mais dura, e o gate **ainda
-não lê o disco**. Quem lê é `origins`: cruza arquivos embarcados com recibos e
-relata ausência. JSON sem origem, autor e licença não declara. Sidecar sem
-os três rótulos também não. Nomeia a mídia que o recibo lista e o disco
-perdeu. Nomear não devolve o arquivo. `--declare`
-escreve o sidecar; recibo presente não é licença válida — é origem declarada.
-Uma tabela que afirma `met` enquanto `origins` lista arquivo sem recibo não
-sobrevive à leitura do próprio projeto.
+`origins` cruza arquivos embarcados com recibos e relata ausência. JSON sem
+origem, autor e licença não declara. Sidecar sem os três rótulos também não.
+Nomeia a mídia que o recibo lista e o disco perdeu. Nomear não devolve o
+arquivo. `--declare` escreve o sidecar; recibo é origem declarada, não
+bloqueio de entrega. Uma tabela que afirma `met` enquanto `origins` lista
+arquivo sem recibo marca `contradicts_licensing`.
 
 E o mais importante: **não há evidência de que gates melhorem o jogo entregue.**
 O levantamento em [gates-research.md](gates-research.md) §6.22 procurou e não

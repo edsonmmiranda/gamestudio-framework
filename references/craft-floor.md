@@ -57,7 +57,7 @@ conhecida. Lacuna material vira limitação explícita e próxima ação.
 
 - Não inventar projeto, autoria, prioridade, evidência, aprovação ou capacidade.
 - Não transformar documento pronto em jogo implementado nem checklist em certificação.
-- Não publicar, instalar dependências, promover marco ou reparar binding sem autoridade.
+- Não instalar dependências, promover marco ou reparar binding sem autoridade.
 - Não criar nove documentos para um jogo pequeno quando `game-design.md` cobre o caso.
 - Não confundir “AAA” com tier de publisher; aqui é piso observável de acabamento.
 - Não rebaixar a melhor referência visual aprovada para facilitar métricas.

@@ -73,7 +73,7 @@ jogo com trabalho, o Atlas distingue nossos / referências / sem linhagem, e o
 - Estudos de cliente instalado, dumps, prints, GLB, Lua.
 - Planos de produto, identidade de marca, operação, analytics.
 - Material privado (conversa, mentoria).
-- IP de terceiros. O exemplo Hexa Drop é inventado precisamente por isso.
+- O exemplo Hexa Drop é inventado para a réplica.
 
 ## Ligação com o harness
 

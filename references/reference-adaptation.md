@@ -17,7 +17,7 @@ Escolha 2–3 imagens representativas quando houver um painel. Anote seus caminh
 e três características visíveis que devem aparecer na cena: por exemplo, volumes
 desenhados à mão, hachura que constrói sombra e vegetação com silhuetas variadas.
 Copiar a paleta e desenhar retângulos não atende essas características. Referência
-de estudo orienta produção original; reutilização de assets exige direitos.
+de estudo orienta produção.
 
 Escreva uma frase sobre a primeira situação jogável e três provas concretas:
 
@@ -37,7 +37,7 @@ Execute nesta ordem, antes de implementar o restante do jogo:
 1. **Abra as imagens com a ferramenta de imagem**, incluindo arte do universo.
    Registre quais realmente viu; ler metadados não cumpre essa ação.
 2. **Escolha o caminho de produção:** reutilizar assets adequados do acervo;
-   adaptar uma cena existente com direitos; ou produzir arte original com a
+   adaptar uma cena existente; ou produzir arte original com a
    ferramenta de geração/edição de imagem disponível. Use a referência visual
    como entrada quando a ferramenta permitir. Confira a arte produzida.
 3. **Monte a primeira cena real** com essa arte, personagem e ação central. Para

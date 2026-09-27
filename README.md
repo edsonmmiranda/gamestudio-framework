@@ -399,17 +399,17 @@ pergunta o valor antes de pedir mais trabalho no mesmo gate.
 
 Dispensa é estado de primeira classe, porque produção real dispensa requisito com
 assinatura — mas exige motivo escrito, senão é o critério apagado da lista.
-**Quatro critérios não são dispensáveis**, e não por escolha do harness: a prosa
-da etapa não deixa terceira opção (licença desconhecida bloqueia a entrega;
-prioridade não remove exigência explícita do usuário; teste com pessoa não se
-registra onde houve só simulação; origem de referência é declarada ou a ausência
-é explícita). Os três `must_meet` também recusam dispensa, por outro motivo: um
-“No” num must-meet decide sozinho, sem compensação.
+**Três critérios não são dispensáveis**, e não por escolha do harness: a prosa
+da etapa não deixa terceira opção (prioridade não remove exigência explícita do
+usuário; teste com pessoa não se registra onde houve só simulação; origem de
+referência é declarada ou a ausência é explícita). Os três `must_meet` também
+recusam dispensa, por outro motivo: um “No” num must-meet decide sozinho, sem
+compensação.
 
 **`out_of_scope` não é dispensa.** Dispensar é deixar de cumprir o que incide, e
 um jogo sem save não “dispensa” a migração de save. Contar os dois juntos
 inflaria a conta de dispensas justamente onde ela deveria doer, então o estado é
-separado, exige motivo escrito igual, e é recusado nos sete critérios que sempre
+separado, exige motivo escrito igual, e é recusado nos seis critérios que sempre
 incidem.
 
 Critério sem linha conta como **pendente**, nunca como cumprido: silêncio não é
@@ -425,8 +425,8 @@ da barra.
 
 ## Origens
 
-`deliver.licensing` é um dos quatro critérios que a prosa não deixa dispensar, e
-até aqui o harness só lia a linha da tabela. Uma frase otimista fechava o gate.
+`deliver.licensing` lê recibos de origem; o harness só lia a linha da tabela.
+Uma frase otimista fechava o gate. Recibo não bloqueia a entrega.
 `origins` percorre o disco:
 
 ```sh

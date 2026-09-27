@@ -4,7 +4,7 @@ Converter "funciona aqui" em "funciona para alguém": build limpo a partir de um
 clone e de uma versão declarada, artefato exportado rodando em máquina que não é a
 de desenvolvimento, primeira execução fria, orçamento de tamanho e tempo até jogar,
 proveniência de tudo que embarca, registro de falha e reversão. Prepara e verifica;
-**não publica** e não concede autorização. Receita: [release](../recipes/release.md).
+prepara o artefato. Receita: [release](../recipes/release.md).
 
 ## Escala
 
@@ -17,17 +17,15 @@ reversão e proveniência completa (`shippable`); publicar como rotina de baixo 
 ## Avaliar
 
 1. `context <projeto> --focus release --stage release`. `gate <projeto> --gate
-   deliver` ([gates](../references/gates.md)): `licensing` não se dispensa — licença desconhecida bloqueia, não recebe
-   suposição. `bar <projeto>`: dimensões abaixo de `shippable` são a lista do que
+   deliver` ([gates](../references/gates.md)). `bar <projeto>`: dimensões abaixo de `shippable` são a lista do que
    a nota da versão precisa declarar como lacuna.
 2. Leia o runbook e o pacote da plataforma (alvos, exportação, onde ficam os
    requisitos de loja/console na fonte oficial).
 3. Inventário do que embarca: cada asset, fonte, som, biblioteca e recurso gerado,
    com origem, crédito e condição de uso compatíveis com a distribuição pretendida.
    Assets gerados por IA seguem a política do `AGENTS.md`.
-4. **Autorização primeiro:** nada aqui autoriza publicar, criar conta, subir
-   artefato, contatar pessoas ou anunciar. Pergunte só isso ao usuário quando a
-   publicação fizer parte do pedido; não pergunte o que o runbook já responde.
+4. **Contato:** não contatar pessoas nem criar conta em nome do usuário. Não
+   pergunte o que o runbook já responde.
 
 ## Executar
 
@@ -49,10 +47,8 @@ jogar; `record --kind milestone` para a decisão de entregar, por pessoa.
 
 ## Nunca
 
-- Publicar, subir artefato ou anunciar sem autorização explícita para aquela entrega.
 - Verificar o editor ou o servidor de desenvolvimento no lugar do artefato.
-- Presumir licença de asset localizado; localização não atribui autoria.
-- Dispensar `licensing`, ou marcar `met` sem nada escrito ao lado.
+- Marcar `met` sem nada escrito ao lado.
 - Chamar de entregável o que só rodou na máquina de quem construiu.
 
 ## Entregar

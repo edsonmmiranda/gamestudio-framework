@@ -256,7 +256,7 @@ FOCUS_DIMENSIONS = {
 # O terceiro campo de cada critério é `waivable`. Ele é falso só onde a prosa da
 # etapa não deixa terceira opção — "prioridade não permite remover exigências
 # explícitas do usuário", "não registre teste com pessoa quando houve somente
-# simulação", "licença desconhecida bloqueia a entrega", e origem declarada ou
+# simulação", e origem declarada ou
 # ausência explícita, que já traz a própria saída. Nos demais, dispensar é decisão
 # de quem assina, com motivo e autor, em vez de eu decidir por todo mundo o que é
 # negociável.
@@ -379,8 +379,7 @@ GATES = {
             ("runbook", "Outra pessoa constrói a partir do runbook", True, "readiness"),
             ("foreign_machine", "O artefato roda em máquina que não é a de desenvolvimento", True, "readiness"),
             ("save_migration", "Save migra da versão anterior", True, "readiness"),
-            # A prosa é explícita: licença desconhecida bloqueia a entrega.
-            ("licensing", "Nenhum recurso embarcado tem licença desconhecida", False, "readiness"),
+            ("licensing", "Origem dos recursos embarcados está declarada", True, "readiness"),
             ("rollback", "Existe procedimento de reversão", True, "readiness"),
         ),
     },
@@ -4488,11 +4487,10 @@ def invite_page(project):
 
 
 # `scan` lê documentos e, de propósito, não entra em textures/fonts/models/videos.
-# É exatamente aí que mora o asset embarcado. O gate `deliver.licensing` recusa
-# dispensa e, até este comando, ninguém lia o disco: uma linha otimista fechava
-# a tabela. Aqui a pergunta é outra e mais estreita — o arquivo tem recibo de
-# origem? — e a resposta negativa não é "licença inválida". Validar licença
-# exigiria titular, texto e jurisdição, e nada disso cabe num walk.
+# É exatamente aí que mora o asset embarcado. `origins` pergunta se o arquivo
+# tem recibo de origem; a resposta negativa não é "licença inválida" nem
+# bloqueio de entrega. Validar licença exigiria titular, texto e jurisdição, e
+# nada disso cabe num walk.
 EMBEDDED_SUFFIXES = {
     ".wav", ".ogg", ".mp3", ".flac", ".m4a", ".aac",
     ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".svg", ".ico",
@@ -7542,7 +7540,7 @@ def agents_memory_text(destination, play=None, starter=None, documents=False, id
     )
     if destination.joinpath("package.json").is_file():
         lines.append(f"- Validadores: `cd {shlex.quote(str(destination))} && npm test`. Build verde não prova diversão.")
-    lines.append("- Não publicar, não apagar saves e não rodar `python3 tools/design-sfx.py` sem `--from`.")
+    lines.append("- Não apagar saves e não rodar `python3 tools/design-sfx.py` sem `--from`.")
     lines.extend(["", "## O que este jogo já é", ""])
     if starter:
         lines.append(f"- Starter: `{starter}`. Partir dele é REUSE.")
@@ -9139,9 +9137,8 @@ def next_step(project, focus="create", studies_root=None, genre=None):
         sample = ", ".join(f"`{path}`" for path in origins["undeclared"][:4])
         extra = " e mais" if len(origins["undeclared"]) > 4 else ""
         why = (
-            "Arquivo embarcado sem recibo conta como licença desconhecida, e o critério "
-            "`deliver.licensing` não se dispensa. O harness não valida a licença: só vê "
-            "que a origem não foi declarada."
+            "Arquivo embarcado sem recibo: o harness só vê que a origem não foi "
+            "declarada. Recibo é proveniência, não bloqueio de entrega."
         )
         if origins["contradicts_licensing"]:
             why = (

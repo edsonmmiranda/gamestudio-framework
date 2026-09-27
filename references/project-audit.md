@@ -257,7 +257,7 @@ os registros afetados, sem repetir a pré-produção inteira.
 6. **Recuperar histórico e prova:** examine decisões, devlog, commits pertinentes e
    resultados existentes; não invente motivos antigos. Rode somente verificadores
    apropriados ao escopo, com recibos. Visual/playtest exige observação
-   separada; ausência permanece explícita. Não publicar ou contatar pessoas por padrão.
+   separada; ausência permanece explícita. Não contatar pessoas por padrão.
    Confira o comando exato do runbook. Em `verify`, scripts de package.json usam
    `--script doctor`; `--command` recebe executável e argumentos separados, como
    `--command npm run doctor`, nunca a cadeia inteira em um argumento entre aspas.

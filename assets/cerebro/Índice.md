@@ -26,7 +26,7 @@ Nó: [[Oficina]] · código: `games/oficina`
 | [[Oficina — o anel que chegou tarde]] | aprendizado | vigente | Caso de exemplo: Oficina traduz o anel de Hexa Drop numa linha do caderno. A punição é o espaço, não o timer. |
 | [[Aula 0001 — o anel não é a linha]] | aula | vigente | Aula de exemplo: copiar o contrato (anel que some) não é copiar a forma (hexágono). |
 | [[Estudo Cai-Cai]] | estudo | vigente | Porta curta: Cai-Cai (inventado) desce da mesma árvore que Hexa Drop, sem citação do time. Linhagem C, não inspirou. |
-| [[Estudo Hexa Drop]] | estudo | vigente | Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone nem autoriza copiar IP. · +1 partes |
+| [[Estudo Hexa Drop]] | estudo | vigente | Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone. · +1 partes |
 | [[Hexa Drop — o anel que some]] | estudo | vigente | Parte do estudo de exemplo: o anel central some ao fechar e pune o buraco que sobra. |
 | [[Cai-Cai — recensão]] | evidencia | vigente | Recensão inventada: um crítico aponta que Oficina parece Cai-Cai. Força D / [T]. Não sustenta inspirou. |
 | [[Hexa Drop — postmortem]] | evidencia | vigente | Ficha de exemplo: fala inventada da designer Lia Costa sobre o anel que some. Serve de evidência A no kit, não é fonte real. |
@@ -46,7 +46,7 @@ Nó: [[Oficina]] · código: `games/oficina`
 
 ### combate
 
-- [[Estudo Hexa Drop]] · estudo — Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone nem autoriza copiar IP.
+- [[Estudo Hexa Drop]] · estudo — Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone.
 
 ### design
 
@@ -54,7 +54,7 @@ Nó: [[Oficina]] · código: `games/oficina`
 - [[Aula 0001 — o anel não é a linha]] · aula — Aula de exemplo: copiar o contrato (anel que some) não é copiar a forma (hexágono).
 - [[Design de jogos — missão de ensino]] · aula — Missão do material de ensino deste kit: o aluno escreve uma hipótese que uma observação pode contrariar.
 - [[Estudo Cai-Cai]] · estudo — Porta curta: Cai-Cai (inventado) desce da mesma árvore que Hexa Drop, sem citação do time. Linhagem C, não inspirou.
-- [[Estudo Hexa Drop]] · estudo — Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone nem autoriza copiar IP.
+- [[Estudo Hexa Drop]] · estudo — Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone.
 - [[Hexa Drop — o anel que some]] · estudo — Parte do estudo de exemplo: o anel central some ao fechar e pune o buraco que sobra.
 - [[Padrões]] · hub — Porta dos padrões: o que se repete em duas ou mais fontes, em design, método e armadilhas. Uma nota por padrão em padroes/.
 - [[Genealogia]] · hub — Porta do grafo de genealogia: tipos de nó, relações, confiança A–D e como adicionar um nó ou uma aresta.
@@ -116,7 +116,7 @@ Notas principais; as partes de um estudo aparecem na nota-mãe (`parte_de`).
 | Nota | Tipo | Status | Resumo |
 |---|---|---|---|
 | [[Estudo Cai-Cai]] | estudo | vigente | Porta curta: Cai-Cai (inventado) desce da mesma árvore que Hexa Drop, sem citação do time. Linhagem C, não inspirou. |
-| [[Estudo Hexa Drop]] | estudo | vigente | Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone nem autoriza copiar IP. · +1 partes |
+| [[Estudo Hexa Drop]] | estudo | vigente | Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone. · +1 partes |
 
 ### pesquisa — avaliação de método, ferramenta ou tecnologia para o nosso fluxo
 

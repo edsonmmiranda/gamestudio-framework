@@ -27,4 +27,4 @@ pendentes: 0
 ## Notas
 
 - Estúdio: [[Byteforge]]. Designer: [[Lia Costa]].
-- Dossiê: [[Estudo Hexa Drop]]. Não é um jogo real e não autoriza copiar IP.
+- Dossiê: [[Estudo Hexa Drop]]. Não é um jogo real.

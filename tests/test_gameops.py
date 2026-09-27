@@ -277,6 +277,24 @@ class PreflightTest(GameOpsTest):
         self.git(self.alpha, "push", "origin", "main")
         self.assertEqual(gameops.preflight(self.hub, self.modules, ".")["blocking"], [])
 
+    def test_instruction_files_warn_on_size_and_dead_paths_without_blocking(self):
+        (self.alpha / "docs").mkdir()
+        (self.alpha / "docs/vivo.md").write_text("ok\n")
+        self.stage("AGENTS.md", "Leia `docs/vivo.md`, `docs/morto.md` e [plano](docs/sumiu%20de%20vez.md).\n"
+                                "Repositório `oalanicolas/games-alpha`, saída `dist/client/index.html`, "
+                                "modelo `docs/<jogo>.md`, rota `/create-map`.\n" + "regra vigente\n" * 1000)
+        report = gameops.preflight(self.hub, self.modules, "alpha")
+        warnings = "\n".join(report["warnings"])
+        self.assertEqual(report["blocking"], [])
+        self.assertIn("AGENTS.md: ~3,5", warnings)
+        self.assertIn("2 caminhos citados não existem: docs/morto.md, docs/sumiu de vez.md", warnings)
+        for fine in ("docs/vivo.md", "oalanicolas/games-alpha", "dist/client", "docs/<jogo>.md", "/create-map"):
+            self.assertNotIn(fine, warnings)
+        short = gameops.preflight(self.hub, self.modules, "alpha", max_instruction_tokens=10_000)
+        self.assertNotIn("tokens", "\n".join(short["warnings"]))
+        self.stage("notas.md", "`docs/morto.md`\n")
+        self.assertNotIn("notas.md", "\n".join(gameops.preflight(self.hub, self.modules, "alpha")["warnings"]))
+
     def test_push_with_nothing_new_and_unknown_repository(self):
         report = gameops.preflight(self.hub, self.modules, "alpha", push=True)
         self.assertIn("nada a publicar: HEAD já está em origin/main", report["info"])

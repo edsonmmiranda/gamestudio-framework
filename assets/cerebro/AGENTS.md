@@ -38,7 +38,7 @@ Todo nome é único: `[[Nome]]` basta.
 | Regras deste cérebro | [[Processo]] e este arquivo |
 | Método sem prova local ainda | [[Métodos herdados]], como regra herdada — não como padrão |
 
-Estudo **não é cânone** do jogo e não autoriza copiar IP. `status: historico` é
+Estudo **não é cânone** do jogo. `status: historico` é
 prova de um momento. `status: superado` aponta o substituto. Rótulos [O]/[T]/[I]
 e A–D: [[Rotular cada afirmação pela origem]]. Features visíveis não são o jogo:
 [[Clonar o que se vê]]. Crescimento: [[Como crescer]].

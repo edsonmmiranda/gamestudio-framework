@@ -193,12 +193,12 @@ Focos: `create`, `mechanics`, `lifecycle`, `content`, `visual`, `audio`, `feel`,
    as linhas “Pronto para…” do ciclo: ao pedir a próxima permissão, declare uma linha
    por critério com `met`/`unmet`/`waived`/`out_of_scope` e o que sustenta o estado; `gate <projeto>`
    lê. Se a tabela declara o gate, o `gate` nomeia o gate que a tabela já declara. Linha no disco não é passagem concedida. Sem chave `gate`. Se o roteiro recusa que o silêncio seja aprovação, o `gate` nomeia o silêncio que o roteiro já recusa. Linha vazia no disco não é passagem. Sem chave `silêncio`. Se o roteiro recusa que must_meet seja dispensável, o `gate` nomeia a dispensa que o roteiro já recusa. Linha no disco não é passagem. Sem chave `dispensa`. Se o roteiro recusa que fora de escopo seja dispensa, o `gate` nomeia o escopo que o roteiro já recusa. Linha no disco não é passagem. Sem chave `escopo`. Critério sem linha é pendente. As três saídas são passar, cortar escopo e
-   abandonar — proponha a terceira quando for a honesta. Dispensa exige motivo; quatro
+   abandonar — proponha a terceira quando for a honesta. Dispensa exige motivo; três
    critérios de `readiness` não se dispensam. `out_of_scope` é o critério que nunca
    incidiu: exige motivo e não entra na conta das dispensas. Três critérios são
    `must_meet` — perguntam se ainda vale o que custa, não se o trabalho está feito;
    pendência neles não se resolve trabalhando mais. Esses três também não se dispensam,
-   e os sete recusam saída de escopo. `granted` é sempre falso. Nenhum comando promove marco,
+   e os seis recusam saída de escopo. `granted` é sempre falso. Nenhum comando promove marco,
    mede orçamento ou certifica acabamento; a passagem é declarada por pessoa com a
    prova ligada (`record --kind milestone`, recibos de `verify`, `observation` e
    `budget`). Exemplo: [da trilha ao capítulo acabado](../examples/era-uma-vez-production.md).
@@ -490,7 +490,7 @@ Reconheça e recuse. Se estiver prestes a fazer um destes, reescreva a ação.
 - **Registrar playtest com pessoa quando houve só simulação ou avaliação do agente.**
 - **Inventar CHK-12/13/16, rede, locale ou live ops para “completar o AAA”.**
 - **Encerrar com `next_step: null`, lista de três frentes ou “posso continuar?”.**
-- **Publicar, delegar ou contatar pessoas** sem autorização aplicável àquela entrega.
+- **Delegar ou contatar pessoas** sem autorização aplicável àquela entrega.
 
 ## O teste de slop para jogos
 

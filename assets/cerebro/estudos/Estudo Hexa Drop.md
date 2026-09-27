@@ -1,6 +1,6 @@
 ---
 tipo: estudo
-resumo: "Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone nem autoriza copiar IP."
+resumo: "Porta do estudo de exemplo: Hexa Drop (inventado) e o anel que some. Não é cânone."
 jogos:
   - "[[Oficina]]"
 temas:
@@ -14,7 +14,7 @@ referencias:
 # Estudo Hexa Drop
 
 Pesquisa de exemplo deste kit. Pedido: mostrar um estudo completo que passa no `check`.
-Não é cânone de produto, não autoriza copiar IP e o objeto **não existe** — foi inventado
+Não é cânone de produto e o objeto **não existe** — foi inventado
 para a réplica. Substitua pelo seu estudo.
 
 **Objeto:** Hexa Drop, 1991, Byteforge (fictício).

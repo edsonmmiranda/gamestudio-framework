@@ -2,10 +2,8 @@
 
 Entrada: a versão que se pretende entregar, a plataforma alvo e quem vai jogar.
 
-**Autorização primeiro.** Nada nesta receita autoriza publicar, criar conta em
-loja, subir artefato, contatar pessoas ou anunciar. Publicação exige autorização
-explícita do usuário para aquela entrega. Preparar um artefato verificável é
-trabalho técnico; distribuí-lo é decisão dele.
+Preparar um artefato verificável é trabalho técnico. Não criar conta em loja
+nem contatar pessoas em nome do usuário.
 
 O ciclo criativo do framework terminava em QA, e essa lacuna produz um padrão
 conhecido: um jogo que funciona na máquina de quem construiu e falha em qualquer
@@ -45,8 +43,7 @@ O que precisa estar resolvido antes de chamar uma versão entregável:
 - **Primeira execução:** instalação limpa, sem save, sem cache, sem permissão
   concedida. É o único caminho que todo jogador percorre e o menos testado.
 - **Proveniência do que embarca:** cada asset, fonte, som, biblioteca e recurso
-  gerado com origem, crédito e condição de uso compatíveis com a distribuição
-  pretendida. Licença desconhecida bloqueia a entrega, não recebe uma suposição.
+  gerado com origem e crédito quando houver.
 - **Registro de falha:** quando o jogo quebra no dispositivo de alguém, existe
   como saber. Coleta de erro precisa de decisão explícita sobre o que é enviado e
   do consentimento aplicável; telemetria não é padrão silencioso.

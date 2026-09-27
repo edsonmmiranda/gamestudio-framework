@@ -15,6 +15,7 @@ import shlex
 import subprocess
 import sys
 import time
+import urllib.parse
 
 from workspace import ROOT, load_config, load_manifest, parent_of
 
@@ -428,6 +429,10 @@ CONFLICT_MARKER = re.compile(r"^(<{7}|={7}|>{7})( |$)")
 SECRET_NAME = re.compile(r"(^|/)(id_(rsa|ed25519|ecdsa|dsa)|[^/]+\.(pem|p12|pfx|key|keystore|jks))$")
 PRODUCTION_MEDIA = {".mov", ".mp4", ".mkv", ".avi", ".blend", ".blend1", ".psd", ".kra", ".xcf",
                     ".aep", ".prproj", ".zip", ".7z", ".rar", ".tar", ".gz"}
+# Arquivos de instrução que o agente carrega em todo turno: tamanho e caminho morto custam em todos.
+INSTRUCTION_FILES = {"AGENTS.md", "CLAUDE.md"}
+INSTRUCTION_MAX_TOKENS = 3000
+CITED = re.compile(r"`([^`\n]+)`|\]\(([^)\s]+)\)")
 
 
 def secret_file(path):
@@ -435,6 +440,27 @@ def secret_file(path):
     if name == ".env" or (name.startswith(".env.") and name.split(".", 2)[2] not in ("example", "sample", "template")):
         return True
     return bool(SECRET_NAME.search(path))
+
+
+def dead_paths(text, bases):
+    """Caminhos citados cuja pasta existe em alguma base mas o arquivo não: pista de doc rot.
+
+    Exige a pasta-mãe presente para não confundir slug de repositório, exemplo ou saída de build com
+    caminho quebrado."""
+    dead = []
+    for code, link in CITED.findall(text):
+        cited = code.strip() if code else urllib.parse.unquote(link.split("#", 1)[0])
+        if (not cited or "/" not in cited or "://" in cited or cited.startswith(("/", "~", "-", "#"))
+                or any(mark in cited for mark in "<>*{}$|=…")):
+            continue
+        if " " in cited and not cited.endswith(".md"):
+            continue
+        relative = Path(cited.rstrip("/"))
+        if not relative.parts or any((base / relative).exists() for base in bases):
+            continue
+        if any((base / relative).parent.is_dir() for base in bases) and cited not in dead:
+            dead.append(cited)
+    return dead
 
 
 def added_lines(diff):
@@ -505,7 +531,7 @@ def working_tree(repo):
     return modified, untracked
 
 
-def preflight(root, modules, target, push=False, max_mb=5):
+def preflight(root, modules, target, push=False, max_mb=5, max_instruction_tokens=INSTRUCTION_MAX_TOKENS):
     repo, label, module, owner = resolve_target(root, modules, target)
     external = bool(module and module.get("external"))
     report = {"repository": label, "mode": "push" if push else "stage",
@@ -566,6 +592,15 @@ def preflight(root, modules, target, push=False, max_mb=5):
             warn(f"{path}: {int(size) / 1_000_000:.1f} MB; mídia de produção vai para o acervo externo")
         elif Path(path).suffix.lower() in PRODUCTION_MEDIA:
             warn(f"{path}: extensão de mídia de produção; confirme que é asset de runtime")
+        if Path(path).name in INSTRUCTION_FILES:
+            text = run_git(repo, "show", blob(path)) or ""
+            if len(text) // 4 > max_instruction_tokens:
+                warn(f"{path}: ~{len(text) // 4:,} tokens, acima de {max_instruction_tokens:,}; carrega em todo "
+                     "turno: deixe só as regras vigentes e mova o histórico para o registro de decisões")
+            dead = dead_paths(text, [repo / Path(path).parent, repo, Path(root).resolve()])
+            if dead:
+                warn(f"{path}: {plural(len(dead), 'caminho citado não existe', 'caminhos citados não existem')}: "
+                     + ", ".join(dead[:5]) + ("…" if len(dead) > 5 else ""))
     diff = run_git(repo, "diff", *diff_args, "-U0", "--no-color", "--no-ext-diff") or ""
     for path, number, text in added_lines(diff):
         where = f"{path}:{number}"
@@ -743,7 +778,9 @@ def main():
                 print_plan(output)
             return 0
         if args.command == "preflight":
-            report = preflight(args.root, modules, args.repository, push=args.push, max_mb=args.max_mb)
+            limit = load_config(args.root).get("gameops", {}).get("instructions_max_tokens", INSTRUCTION_MAX_TOKENS)
+            report = preflight(args.root, modules, args.repository, push=args.push, max_mb=args.max_mb,
+                               max_instruction_tokens=limit)
             print(json.dumps(report, ensure_ascii=False, indent=2)) if args.json else print_preflight(report)
             return 1 if report["blocking"] else 0
         report = gates(args.root, modules, args.repository, run=args.run, include_all=args.all, timeout=args.timeout)

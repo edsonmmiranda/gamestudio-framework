@@ -12,7 +12,7 @@ referencias: []
 > Nome do arquivo: `Estudo <Referência>`. Partes: `<Referência> — <aspecto>` com `parte_de`. Pergunta em uma linha.
 
 Pesquisa em {{date:DD/MM/YYYY}}. Pedido: …
-Não é cânone de produto, não autoriza copiar IP de … e não abre um jogo novo.
+Não é cânone de produto e não abre um jogo novo.
 
 **Objeto:** nome, versão/build conferida, plataforma, data da versão.
 **Método:** o que foi lido (cliente, manual, wiki, VOD, imprensa) e o que **não** foi feito (playtest, partida medida, compra).

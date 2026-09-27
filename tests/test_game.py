@@ -4567,8 +4567,8 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
             "o roteiro já recusa que fora de escopo seja dispensa",
         )
         self.assertEqual(game.gate_problem_scope_source(), "references/gates.md")
-        self.declare_gate({("deliver", "licensing"): ("out_of_scope", "não se aplica aqui")})
-        report = game.gate_reading(self.project, "deliver")
+        self.declare_gate({("implement", "user_requirements"): ("out_of_scope", "não se aplica aqui")})
+        report = game.gate_reading(self.project, "implement")
         self.assertEqual([item["reason"] for item in report["problems"]], ["always_applies"])
         item = report["problems"][0]
         self.assertIn(
@@ -4583,7 +4583,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         raw = game.gate_declaration(self.project)
         self.assertNotIn("scope", raw["problems"][0])
         with mock.patch.object(game, "gate_problem_scope_source", return_value=None):
-            silent = game.gate_reading(self.project, "deliver")
+            silent = game.gate_reading(self.project, "implement")
         self.assertNotIn("fora de escopo seja dispensa", silent["problems"][0]["scope"])
         recipe = (game.FRAMEWORK / "recipes/production.md").read_text(encoding="utf-8")
         skill = game_dev_manual()
@@ -4627,10 +4627,10 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertNotIn("verified", entrega)
         self.assertNotIn("passed", entrega)
 
-    # A prosa da etapa não deixa terceira opção em quatro critérios: licença
-    # desconhecida bloqueia a entrega, prioridade não remove exigência do usuário,
-    # teste com pessoa não se registra onde houve simulação, e origem de referência
-    # é declarada ou a ausência é explícita. Dispensar esses é recusado.
+    # A prosa da etapa não deixa terceira opção em três critérios de readiness:
+    # prioridade não remove exigência do usuário, teste com pessoa não se registra
+    # onde houve simulação, e origem de referência é declarada ou a ausência é
+    # explícita. Dispensar esses é recusado.
     def test_the_four_criteria_the_prose_leaves_no_way_around_cannot_be_waived(self):
         forbidden = [
             (gate, key)
@@ -4641,7 +4641,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertEqual(
             forbidden,
             [("design", "reference_origin"), ("implement", "user_requirements"),
-             ("conclude", "human_vs_agent"), ("deliver", "licensing")],
+             ("conclude", "human_vs_agent")],
         )
         for gate, key in forbidden:
             with self.subTest(gate=gate, criterion=key):
@@ -5118,7 +5118,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         proposals = self.proposals(game.next_step(self.project, "release"))
         proposal = next(item for item in proposals if item["basis"] == "origins.undeclared")
         self.assertIn("hero.png", proposal["action"])
-        self.assertIn("licença desconhecida", proposal["why"])
+        self.assertIn("origem não foi", proposal["why"])
         self.assertTrue(any("--declare" in command and "hero.png" in command for command in proposal["commands"]))
         self.assertTrue(any("--origin" in command and "--license" in command for command in proposal["commands"]))
 
@@ -10887,7 +10887,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
 
     def test_next_fixes_the_gate_form_before_chasing_the_criterion(self):
         (self.project / "index.html").write_text("<canvas></canvas>")
-        self.declare_gate({("deliver", "licensing"): ("waived", "queria dispensar")})
+        self.declare_gate({("implement", "user_requirements"): ("waived", "queria dispensar")})
         bases = [item["basis"] for item in self.proposals(game.next_step(self.project, "release"))]
         self.assertIn("gates.problems", bases)
         self.assertNotIn("gates.pending", bases)
