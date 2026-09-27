@@ -450,12 +450,14 @@ def dead_paths(text, bases):
     dead = []
     for code, link in CITED.findall(text):
         cited = code.strip() if code else urllib.parse.unquote(link.split("#", 1)[0])
-        if (not cited or "/" not in cited or "://" in cited or cited.startswith(("/", "~", "-", "#"))
-                or any(mark in cited for mark in "<>*{}$|=…")):
+        cited = re.sub(r":\d+(-\d+)?$", "", cited)
+        # Pasta citada com barra final descreve um lugar (saída, cache) que pode nascer depois.
+        if (not cited or "/" not in cited or cited.endswith("/") or "://" in cited
+                or cited.startswith(("/", "~", "-", "#")) or any(mark in cited for mark in "<>*{}$|=…")):
             continue
         if " " in cited and not cited.endswith(".md"):
             continue
-        relative = Path(cited.rstrip("/"))
+        relative = Path(cited)
         if not relative.parts or any((base / relative).exists() for base in bases):
             continue
         if any((base / relative).parent.is_dir() for base in bases) and cited not in dead:

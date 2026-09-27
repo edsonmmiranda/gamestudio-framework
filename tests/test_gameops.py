@@ -282,13 +282,15 @@ class PreflightTest(GameOpsTest):
         (self.alpha / "docs/vivo.md").write_text("ok\n")
         self.stage("AGENTS.md", "Leia `docs/vivo.md`, `docs/morto.md` e [plano](docs/sumiu%20de%20vez.md).\n"
                                 "Repositório `oalanicolas/games-alpha`, saída `dist/client/index.html`, "
-                                "modelo `docs/<jogo>.md`, rota `/create-map`.\n" + "regra vigente\n" * 1000)
+                                "modelo `docs/<jogo>.md`, rota `/create-map`, cache `docs/tmp/`, "
+                                "linha `docs/vivo.md:3-4`.\n" + "regra vigente\n" * 1000)
         report = gameops.preflight(self.hub, self.modules, "alpha")
         warnings = "\n".join(report["warnings"])
         self.assertEqual(report["blocking"], [])
         self.assertIn("AGENTS.md: ~3,5", warnings)
         self.assertIn("2 caminhos citados não existem: docs/morto.md, docs/sumiu de vez.md", warnings)
-        for fine in ("docs/vivo.md", "oalanicolas/games-alpha", "dist/client", "docs/<jogo>.md", "/create-map"):
+        for fine in ("docs/vivo.md", "oalanicolas/games-alpha", "dist/client", "docs/<jogo>.md", "/create-map",
+                     "docs/tmp"):
             self.assertNotIn(fine, warnings)
         short = gameops.preflight(self.hub, self.modules, "alpha", max_instruction_tokens=10_000)
         self.assertNotIn("tokens", "\n".join(short["warnings"]))
