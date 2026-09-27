@@ -407,6 +407,31 @@ class InvarianteEFronteiraTest(unittest.TestCase):
         )
         self.assertIn("ludema só nasce com dois ou mais", g.stdout + g.stderr)
 
+    def test_area_do_vault_repete_as_pastas_de_tipo(self) -> None:
+        rel = "estudio/planos/Estúdio — plano de teste.md"
+        nota = self.vault / rel
+        nota.parent.mkdir(parents=True)
+        nota.write_text(
+            "---\ntipo: plano\nresumo: \"Plano de teste da área.\"\ntemas:\n  - processo\n"
+            "status: rascunho\ndata: 2026-09-27\n---\n# Estúdio — plano de teste\n\nTexto.\n",
+            encoding="utf-8",
+        )
+
+        def erros() -> set[str]:
+            r = _run(self.vault, "check", "--nivel", "erro", "--json")
+            return {i["codigo"] for i in json.loads(r.stdout)["itens"] if i["arquivo"] == rel and i["nivel"] == "erro"}
+
+        self.assertIn("PASTA", erros())  # sem área declarada, a pasta fica fora do contrato
+        cfg = self.vault / "_sistema" / "cerebro_config.json"
+        dados = json.loads(cfg.read_text(encoding="utf-8"))
+        dados["areas"] = {"estudio": {"nome": "Área do estúdio", "cor": "#C9A227"}}
+        cfg.write_text(json.dumps(dados, ensure_ascii=False), encoding="utf-8")
+        self.assertEqual(erros(), set())
+        r = _run(self.vault, "cores")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        consultas = [g["query"] for g in json.loads((self.vault / ".obsidian" / "graph.json").read_text(encoding="utf-8"))["colorGroups"]]
+        self.assertLess(consultas.index('path:"estudio/"'), consultas.index('path:"estudos/"'))
+
 
 if __name__ == "__main__":
     unittest.main()

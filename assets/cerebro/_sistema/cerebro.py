@@ -67,7 +67,13 @@ PASTA_DO_TIPO = {
     "identidade": "identidade", "operacao": "operacao", "aula": "aulas", "registro": "registros",
     "evidencia": "evidencias", "padrao": "padroes", "visao": "genealogia-jogos/visoes", "captura": "_entrada",
 }
-PASTAS_DO_VAULT = set(PASTA_DO_TIPO.values()) | {"", "genealogia-jogos", "_sistema", "_anexos"}
+PASTAS_BASE = set(PASTA_DO_TIPO.values()) | {"", "genealogia-jogos", "_sistema", "_anexos"}
+
+
+def pastas_do_tipo(tipo: str) -> set[str]:
+    """Pastas onde um tipo pode morar: a do vault e a mesma dentro de cada área."""
+    base = PASTA_DO_TIPO[tipo]
+    return {base} | ({f"{a}/{base}" for a in AREAS} & PASTAS_DE_AREA)
 # Nome de arquivo diz o que a nota é. Estes não dizem nada.
 NOMES_GENERICOS = {
     "readme", "leia-me", "leiame", "estudo", "index", "indice", "notes", "notas", "nota", "report", "relatorio",
@@ -93,6 +99,13 @@ def carregar_config() -> dict:
 
 
 CONFIG = carregar_config()
+# Áreas do vault (`areas` no cerebro_config.json): partes com as mesmas pastas de tipo (`<área>/estudos/`…),
+# separadas para poderem virar submódulo aninhado. {"<área>": {"nome": …, "cor": "#RRGGBB", "descricao": …}}
+AREAS_CONFIG: dict[str, dict] = CONFIG.get("areas") or {}
+AREAS = tuple(sorted(AREAS_CONFIG))
+PASTAS_DE_AREA = {f"{a}/{p}" for a in AREAS for p in PASTA_DO_TIPO.values()
+                  if p not in ("genealogia-jogos/visoes", "_entrada")} | {f"{a}/_anexos" for a in AREAS}
+PASTAS_DO_VAULT = PASTAS_BASE | set(AREAS) | PASTAS_DE_AREA
 # Metadados de nota que não pode carregar frontmatter (symlink para documento canônico fora do vault).
 SIDECAR: dict[str, dict] = CONFIG.get("sidecar", {})
 LIMITES: dict[str, int] = {"dias_semente": 90, "dias_candidato": 90, **CONFIG.get("limites", {})}
@@ -502,7 +515,7 @@ def cmd_check(args) -> int:
             ach.add("erro", "PASTA", n.rel, f"pasta fora do contrato; notas moram em {', '.join(sorted(p for p in PASTAS_DO_VAULT if p))} ou na raiz")
         if unicodedata.normalize("NFC", n.nome).lower() in NOMES_GENERICOS:
             ach.add("erro", "NOME_GENERICO", n.rel, "nome genérico; o nome do arquivo precisa dizer o que a nota é")
-        elif pasta in set(PASTA_DO_TIPO.values()) - {"genealogia-jogos/visoes"} and len(n.nome.split()) < 2:
+        elif pasta in (set(PASTA_DO_TIPO.values()) | PASTAS_DE_AREA) - {"genealogia-jogos/visoes"} and len(n.nome.split()) < 2:
             ach.add("aviso", "NOME_CURTO", n.rel, "nome de uma palavra só; prefira 'Assunto — aspecto'")
         titulo_ok = {n.nome, f"Visão · {n.nome}"}
         if n.titulo not in titulo_ok and not n.caminho.is_symlink() and pasta in PASTAS_DO_VAULT - {"", "genealogia-jogos"}:
@@ -513,9 +526,9 @@ def cmd_check(args) -> int:
             continue
         if n.tipo not in TIPOS:
             ach.add("erro", "TIPO", n.rel, f"tipo {n.tipo!r} fora do contrato ({', '.join(sorted(TIPOS))})")
-        elif n.tipo in PASTA_DO_TIPO and pasta != PASTA_DO_TIPO[n.tipo]:
-            ach.add("erro", "TIPO_PASTA", n.rel, f"tipo {n.tipo} mora em {PASTA_DO_TIPO[n.tipo]}/")
-        elif n.tipo in {"hub", "processo"} and pasta not in {"", "genealogia-jogos", "_entrada"}:
+        elif n.tipo in PASTA_DO_TIPO and pasta not in pastas_do_tipo(n.tipo):
+            ach.add("erro", "TIPO_PASTA", n.rel, f"tipo {n.tipo} mora em {PASTA_DO_TIPO[n.tipo]}/ (ou na mesma pasta de uma área)")
+        elif n.tipo in {"hub", "processo"} and pasta not in {"", "genealogia-jogos", "_entrada", *AREAS}:
             ach.add("erro", "TIPO_RAIZ", n.rel, f"{n.tipo} mora na raiz do vault")
         if not str(m.get("resumo") or "").strip():
             ach.add("aviso", "RESUMO", n.rel, "sem resumo")
@@ -1235,16 +1248,26 @@ def _casa(regra: dict, n: "Nota") -> bool:
     return n.tipo in regra["tipos"]
 
 
+def cores() -> list[tuple]:
+    """CORES com um grupo por área do vault, antes do primeiro grupo de pasta de tipo (o Obsidian pinta com o
+    primeiro que casa, e `path:"estudos/"` também casaria `<área>/estudos/`)."""
+    base = list(CORES)
+    i = next((k for k, c in enumerate(base) if c[0] == "Conhecimento"), len(base))
+    areas = [("Áreas", cfg.get("nome") or area, cfg.get("cor") or "#8E8E93", {"pasta": area}, cfg.get("descricao") or "")
+             for area, cfg in sorted(AREAS_CONFIG.items())]
+    return base[:i] + areas + base[i:]
+
+
 def grupos_de_cor() -> list[dict]:
     return [{"query": _consulta(regra), "color": {"a": 1, "rgb": int(cor[1:], 16)}}
-            for _, _, cor, regra, _ in CORES]
+            for _, _, cor, regra, _ in cores()]
 
 
 def gerar_legenda(notas: list["Nota"]) -> str:
     contagem: Counter[str] = Counter()
     sem_cor = 0
     for n in notas:
-        for _, nome, _, regra, _ in CORES:
+        for _, nome, _, regra, _ in cores():
             if _casa(regra, n):
                 contagem[nome] += 1
                 break
@@ -1259,11 +1282,11 @@ def gerar_legenda(notas: list["Nota"]) -> str:
         "# Legenda do grafo",
         "",
         f"> Gerada por `python3 {PREFIXO}_sistema/cerebro.py cores`, que também grava as cores no Graph.",
-        "> Para mudar uma cor, edite `CORES` no `cerebro.py` e rode de novo. Contrato: [[Processo]].",
+        "> Para mudar uma cor, edite `CORES` no `cerebro.py` (ou `areas` no `_sistema/cerebro_config.json`) e rode de novo. Contrato: [[Processo]].",
         "",
     ]
     familia_atual = None
-    for familia, nome, cor, regra, desc in CORES:
+    for familia, nome, cor, regra, desc in cores():
         if familia != familia_atual:
             out += ["", f"## {familia}", "", "| | Nós | Quantos | O que é |", "|---|---|---|---|"]
             familia_atual = familia
@@ -1316,7 +1339,7 @@ def cmd_cores(args) -> int:
     })
     GRAPH.write_text(json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     LEGENDA.write_text(gerar_legenda(notas), encoding="utf-8")
-    print(f"{len(CORES)} grupos de cor em {GRAPH.relative_to(VAULT)}; legenda em {LEGENDA.name}.")
+    print(f"{len(cores())} grupos de cor em {GRAPH.relative_to(VAULT)}; legenda em {LEGENDA.name}.")
     print("Obsidian aberto: Cmd/Ctrl+P → Reload app without saving, senão ele regrava o graph.json.")
     return 0
 
