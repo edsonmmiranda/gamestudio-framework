@@ -5,6 +5,8 @@ audit      inventário somente leitura: worktrees, branches, stashes e gitlinks
 cleanup    plano de limpeza com os comandos dos itens comprovados; não executa
 preflight  confere o stage, ou o que falta publicar, antes do commit e do push
 gates      lista ou roda as verificações que o repositório declara
+deploy     publica na Hostinger o commit já publicado (worktree limpo, gates, build, conferência);
+           com --check, mostra quem responde por cada destino declarado no workspace.json
 """
 import argparse
 import json
@@ -12,7 +14,9 @@ import os
 from pathlib import Path
 import re
 import shlex
+import shutil
 import subprocess
+import tempfile
 import sys
 import time
 import urllib.parse
@@ -739,6 +743,164 @@ def print_gates(report):
         print(f"\n{plural(report['failed'], 'verificação falhou', 'verificações falharam')}.")
 
 
+# Deploy: o commit já publicado no GitHub, montado num worktree limpo, vai para o site da Hostinger.
+# O que está no ar é sempre um commit que existe no remoto; trabalho fora do commit não sobe.
+
+DEPLOY_KEYS = {"domain", "dist", "spa", "build", "public"}
+
+
+def deploy_config(module):
+    config = (module or {}).get("deploy")
+    if config is None:
+        return None
+    if (not isinstance(config, dict) or not isinstance(config.get("domain"), str) or not config["domain"]
+            or set(config) - DEPLOY_KEYS):
+        raise ValueError(f"deploy inválido em {module['id']}: precisa de domain e aceita só "
+                         + ", ".join(sorted(DEPLOY_KEYS)))
+    return config
+
+
+def run_step(report, name, argv, cwd, timeout):
+    started = time.monotonic()
+    try:
+        result = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout)
+        ok, tail = result.returncode == 0, (result.stdout + result.stderr).strip().splitlines()[-20:]
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        ok, tail = False, [str(exc)]
+    report["steps"].append({"name": name, "status": "passed" if ok else "failed",
+                            "seconds": round(time.monotonic() - started, 1), **({} if ok else {"tail": tail})})
+    return ok
+
+
+def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1800, publish=None):
+    repo, label, module, _ = resolve_target(root, modules, target)
+    config = deploy_config(module)
+    if config is None:
+        raise ValueError(f"{label}: sem deploy no workspace.json (\"deploy\": {{\"domain\": \"…\"}})")
+    head = run_git(repo, "rev-parse", "HEAD")
+    report = {"repository": label, "domain": config["domain"], "commit": head[:7], "mode": "dry-run" if dry_run else "deploy",
+              "blocking": [], "info": [], "steps": [], "result": None}
+    upstream = publish_range(repo)
+    if not (upstream and is_ancestor(repo, head, upstream)):
+        message = f"HEAD {head[:7]} ainda não está em {upstream or 'origin'}; publique o commit antes do deploy"
+        if not allow_unpushed:
+            report["blocking"].append(message)
+            return report
+        report["info"].append(message + " (aceito por --allow-unpushed)")
+    modified, untracked = working_tree(repo)
+    if modified or untracked:
+        report["info"].append(f"fora do deploy: {len(modified)} modificados, {untracked} não rastreados")
+    if publish is None:
+        import hostinger_deploy
+        publish = hostinger_deploy.main
+    temp = Path(tempfile.mkdtemp(prefix=f"gameops-deploy-{module['id']}-"))
+    tree = temp / "tree"
+    try:
+        subprocess.run(["git", "-C", str(repo), "worktree", "add", "--quiet", "--detach", str(tree), head],
+                       check=True, capture_output=True, text=True)
+        package = tree / "package.json"
+        data = json.loads(package.read_text(encoding="utf-8")) if package.is_file() else {}
+        scripts = data.get("scripts", {}) if isinstance(data, dict) else {}
+        if (data.get("dependencies") or data.get("devDependencies")) and not run_step(
+                report, "npm ci", ["npm", "ci", "--no-audit", "--no-fund"], tree, timeout):
+            report["result"] = "dependências não instalaram"
+            return report
+        checked = gates(root, modules, str(tree), run=True, timeout=timeout)
+        for gate in checked["gates"]:
+            report["steps"].append({"name": gate["name"], "status": gate["status"],
+                                    **{key: gate[key] for key in ("seconds", "tail", "reason") if key in gate}})
+        if checked["failed"]:
+            report["result"] = "gates falharam; nada foi enviado"
+            return report
+        built = any(gate["name"] in ("build", "doctor", "verify") and gate["status"] == "passed" for gate in checked["gates"])
+        command = config.get("build") or ("npm run build" if "build" in scripts and not built else None)
+        if command and not run_step(report, command, shlex.split(command), tree, timeout):
+            report["result"] = "build falhou; nada foi enviado"
+            return report
+        argv = ["--domain", config["domain"], "--project", str(tree)]
+        argv += ["--dist", config["dist"]] if config.get("dist") else []
+        argv += ["--spa"] if config.get("spa") else []
+        argv += ["--dry-run"] if dry_run else []
+        try:
+            code = publish(argv)
+        except SystemExit as exc:
+            code = exc.code if isinstance(exc.code, int) else 1
+            report["info"].append(str(exc.code))
+        report["result"] = ("montado sem enviar" if dry_run else "publicado e conferido") if code == 0 else (
+            "publicado com pendência na conferência" if code == 2 else "envio falhou")
+        report["exit"] = code
+        return report
+    finally:
+        subprocess.run(["git", "-C", str(repo), "worktree", "remove", "--force", str(tree)], capture_output=True)
+        subprocess.run(["git", "-C", str(repo), "worktree", "prune"], capture_output=True)
+        shutil.rmtree(temp, ignore_errors=True)
+
+
+def print_deploy(report):
+    print(f"{report['repository']} · {report['commit']} → {report['domain']} ({report['mode']})")
+    for line in report["info"]:
+        print(f"  info: {line}")
+    for step in report["steps"]:
+        extra = step.get("reason") or (f"{step['seconds']} s" if "seconds" in step else "")
+        print(f"  {step['status']:8} {step['name']}" + (f"  ({extra})" if extra else ""))
+        for line in step.get("tail", []):
+            print(f"           {line}")
+    for line in report["blocking"]:
+        print(f"  bloqueio: {line}")
+    print(f"\n{'BLOQUEADO' if report['blocking'] else report['result']}.")
+
+
+def served_by(headers):
+    if headers.get("platform") == "hostinger":
+        return "hostinger"
+    if "x-vercel-id" in headers or headers.get("server", "").lower() == "vercel":
+        return "vercel"
+    return headers.get("server") or "?"
+
+
+def deploy_status(root, modules, target=None, fetch=None):
+    """Onde cada destino responde hoje: domínio da Hostinger e, se declarado, o endereço público atual."""
+    if fetch is None:
+        import hostinger_deploy
+        fetch = lambda host: hostinger_deploy.fetch(host, "/", None)[:2]
+    rows = []
+    for module in modules:
+        if target not in (None, module["id"], module["path"]):
+            continue
+        config = deploy_config(module)
+        if config is None:
+            continue
+        row = {"id": module["id"], "domain": config["domain"], "warnings": []}
+        for key, host in (("site", config["domain"]), ("public", config.get("public"))):
+            if host:
+                host = host.split("://", 1)[-1].strip("/")
+                status, headers = fetch(host)
+                row[key] = {"host": host, "status": status, "server": served_by(headers)}
+        package = Path(root) / module["path"] / "package.json"
+        if package.is_file():
+            script = json.loads(package.read_text(encoding="utf-8")).get("scripts", {}).get("deploy", "")
+            declared = re.search(r"--domain\s+(\S+)", script)
+            if declared and declared.group(1) != config["domain"]:
+                row["warnings"].append(f"npm run deploy publica em {declared.group(1)}, não em {config['domain']}")
+        rows.append(row)
+    return rows
+
+
+def print_deploy_status(rows):
+    if not rows:
+        print("nenhum módulo com deploy no workspace.json.")
+        return
+    for row in rows:
+        site = row.get("site", {})
+        line = f"{row['id']:24} {site.get('host', row['domain']):36} {site.get('status', '-')!s:>4} {site.get('server', '-')}"
+        if "public" in row:
+            public = row["public"]
+            line += f"  · público {public['host']} {public['status']} {public['server']}"
+        print(line)
+        for warning in row["warnings"]:
+            print(f"  aviso: {warning}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -761,6 +923,13 @@ def main():
     verify.add_argument("--all", action="store_true", help="ignora as condições when da configuração")
     verify.add_argument("--timeout", type=int, default=1800)
     verify.add_argument("--json", action="store_true")
+    ship = sub.add_parser("deploy", help="publica na Hostinger o commit já publicado do módulo, ou confere os sites")
+    ship.add_argument("repository", nargs="?", help="id ou caminho do módulo (opcional com --check)")
+    ship.add_argument("--check", action="store_true", help="só confere status e servidor de cada destino (rede)")
+    ship.add_argument("--dry-run", action="store_true", help="worktree, dependências, gates, build e zip; não envia")
+    ship.add_argument("--allow-unpushed", action="store_true", help="aceita commit que ainda não está no remoto")
+    ship.add_argument("--timeout", type=int, default=1800)
+    ship.add_argument("--json", action="store_true")
     args = parser.parse_args()
     try:
         if run_git(args.root, "rev-parse", "--git-dir") is None:
@@ -785,6 +954,17 @@ def main():
                                max_instruction_tokens=limit)
             print(json.dumps(report, ensure_ascii=False, indent=2)) if args.json else print_preflight(report)
             return 1 if report["blocking"] else 0
+        if args.command == "deploy":
+            if args.check:
+                rows = deploy_status(args.root, modules, args.repository)
+                print(json.dumps(rows, ensure_ascii=False, indent=2)) if args.json else print_deploy_status(rows)
+                return 0
+            if not args.repository:
+                raise ValueError("Informe o módulo: gameops.py deploy <id>, ou use --check.")
+            report = deploy(args.root, modules, args.repository, dry_run=args.dry_run,
+                            allow_unpushed=args.allow_unpushed, timeout=args.timeout)
+            print(json.dumps(report, ensure_ascii=False, indent=2)) if args.json else print_deploy(report)
+            return 0 if not report["blocking"] and report.get("exit") == 0 else 1
         report = gates(args.root, modules, args.repository, run=args.run, include_all=args.all, timeout=args.timeout)
         print(json.dumps(report, ensure_ascii=False, indent=2)) if args.json else print_gates(report)
         return 1 if report["failed"] else 0

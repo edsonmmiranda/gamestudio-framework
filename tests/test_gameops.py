@@ -378,5 +378,75 @@ class GatesTest(GameOpsTest):
         self.assertIn("nenhuma verificação declarada", self.cli("gates", "alpha").stdout)
 
 
+class DeployTest(GameOpsTest):
+    def setUp(self):
+        super().setUp()
+        self.modules[0]["deploy"] = {"domain": "alpha.test", "dist": "."}
+        self.calls = []
+
+    def publish(self, argv):
+        tree = Path(argv[argv.index("--project") + 1])
+        self.calls.append({"argv": argv, "files": sorted(path.name for path in tree.iterdir())})
+        return 0
+
+    def worktrees(self):
+        return self.git(self.alpha, "worktree", "list", "--porcelain").count("worktree ")
+
+    def test_only_the_published_commit_goes_out_from_a_clean_worktree(self):
+        (self.alpha / "rascunho.txt").write_text("fora do commit\n")
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        self.assertEqual(report["blocking"], [])
+        self.assertEqual(report["result"], "publicado e conferido")
+        argv = self.calls[0]["argv"]
+        self.assertEqual(argv[:2], ["--domain", "alpha.test"])
+        self.assertEqual(argv[argv.index("--dist") + 1], ".")
+        self.assertIn("main.txt", self.calls[0]["files"])
+        self.assertNotIn("rascunho.txt", self.calls[0]["files"])
+        self.assertIn("fora do deploy: 0 modificados, 1 não rastreados", report["info"])
+        self.assertEqual(self.worktrees(), 1)
+        self.assertFalse(Path(argv[argv.index("--project") + 1]).exists())
+
+    def test_unpushed_commit_is_blocked_unless_allowed(self):
+        self.commit(self.alpha, "novo.txt", "local")
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        self.assertIn("ainda não está em origin/main", "\n".join(report["blocking"]))
+        self.assertEqual(self.calls, [])
+        allowed = gameops.deploy(self.hub, self.modules, "alpha", allow_unpushed=True, dry_run=True,
+                                 publish=self.publish)
+        self.assertEqual(allowed["blocking"], [])
+        self.assertEqual(allowed["result"], "montado sem enviar")
+        self.assertIn("--dry-run", self.calls[0]["argv"])
+        self.assertIn("novo.txt", self.calls[0]["files"])
+
+    @unittest.skipUnless(shutil.which("npm"), "npm ausente")
+    def test_failing_gate_stops_before_anything_is_sent(self):
+        (self.alpha / "package.json").write_text(json.dumps({"scripts": {"test": "node -e \"process.exit(4)\""}}))
+        self.git(self.alpha, "add", "package.json")
+        self.git(self.alpha, "commit", "-m", "gate")
+        self.git(self.alpha, "push", "origin", "main")
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        self.assertEqual(report["result"], "gates falharam; nada foi enviado")
+        self.assertEqual(self.calls, [])
+        self.assertEqual(self.worktrees(), 1)
+
+    def test_module_without_deploy_or_with_unknown_keys_is_refused(self):
+        with self.assertRaisesRegex(ValueError, "sem deploy"):
+            gameops.deploy(self.hub, [dict(self.modules[0], deploy=None)], "alpha")
+        with self.assertRaisesRegex(ValueError, "deploy inválido"):
+            gameops.deploy(self.hub, [dict(self.modules[0], deploy={"dominio": "x"})], "alpha")
+
+    def test_status_says_who_serves_each_destination_and_flags_npm_mismatch(self):
+        self.modules[0]["deploy"]["public"] = "https://alpha.vercel.app"
+        (self.alpha / "package.json").write_text(json.dumps({"scripts": {
+            "deploy": "npm run build && python3 x.py --domain outro.test"}}))
+        answers = {"alpha.test": (200, {"platform": "hostinger", "server": "LiteSpeed"}),
+                   "alpha.vercel.app": (200, {"server": "Vercel", "x-vercel-id": "gru1::x"})}
+        rows = gameops.deploy_status(self.hub, self.modules, fetch=lambda host: answers[host])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["site"], {"host": "alpha.test", "status": 200, "server": "hostinger"})
+        self.assertEqual(rows[0]["public"]["server"], "vercel")
+        self.assertIn("npm run deploy publica em outro.test, não em alpha.test", rows[0]["warnings"])
+
+
 if __name__ == "__main__":
     unittest.main()
