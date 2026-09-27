@@ -429,6 +429,26 @@ class DeployTest(GameOpsTest):
         self.assertEqual(self.calls, [])
         self.assertEqual(self.worktrees(), 1)
 
+    @unittest.skipUnless(shutil.which("npm"), "npm ausente")
+    def test_build_runs_before_gates_that_read_the_build(self):
+        (self.alpha / "package.json").write_text(json.dumps({"scripts": {
+            "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').writeFileSync('dist/ok','1')\"",
+            "test": "node -e \"process.exit(require('fs').existsSync('dist/ok')?0:5)\""}}))
+        self.git(self.alpha, "add", "package.json")
+        self.git(self.alpha, "commit", "-m", "teste lê o build")
+        self.git(self.alpha, "push", "origin", "main")
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        self.assertEqual([step["name"] for step in report["steps"]], ["npm run build", "test", "build"])
+        self.assertEqual(report["result"], "publicado e conferido")
+
+    def test_upload_failure_is_reported_and_the_worktree_is_removed(self):
+        def broken(argv):
+            raise RuntimeError("hostinger hosting files: 500")
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=broken)
+        self.assertEqual(report["result"], "envio falhou")
+        self.assertIn("RuntimeError: hostinger hosting files: 500", report["info"])
+        self.assertEqual(self.worktrees(), 1)
+
     def test_missing_hostinger_cli_blocks_before_building(self):
         with patch.object(gameops.shutil, "which", return_value=None):
             report = gameops.deploy(self.hub, self.modules, "alpha")

@@ -123,13 +123,16 @@ def build_files(dist: Path, project: Path | None = None) -> list[Path]:
     """Nunca publica Git, ambiente, dependências ou vínculo da Vercel, mesmo quando o build é a raiz."""
     patterns = ignore_patterns(project) if project and dist.resolve() == project.resolve() else []
     files = []
-    for p in dist.rglob("*"):
-        rel = p.relative_to(dist).as_posix()
-        parts = rel.split("/")
-        if (not p.is_file() or p.name in SKIP or any(part in PRIVATE_DIRS for part in parts)
-                or any(part.startswith(".env") for part in parts) or ignored(rel, patterns)):
-            continue
-        files.append(p)
+    for folder, dirs, names in os.walk(dist):
+        # Poda na descida: node_modules e .git nem são percorridos.
+        dirs[:] = [d for d in dirs if d not in PRIVATE_DIRS and not d.startswith(".env")]
+        for name in names:
+            p = Path(folder) / name
+            rel = p.relative_to(dist).as_posix()
+            if (name in SKIP or name in PRIVATE_DIRS or any(part.startswith(".env") for part in rel.split("/"))
+                    or ignored(rel, patterns) or not p.is_file()):
+                continue
+            files.append(p)
     return sorted(files)
 
 

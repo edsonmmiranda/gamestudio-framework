@@ -81,11 +81,12 @@ class BuildTests(unittest.TestCase):
 
     def test_project_root_build_never_ships_git_env_dependencies_or_ignored_files(self):
         for rel in ("index.html", "js/game.js", ".git", ".env", ".env.local", "node_modules/x/i.js",
-                    ".vercel/project.json", "docs/notas.md", "AGENTS.md", "art/fonte.psd"):
+                    ".vercel/project.json", "docs/notas.md", "AGENTS.md", "art/fonte.psd",
+                    "assets/audio/musica.mp3", "assets/audio/efeito.mp3"):
             self.write(rel)
-        self.write(".vercelignore", "# comentário\ndocs/\nAGENTS.md\n*.psd\n")
+        self.write(".vercelignore", "# comentário\ndocs/\nAGENTS.md\n*.psd\nassets/audio/musica.mp3\n")
         names = [p.relative_to(self.project).as_posix() for p in deploy.build_files(self.project, self.project)]
-        self.assertEqual(names, ["index.html", "js/game.js"])
+        self.assertEqual(names, ["assets/audio/efeito.mp3", "index.html", "js/game.js"])
         self.write("dist/index.html")
         self.write("dist/docs/manual.md")
         dist_names = [p.relative_to(self.project / "dist").as_posix()

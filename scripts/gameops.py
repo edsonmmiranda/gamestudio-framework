@@ -781,8 +781,8 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
     report = {"repository": label, "domain": config["domain"], "commit": head[:7], "mode": "dry-run" if dry_run else "deploy",
               "blocking": [], "info": [], "steps": [], "result": None}
     if publish is None and not dry_run and shutil.which("hostinger") is None:
-        report["blocking"].append("CLI hostinger ausente nesta máquina: brew install hostinger/tap/hostinger e "
-                                  "hostinger login (o envio usa a sessão dela; nenhum token fica no workspace)")
+        report["blocking"].append("CLI hostinger ausente nesta máquina: brew install hostinger/tap/hostinger; a "
+                                  "primeira chamada faz o login pelo navegador (nenhum token fica no workspace)")
         return report
     upstream = publish_range(repo)
     if not (upstream and is_ancestor(repo, head, upstream)):
@@ -809,17 +809,17 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
                 report, "npm ci", ["npm", "ci", "--no-audit", "--no-fund"], tree, timeout):
             report["result"] = "dependências não instalaram"
             return report
+        # Build antes dos gates: há testes que leem o build (worker do Sites no Sucata Viva).
+        command = config.get("build") or ("npm run build" if "build" in scripts else None)
+        if command and not run_step(report, command, shlex.split(command), tree, timeout):
+            report["result"] = "build falhou; nada foi enviado"
+            return report
         checked = gates(root, modules, str(tree), run=True, timeout=timeout)
         for gate in checked["gates"]:
             report["steps"].append({"name": gate["name"], "status": gate["status"],
                                     **{key: gate[key] for key in ("seconds", "tail", "reason") if key in gate}})
         if checked["failed"]:
             report["result"] = "gates falharam; nada foi enviado"
-            return report
-        built = any(gate["name"] in ("build", "doctor", "verify") and gate["status"] == "passed" for gate in checked["gates"])
-        command = config.get("build") or ("npm run build" if "build" in scripts and not built else None)
-        if command and not run_step(report, command, shlex.split(command), tree, timeout):
-            report["result"] = "build falhou; nada foi enviado"
             return report
         argv = ["--domain", config["domain"], "--project", str(tree)]
         argv += ["--dist", config["dist"]] if config.get("dist") else []
@@ -830,6 +830,9 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
         except SystemExit as exc:
             code = exc.code if isinstance(exc.code, int) else 1
             report["info"].append(str(exc.code))
+        except Exception as exc:  # CLI, rede ou upload: o relatório diz onde parou; o worktree sai no finally.
+            code = 1
+            report["info"].append(f"{type(exc).__name__}: {exc}")
         report["result"] = ("montado sem enviar" if dry_run else "publicado e conferido") if code == 0 else (
             "publicado com pendência na conferência" if code == 2 else "envio falhou")
         report["exit"] = code
