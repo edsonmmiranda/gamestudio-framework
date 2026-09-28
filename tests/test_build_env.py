@@ -35,6 +35,24 @@ class BuildEnvTest(unittest.TestCase):
         self.assertEqual(missing, ["P"])
         self.assertNotIn("SEGREDO", values)
 
+    def test_expansion_in_a_dotenv_file_is_refused_not_sent_literally(self):
+        self.write(".env.local", "BASE=https://a.test\nVITE_URL=${BASE}/v1\n")
+        values, _, missing = build_env.resolve({"env": {"VITE_URL": None}}, self.dir, environ={})
+        self.assertEqual(values, {})
+        self.assertEqual(len(missing), 1)
+        self.assertTrue(missing[0].startswith("VITE_URL (usa ${"))
+
+    def test_every_form_vite_replaces_is_a_reference(self):
+        self.write("src/a.js", "const a = import.meta.env.VITE_A, b = import.meta.env?.VITE_B;\n"
+                   "const c = import.meta.env['VITE_C'], d = import.meta.env?.[\"VITE_D\"];\n"
+                   "const { VITE_E, MODE, VITE_F: f } = import.meta.env;\n")
+        self.write("index.html", "<title>%VITE_TITLE%</title>")
+        self.write("build/gerado.js", "import.meta.env.VITE_EM_BUILD")
+        self.write("tests/a.test.js", "import.meta.env.VITE_SO_TESTE")
+        self.write("vite.config.mjs", "define: { 'import.meta.env.VITE_A': JSON.stringify('x') }")
+        self.assertEqual(build_env.referenced(self.dir),
+                         {"VITE_B", "VITE_C", "VITE_D", "VITE_E", "VITE_F", "VITE_TITLE", "VITE_EM_BUILD"})
+
     def test_invalid_declaration(self):
         for env in ([], {"a-b": None}, {"A": 1}):
             with self.assertRaises(ValueError):

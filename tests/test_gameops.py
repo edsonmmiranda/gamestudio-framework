@@ -318,12 +318,12 @@ class GatesTest(GameOpsTest):
             "build": "node -e \"process.exit(0)\"", "test": "node -e \"console.log('quebrou'); process.exit(3)\"",
             "lint": "node -e \"process.exit(0)\"", "deploy": "node -e \"process.exit(9)\""}}))
         listed = gameops.gates(self.hub, self.modules, "alpha")
-        self.assertEqual([gate["name"] for gate in listed["gates"]], ["lint", "test", "build"])
+        self.assertEqual([gate["name"] for gate in listed["gates"]], ["lint", "build", "test"])
         self.assertEqual({gate["status"] for gate in listed["gates"]}, {"listed"})
         ran = gameops.gates(self.hub, self.modules, "alpha", run=True)
-        self.assertEqual([gate["status"] for gate in ran["gates"]], ["passed", "failed", "passed"])
+        self.assertEqual([gate["status"] for gate in ran["gates"]], ["passed", "passed", "failed"])
         self.assertEqual(ran["failed"], 1)
-        self.assertIn("quebrou", "\n".join(ran["gates"][1]["tail"]))
+        self.assertIn("quebrou", "\n".join(ran["gates"][2]["tail"]))
         self.assertEqual(self.cli("gates", "alpha", "--run").returncode, 1)
 
     def test_configured_hub_gates_run_only_when_their_paths_changed(self):
@@ -438,7 +438,7 @@ class DeployTest(GameOpsTest):
         self.git(self.alpha, "commit", "-m", "teste lê o build")
         self.git(self.alpha, "push", "origin", "main")
         report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
-        self.assertEqual([step["name"] for step in report["steps"]], ["npm run build", "test", "build"])
+        self.assertEqual([step["name"] for step in report["steps"]], ["npm run build", "build", "test"])
         self.assertEqual(report["result"], "publicado e conferido")
 
     def test_upload_failure_is_reported_and_the_worktree_is_removed(self):

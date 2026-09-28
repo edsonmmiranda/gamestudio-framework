@@ -22,7 +22,7 @@ que achou e continuar sem aprender os comandos ou a terminologia do framework?**
 Uma jornada melhor ainda precisa ser demonstrada com pessoas; os testes abaixo
 comprovam comportamentos das ferramentas e conflitos das instruções.
 
-O [registro da leitura no laboratório](../../../games-workspace/docs/pesquisas/MDA%20%E2%80%94%20evolu%C3%A7%C3%A3o%20do%20framework%20de%20games.md)
+O registro da leitura no laboratório (`games-workspace/docs/pesquisas/MDA — evolução do framework de games.md`)
 identifica o corpus, o texto fornecido por Alan e os limites da pesquisa disponível.
 Este documento é o destino central da proposta transferível; não é uma nova receita
 ativa nem substitui os documentos canônicos abaixo.
@@ -31,7 +31,7 @@ ativa nem substitui os documentos canônicos abaixo.
 
 Luna leu o guia 0.10.3, mas confirmou que não abriu imagens, comparou a cena apenas
 ao final e testou somente presença de strings. A entrega excluiu áudio e apresentou
-um mapa de formas simples. O [resultado preservado](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/replay-1/RESULT.md)
+um mapa de formas simples. O resultado preservado (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/replay-1/RESULT.md`)
 reprova a hipótese de que explicitar critérios em texto bastaria nesta execução.
 
 A 0.10.4 torna explícitas operações de produção de arte e inclui
@@ -46,11 +46,11 @@ reprovado artisticamente: limite demonstrado, não apenas declarado.
 
 Arquivos adicionais à revisão 5: script, testes e ajustes na rota de adaptação.
 A acessibilidade pertinente foi conservada no piso; “entrada” não a substitui.
-O [candidato 2](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/framework-candidate-2/manifest.json)
+O candidato 2 (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/framework-candidate-2/manifest.json`)
 identifica os arquivos antes do segundo replay com outro Luna, sem o diagnóstico.
 Critérios e adaptações do segundo teste foram registrados antes da execução.
 
-O [segundo resultado](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/replay-2/RESULT.md)
+O segundo resultado (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/replay-2/RESULT.md`)
 também reprovou: abriu dois pins e rodou a ajuda HTTP, mas fez captura direta sem
 batalha, manteve formas simples e áudio ausente. Declarou a falha do navegador
 e os testes herdados incompatíveis. O revisor conseguiu abrir sua cena depois;
@@ -73,7 +73,7 @@ Pac; variedade de encontros impossível e interrupção de batalha pelo Dex no R
 URLs de assets 404; arte do Red distante do painel indicado. Não foi preciso exigir
 o conteúdo integral de Pokémon para demonstrar a falha.
 
-O [caso completo no laboratório](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/REPORT.md)
+O caso completo no laboratório (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/REPORT.md`)
 preserva pedidos, mensagens/ações observáveis, fontes com hashes, reproduções e
 capturas. Originais não foram alterados. Diagnóstico com estado fabricado está
 separado de interação pública. O campo de modelo não veio no histórico consultado;
@@ -81,7 +81,7 @@ Alan é a fonte da atribuição histórica a Luna.
 
 Correção de interpretação do piloto anterior: Luna era o criador simulado;
 outro agente construía. Aquele caso não valida o desempenho de Luna implementando.
-O [novo protocolo](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/REPLAY-PROTOCOL.md)
+O novo protocolo (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-build-failures/REPLAY-PROTOCOL.md`)
 define antes da execução um replay isolado com `gpt-5.6-luna`, sem o gabarito da
 auditoria, e compara o resultado aos critérios do pedido.
 
@@ -144,7 +144,7 @@ testes. `doctor` confirmou catálogo, manifesto do starter e atalhos vigentes.
 A entrada da skill tem 116 linhas. Foram conferidos os links novos e alterados.
 O núcleo Python não tem scripts próprios de lint/typecheck npm.
 
-O [registro de verificação no laboratório](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-guided-creation/README.md)
+O registro de verificação no laboratório (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-guided-creation/README.md`)
 preserva logs, hashes e a revisão de nove percursos por leitura. Naquela etapa não
 houve revisão independente ou validação de UX com participante. O texto de diagnóstico na interface do
 starter permanece fora deste patch; ajuste-a pela fricção observada no piloto.
@@ -167,7 +167,7 @@ Seções sobre questionários e modelos aprofundados continuam propostas condici
 ### Resultado posterior: ensaio de criação e primeira melhoria
 
 Após a implementação acima, Alan pediu simulação completa, autorizando Luna no
-papel de criador leigo. O [relatório do piloto](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-pilot/REPORT.md)
+papel de criador leigo. O relatório do piloto (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-luna-pilot/REPORT.md`)
 preserva protocolo anterior à entrega, mensagens sem reescrita, versões, ações
 e critérios. O teste usou instruções 0.10.2 e um protótipo local; não uma conversa
 inteiramente inventada pelo autor da análise.
@@ -220,7 +220,7 @@ camada nova de formulários ou um assistente com etapas fixas não resolve essa 
 
 Examinei a entrada da skill, seus comandos, consumidores em `game.py` e o starter.
 Depois executei `guide → start → next → note → next → playtest` numa fixture.
-O [registro do teste](../../../games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-beginner-journey/README.md)
+O registro do teste (`games-workspace/docs/_anexos/mda-framework/evidence/2026-09-12-beginner-journey/README.md`)
 preserva entradas, saídas, hashes e limites. A nota era sintética e identificada
 como avaliação do agente; nenhuma pessoa foi usada ou simulada como participante.
 
@@ -386,15 +386,15 @@ regras; observar percorre a relação inversa. Os oito tipos de diversão formam
 vocabulário aberto. O próprio paper inclui competição nos exemplos e não apresenta
 uma fórmula universal de diversão. Fontes: [paper](https://users.cs.northwestern.edu/~hunicke/MDA.pdf),
 [palestra NWU](http://algorithmancy.8kindsoffun.com/MDAnwu.ppt) e
-[material local do workshop](../../../games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/leblanc-gdc2004-handout/derived/leblanc-gdc2004-OrientationHandout.txt).
+material local do workshop (`games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/leblanc-gdc2004-handout/derived/leblanc-gdc2004-OrientationHandout.txt`).
 
 **Arte, áudio, interface e narrativa participam da causa.** Lantz identifica a
 ambiguidade de “mechanics” e “aesthetics”; a exposição pública de DDE organiza
 design em blueprint, mecânicas e interface. A adaptação útil é nomear todas as
 variáveis de design controláveis na hipótese. O framework já faz isso no workflow;
 o template MDA pode tornar a cobertura explícita. Não é preciso renomear todo o
-processo para DDE. Fontes locais: [Lantz, 2015](../../../games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/lantz-2015-mda/derived/lantz-mda-critique.txt)
-e [Walk, 2017](../../../games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/walk-2017-from-mda-to-dde/derived/gamedeveloper-walk-mda-to-dde.txt).
+processo para DDE. Fontes locais: Lantz, 2015 (`games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/lantz-2015-mda/derived/lantz-mda-critique.txt`)
+e Walk, 2017 (`games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/walk-2017-from-mda-to-dde/derived/gamedeveloper-walk-mda-to-dde.txt`).
 
 **Processo, heurística e questionário cumprem funções diferentes.** O ciclo
 Playcentric converge com o nosso workflow. PLAY oferece inspeção complementar;
@@ -449,7 +449,7 @@ expectativa induzida, aprendizado ou uma causa compartilhada.
 
 ### Análise complementar solicitada em 12/09
 
-Foi lido integralmente o [relatório comparativo fornecido por Alan](../../../games-workspace/docs/pesquisas/Frameworks%20de%20game%20design%20%E2%80%94%20compara%C3%A7%C3%A3o%20da%20evid%C3%AAncia.md),
+Foi lido integralmente o relatório comparativo fornecido por Alan (`games-workspace/docs/pesquisas/Frameworks de game design — comparação da evidência.md`),
 incluindo as passagens adicionais sobre replicação, tipologias, telemetria e FPS web.
 É uma síntese de pesquisa fornecida, não uma validação independente de todas as
 fontes citadas. O paper original do RITE e o teste–reteste do miniPXI foram
@@ -573,7 +573,7 @@ modelos, telemetria e estratificação por habilidade continuam necessários.
 Narrativa e aprendizado podem pedir outras lentes: DDE para explicitar superfícies
 de design, DPE para separar objetivos de aprendizado e experiência. Aprendizado
 exige prova própria; satisfação com um jogo educacional não demonstra aprendizagem.
-[DPE de Winn, corpus local](../../../games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/winn-dpe-chapter/derived/winn-dpe.txt).
+DPE de Winn, corpus local (`games-workspace/docs/_anexos/mda-framework/runs/mda-framework-20260912-e0/raw/winn-dpe-chapter/derived/winn-dpe.txt`).
 
 ## Exemplo: antecipação de um ataque
 

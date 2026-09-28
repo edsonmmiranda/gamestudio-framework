@@ -2115,14 +2115,17 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertNotIn("HEAD substitua o julgamento", game.git_summary_scope())
         self.assertNotIn("HEAD substitua o julgamento", game.next_scope())
 
-    def test_roles_fill_names_the_reuse_the_process_already_refuses(self):
+    # 27/09/2026 (05db57c0): Alan tirou do processo a recusa de reuso automático. O
+    # escopo segue o documento: sem a frase não inventa a recusa; com ela, não a cala.
+    def test_roles_fill_names_the_reuse_only_while_the_process_refuses_it(self):
         guide = (game.FRAMEWORK / "references/process.md").read_text(encoding="utf-8")
-        self.assertTrue(
-            game.process_refuses_automatic_reuse(guide),
-            "o processo já recusa o reuso automático",
-        )
-        self.assertEqual(game.roles_reuse_source(), "references/process.md")
-        report = game.roles_fill(self.project)
+        self.assertFalse(game.process_refuses_automatic_reuse(guide))
+        self.assertIsNone(game.roles_reuse_source())
+        self.assertNotIn("reuso automático", game.roles_fill(self.project)["scope"])
+        self.assertTrue(game.process_refuses_automatic_reuse(
+            "Um asset disponível no disco não é automaticamente reutilizável."))
+        with mock.patch.object(game, "roles_reuse_source", return_value="references/process.md"):
+            report = game.roles_fill(self.project)
         self.assertIn(
             "reuso automático",
             report["scope"],
@@ -2300,14 +2303,17 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertNotIn("infira dependências", game.context_scope())
         self.assertNotIn("infira dependências", game.next_scope())
 
-    def test_scan_names_the_license_the_guide_already_refuses(self):
+    # 27/09/2026 (261002dc): Alan removeu o bloqueio de licença na entrega; o roteiro
+    # passou a dizer que recibo é origem declarada. O scan segue o documento.
+    def test_scan_names_the_license_only_while_the_guide_refuses_it(self):
         guide = (game.FRAMEWORK / "references/gates.md").read_text(encoding="utf-8")
-        self.assertTrue(
-            game.gates_refuse_present_receipt(guide),
-            "o roteiro já recusa que o recibo presente seja licença válida",
-        )
-        self.assertEqual(game.provenance_license_source(), "references/gates.md")
-        report = game.scan(self.project)
+        self.assertFalse(game.gates_refuse_present_receipt(guide))
+        self.assertIsNone(game.provenance_license_source())
+        self.assertNotIn("recibo presente seja licença",
+                         game.scan(self.project)["areas"]["provenance"]["scope"])
+        self.assertTrue(game.gates_refuse_present_receipt("recibo presente não é licença válida"))
+        with mock.patch.object(game, "provenance_license_source", return_value="references/gates.md"):
+            report = game.scan(self.project)
         self.assertIn(
             "recibo presente seja licença",
             report["areas"]["provenance"]["scope"],
@@ -4676,7 +4682,8 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
     def test_what_cannot_be_waived_cannot_be_declared_outside_the_scope_either(self):
         untouchable = [(gate, key) for gate, spec in game.GATES.items()
                        for key, _, waivable, _ in spec["criteria"] if not waivable]
-        self.assertEqual(len(untouchable), 7)
+        # Seis desde 261002dc: deliver.licensing passou a ser dispensável (references/gates.md).
+        self.assertEqual(len(untouchable), 6)
         for gate, key in untouchable:
             with self.subTest(gate=gate, criterion=key):
                 document = self.declare_gate({(gate, key): ("out_of_scope", "não se aplica aqui")})

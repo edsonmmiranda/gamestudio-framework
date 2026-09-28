@@ -659,7 +659,9 @@ def print_preflight(report):
 
 # Gates: verificações declaradas pelo próprio repositório ou pela configuração local.
 
-GATE_ORDER = ("lint", "typecheck", "test", "build", "doctor", "verify", "check")
+# Build antes de test: há suítes que leem o build (Sites do Distrito e do Sucata Viva). Num worktree
+# novo, test primeiro dava vermelho falso — e um vermelho que se aprende a ignorar esconde o real.
+GATE_ORDER = ("lint", "typecheck", "build", "test", "doctor", "verify", "check")
 
 
 def changed_paths(repo):

@@ -17,11 +17,18 @@ import re
 NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 # Ordem do Vite no modo production: o primeiro arquivo que define a variável vence.
 ENV_FILES = (".env.production.local", ".env.local", ".env.production", ".env")
+# Todas as formas que o Vite substitui: env.X, env?.X, env["X"], `const { X } = import.meta.env`
+# e %X% no HTML. Nome que escapa daqui volta a ser a falha muda.
 REFERENCE = re.compile(r"import\.meta\.env\??\.(VITE_[A-Z0-9_]+)")
+BRACKET = re.compile(r"""import\.meta\.env\??\.?\[\s*["'`](VITE_[A-Z0-9_]+)["'`]\s*\]""")
+DESTRUCTURED = re.compile(r"\{([^{}]*)\}\s*=\s*import\.meta\.env\b")
+HTML_REFERENCE = re.compile(r"%(VITE_[A-Z0-9_]+)%")
+VITE_NAME = re.compile(r"\bVITE_[A-Z0-9_]+\b")
 # Chave literal de `define` no vite.config: a própria configuração fornece o valor.
 DEFINED = re.compile(r"""["'`]import\.meta\.env\.(VITE_[A-Z0-9_]+)["'`]\s*:""")
 SOURCE_SUFFIXES = {".js", ".mjs", ".cjs", ".ts", ".mts", ".tsx", ".jsx", ".vue", ".svelte", ".html"}
-SKIP_DIRS = {"node_modules", "dist", "build", "output", "coverage", "tests", "test", "qa", "docs"}
+# Fora: dependências, saída do bundler e código que não vai ao cliente (testes, QA, docs).
+SKIP_DIRS = {"node_modules", "dist", "coverage", "tests", "test", "qa", "docs"}
 BUILD_SUFFIXES = {".js", ".mjs", ".html"}
 
 
@@ -67,10 +74,13 @@ def resolve(config, checkout, environ=None):
             values[key], sources[key] = environ[key], "ambiente"
             continue
         found = next(((name, data[key]) for name, data in files if data.get(key)), None)
-        if found:
-            sources[key], values[key] = found
-        else:
+        if not found:
             missing.append(key)
+        elif "${" in found[1]:
+            # O Vite expande ${OUTRA} no .env; aqui o valor iria literal para o build.
+            missing.append(f"{key} (usa ${{…}} em {found[0]}; escreva o valor)")
+        else:
+            sources[key], values[key] = found
     return values, sources, missing
 
 
@@ -90,6 +100,11 @@ def referenced(tree):
                 continue
             text = path.read_text(encoding="utf-8", errors="ignore")
             found.update(REFERENCE.findall(text))
+            found.update(BRACKET.findall(text))
+            for names in DESTRUCTURED.findall(text):
+                found.update(VITE_NAME.findall(names))
+            if path.suffix == ".html":
+                found.update(HTML_REFERENCE.findall(text))
             if name.startswith("vite.config."):
                 defined.update(DEFINED.findall(text))
     return found - defined

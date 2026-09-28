@@ -252,8 +252,10 @@ def declared_expectations(domain: str, project: Path, root: str | None = None):
     """Atalho `npm run deploy` (sem --expect): o deploy.env do domínio no workspace.json, com os valores
     lidos do ambiente e dos .env* da pasta do projeto. Devolve (esperado, VITE_ sem valor)."""
     root = root or os.environ.get("GAMES_WORKSPACE_ROOT")
-    manifest = Path(root) / "workspace.json" if root else None
-    if not manifest or not manifest.is_file():
+    # Chamado direto pelo núcleo, sem o wrapper do hub: o workspace é o ancestral com workspace.json.
+    candidates = [Path(root)] if root else [Path(project).resolve(), *Path(project).resolve().parents]
+    manifest = next((c / "workspace.json" for c in candidates if (c / "workspace.json").is_file()), None)
+    if not manifest:
         return {}, []
     modules = json.loads(manifest.read_text(encoding="utf-8")).get("modules", [])
     config = next((m["deploy"] for m in modules if isinstance(m.get("deploy"), dict)

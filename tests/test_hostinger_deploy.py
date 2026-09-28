@@ -180,6 +180,12 @@ class ExpectTests(unittest.TestCase):
         (self.project / ".env.local").write_text("VITE_API=https://outra.test\n")
         self.assertEqual(self.run_main(), (3, False))
 
+    def test_without_the_hub_wrapper_the_workspace_is_found_above_the_project(self):
+        with mock.patch.dict(deploy.os.environ):
+            deploy.os.environ.pop("GAMES_WORKSPACE_ROOT", None)
+            deploy.os.environ.pop("VITE_API", None)
+            self.assertEqual(deploy.declared_expectations("alpha.test", self.project), ({}, ["VITE_API"]))
+
     def test_undeclared_domain_or_missing_workspace_checks_nothing(self):
         self.assertEqual(deploy.declared_expectations("outro.test", self.project, str(self.root)), ({}, []))
         self.assertEqual(self.run_main(root=self.root / "sem-workspace"), (0, True))
