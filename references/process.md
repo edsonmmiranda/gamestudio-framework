@@ -79,10 +79,9 @@ pede a lacuna explícita como qualquer outra.
   custo de adaptação injustificado. Explicite essa lacuna e crie somente o necessário.
 
 Considere compatibilidade, licença/proveniência, dependências, substituição e custo
-de manutenção. Um asset disponível no disco não é automaticamente reutilizável.
-Não copie runtime de referência só para absorver um contrato. Antes de nova camada,
-aponte a falha observada e tente a solução menor. Três consumidores com a mesma
-responsabilidade justificam examinar uma extração; três nomes parecidos não bastam.
+de manutenção. Antes de nova camada, aponte a falha observada e tente a solução menor.
+Três consumidores com a mesma responsabilidade justificam examinar uma extração; três
+nomes parecidos não bastam.
 
 Registro mínimo: **necessidade → candidatos/consumidores → decisão e motivo → limite
 da mudança → prova**. Pode viver em decisions.md ou story existente. O contrato
