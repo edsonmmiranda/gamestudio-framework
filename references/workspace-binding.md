@@ -50,6 +50,46 @@ AGENTS e os documentos de cada jogo continuam sendo localizados automaticamente.
 `context_files` pode ser vazio. Use-o somente para referências locais adicionais;
 workflow, checklist e aprendizado genérico entram no núcleo, não nessa configuração.
 
+### Referências do laboratório
+
+`references` diz ao `context` onde o laboratório guarda o que um jogo pode citar
+como referência: o cérebro (estudos, padrões, planos), as bibliotecas de conteúdo e
+as bases de fatos do código. Cada valor é uma pasta dentro do workspace; o núcleo
+não conhece nenhuma delas por padrão.
+
+```json
+{
+  "version": 1,
+  "references": {
+    "studies": "docs",
+    "libraries": "libraries",
+    "anatomy": "outputs/decoded"
+  }
+}
+```
+
+- `studies`: raiz de um vault do [kit do cérebro](../assets/cerebro/Como%20replicar.md).
+  O `context` roda `_sistema/cerebro.py buscar --jogo <pasta do jogo> --json` desse
+  vault e devolve, em `references.studies`, o nó do jogo (`node`) e as notas que o
+  declaram em `jogos:` (`notes`, com tipo, status e resumo). Sem o kit no vault,
+  `tool_missing`; jogo sem nó, `game_not_in_vault`; pasta ausente, `root_missing`.
+- `libraries`: pasta com uma biblioteca por subpasta, cada uma com `library.json`
+  (contrato da skill game-library-studio). Entram em `related` as bibliotecas que os
+  documentos do próprio jogo citam por caminho (`libraries/<nome>`, com arquivo e linha
+  da primeira menção) e as de modo `own` que projetam o jogo (`projectId` igual à pasta
+  do jogo, ou o caminho do jogo no manifesto, README, mandato ou checkpoint). Cada uma
+  traz modo, snapshot, capacidades e escopo do manifesto; `mentioned_missing` lista o
+  que o jogo cita e a pasta não tem. Nada é executado.
+- `anatomy`: pasta com uma base de fatos por referência (`<nome>/anatomia/`). Entram as
+  que os documentos do jogo citam por caminho, com `facts` apontando a base quando existe.
+
+Só documentos do próprio projeto (AGENTS, README e os localizados em
+`foundation.read_first`) contam como declaração; o `AGENTS.md` do laboratório cita
+bibliotecas como exemplo e não liga um jogo a elas. Tudo é candidato: estudo não é
+cânone do jogo, e biblioteca citada não prova que o jogo a segue. Sem a chave,
+`context.references.status` é `not_configured`; o `doctor` lista cada raiz declarada.
+Como usar isso ao implementar: [referência como biblioteca](reference-adaptation.md#4-quando-a-referência-é-uma-biblioteca-do-estúdio).
+
 ## Módulos
 
 O manifesto opcional `workspace.json` declara módulos com `id` e `path`.

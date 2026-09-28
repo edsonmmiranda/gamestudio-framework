@@ -106,6 +106,12 @@ Prova: recurso correto carregado no cenário real, comportamento preservado, cam
 alternativo e referência visual quando afetada. Arquivo gerado ou importado não
 comprova que está sendo consumido.
 
+## Conteúdo como dado nos jogos publicados
+
+Número em tabela com nome e unidade, conteúdo por template e primitivas, mapa como dado-fonte de colisão
+e navegação, regra separada da aparência: as práticas com teste em
+[O que os jogos publicados têm em comum](../references/shipped-games.md), itens 2, 3, 7 e 8.
+
 ## Aprendizados de produção e transporte de assets
 
 [Origem dos casos](../references/sources.md#aprendizados-de-aplicações). Aplicar

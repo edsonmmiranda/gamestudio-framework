@@ -277,6 +277,9 @@ a palavra. O comando lê o campo; não classifica o jogo.
 
 O contexto entrega caminhos para leitura, registros já existentes, catálogos de
 estudo (se um irmão `Games-Frameworks` existir, ou `GAMES_FRAMEWORKS_ROOT`),
+as referências do laboratório (`references`: nó e notas do cérebro, bibliotecas e
+anatomias que o jogo cita, quando `framework/config.json` as declara; ver
+[ligação](references/workspace-binding.md#referências-do-laboratório)),
 menções locais de pause/reset/seed, `foundation` (nove áreas documentais),
 `production_bar` (as dimensões de acabamento pertinentes ao foco), `finish` (perfil
 do checklist de piso) e o acervo `shared/sfx` da raiz informada. Não executa o jogo. Se o mapa recusa que o catálogo ouça o starter, o `context` nomeia a escuta que o mapa já recusa. Acervo no disco não é mix ouvida. Sem chave `ouve`. Se a guia recusa preencher o checklist, o `context` nomeia o checklist que a guia já recusa preencher. Guia no disco não é observação. Sem chave `checklist`.

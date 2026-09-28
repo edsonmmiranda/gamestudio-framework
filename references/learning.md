@@ -77,11 +77,21 @@ economia de execução nem ganho posterior entre ferramentas.
 | Preferência artística, fornecedor excluído, endereço de publicação | AGENTS/configuração do workspace ou documento do jogo |
 | Medição bruta, captura, decisão aplicada e histórico | Jogo ou laboratório que produziu a prova |
 | Segundo cérebro (estudos, padrões, grafo com evidência) | [Kit replicável](../assets/cerebro/Como%20replicar.md); o caso do estúdio permanece no vault do laboratório |
+| Prática comum aos jogos publicados (relógio, tabela, modo como dado, bot, freio, som) | [O que os jogos publicados têm em comum](shipped-games.md); o caso de cada jogo fica no estudo e nos padrões do vault |
 
 Código específico permanece com seus consumidores. Para compartilhar uma implementação,
 confirme o contrato comum e separe parâmetros de identidade, caminhos e políticas.
 Uma técnica reutilizável pode viver como orientação em um package sem transformar
 o código de um jogo inteiro numa biblioteca. O harness continua fino.
+
+## Jogos publicados lidos pela fonte
+
+Vinte e cinco jogos lidos pela fonte primária em setembro de 2026 convergiram, sem combinar, em dezoito
+práticas de máquina, partida e desenho: relógio fixo com tabelas na unidade dele, número em tabela com nome,
+regra separada da aparência, modo e mapa como dados, golpe no clipe, música como estado, bot no corpo do
+jogador, freio para o líder e porta para quem está atrás. Cada uma com quando aplicar, verificar e invalidar
+em [O que os jogos publicados têm em comum](shipped-games.md). O `context` a inclui nos focos `create`,
+`mechanics` e `content`.
 
 ## Aprendizados incorporados nesta extração
 

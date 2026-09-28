@@ -5,7 +5,8 @@ Entrada: ação, estado inicial, alternativa e consequência que precisam mudar.
 Com tela, a primeira regra é a porta. O campo — chuva, guarda,
 recusa — começa depois do avanço. A mostra da porta marca o
 trilho no mesmo alcance do campo; descrever só o meio da partida
-esconde o verbo que abre o ciclo. Sem tela o headless já joga.
+esconde o verbo que abre o ciclo. Sem tela o headless já joga. O que os jogos publicados fazem em
+comum com modo, regra, bot e freio está em [shipped-games](../references/shipped-games.md).
 
 Leia regra, configuração e consumidor existentes. Separe o requisito de experiência
 da primeira solução imaginada. Tente configurar o sistema atual, depois estendê-lo;

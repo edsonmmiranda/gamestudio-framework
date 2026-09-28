@@ -99,5 +99,62 @@ funcionais. Console vazio não prova ausência de 404 nem qualidade visual. Mant
 o registro curto: cenário → esperado → observado → prova/limite. Corrija falhas
 necessárias à promessa antes de apresentar como pronto; siga [entrega](delivery.md).
 
+## 4. Quando a referência é uma biblioteca do estúdio
+
+Um laboratório pode guardar a referência como máquina, não só como imagem ou jogo
+observado: uma biblioteca de conteúdo (contrato da skill game-library-studio) com
+`library.json`, catálogo, `details/` com cada número em `raw`/`value`/`unit`/`status`,
+assets nativos servidos só por um servidor local e um estudo no cérebro. Com a chave
+`references` na [ligação do workspace](workspace-binding.md#referências-do-laboratório),
+o `context` devolve em `references` o nó e as notas do jogo no cérebro, as bibliotecas
+que os documentos do jogo citam (modo, snapshot, capacidades) e as anatomias. Leia isso
+antes de implementar; é candidato, não aprovação.
+
+**Ordem de verdade.** Quando as fontes discordam, vale, nesta ordem: as tabelas e os
+arquivos do pacote da referência; a biblioteca que os leu, organizada e com gate; os
+binários e o código do cliente (anatomia); vídeos públicos da mesma versão; número
+nosso, marcado como nosso, só onde nenhuma fonte cobre. O estudo do cérebro é a leitura
+por pessoa dessas fontes; não é cânone do jogo.
+
+**Dois modos, declarados no brief ou no `AGENTS.md` do jogo:**
+
+- **Réplica como base.** Tudo o que se vê, ouve e mede é igual à referência numa versão
+  fixada, para só depois modificar. Assets e números da referência chegam ao jogo só no
+  servidor de desenvolvimento, lidos da biblioteca; nada deles entra no repositório, em
+  `public/` nem no build, e a flag que os liga é falsa no build.
+- **Regra da referência, expressão nossa.** Só regras, números, fluxo e contagens vêm
+  da biblioteca; arte, som, texto, nomes, mapas e interface são nossos. A folha de
+  referência do jogo guarda cada número com a fonte (`libraries/<nome>@<revisão>`,
+  arquivo e campo) e o estado.
+
+Nos dois modos, um guarda executável declarado no `package.json` recusa arquivos do
+pacote, formatos da referência, sequências de números do cliente em `src/` e `tests/`
+e caminhos absolutos de máquina, e sai com erro. Copiar asset ou número para o jogo
+exige `usage.production` e `usage.redistribution` em `allowed` no catálogo, e a origem
+continua `reference`, nunca `authored`.
+
+**Cada número com origem.** Um só vocabulário por jogo, escrito no brief: `observed`
+(lido de arquivo, tabela ou prefab), `inferred` (derivado, com a evidência nomeada),
+`external_reference` (fora do pacote, fixado por commit ou revisão com data) e
+`assumed` (nosso, com a conta). Constante de jogabilidade sem regra na folha é defeito;
+um gate refaz a folha a partir da biblioteca e compara.
+
+**O que os jogos publicados fazem em comum** (relógio fixo, número em tabela, regra separada da aparência,
+modo e mapa como dados, golpe no clipe, bot no corpo do jogador, freio e porta) está em
+[shipped-games.md](shipped-games.md): use como lista de verificação do que copiar da referência, antes
+do que a torna famosa.
+
+**O que a biblioteca não prova.** Modo, snapshot e capacidades vêm do manifesto, não de
+execução; `runtime: unsupported` significa que ninguém conferiu a partida original.
+Frame data lido do disco não é comportamento em partida: cite a capacidade da biblioteca
+ao lado de cada prova. Biblioteca `own` (do próprio jogo) projeta o commit que fixa e não
+é fonte paralela; o jogo continua dono do conteúdo.
+
+Casos no laboratório de origem (28/09/2026): réplica do Brawlhalla em
+`games/ultimo-rabisco` e do Mario Kart Tour em `games/rabisco-kart`; regra do Among Us
+com expressão própria em `prototypes/rabisco-traira`; parecer
+`docs/registros/Bibliotecas de jogos — o que elas ensinam ao framework.md`.
+
 Origem: mecanismo de referência e comparação da Impeccable, aplicado aos casos
-de adaptação de jogos registrados na [adoção](../adoption.md).
+de adaptação de jogos registrados na [adoção](../adoption.md); a seção 4 vem do
+parecer sobre as bibliotecas do laboratório de origem, 28/09/2026.

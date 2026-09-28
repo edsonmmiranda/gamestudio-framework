@@ -193,6 +193,12 @@ informação sonora precisa de equivalente visual — requisito de
 [acessibilidade](accessibility.md), não recurso extra. Degraus da dimensão `audio_mix`:
 [barra de acabamento](../references/production-bar.md#audio_mix--mixagem-não-arquivos).
 
+## Som nos jogos publicados
+
+Som como evento nomeado com mix em banco, música pela fase da partida, voz com portão e som de impacto
+que escala com o acerto: [O que os jogos publicados têm em comum](../references/shipped-games.md),
+itens 9 e 10.
+
 ## Aprendizados de memória e transporte
 
 Casos e limites em [aprendizados de aplicações](../references/sources.md#aprendizados-de-aplicações).

@@ -52,8 +52,8 @@ python3 scripts/game.py context <projeto> --focus <foco> [--stage <etapa>] [--ge
 ```
 
 Consuma o JSON inteiro. Leia os AGENTS aplicáveis (`instructions`),
-`foundation.read_first`/`records`, os catálogos em `studies` e **somente** as
-referências em `read_next` (receita → pacote de plataforma → pacote de gênero).
+`foundation.read_first`/`records`, os catálogos em `studies`, as referências do
+laboratório em `references` e **somente** as referências em `read_next` (receita → pacote de plataforma → pacote de gênero).
 Não rode de novo se a saída já está nesta conversa; exceções: depois de `teach` ou
 `document` (reescrevem a base), depois de `--event direction-approved`, e em
 retomada (`--event resume`).
@@ -80,10 +80,16 @@ Focos: `create`, `mechanics`, `lifecycle`, `content`, `visual`, `audio`, `feel`,
   implementação” de etapa definida retoma o recorte. O objeto e a conversa prevalecem.
 - `capabilities.mentioned` aponta arquivo local; não prova pause, reset, seed,
   observe, act, advance, capture nem dispose. `context` lê arquivos sem executá-los.
+- `references` vem da chave `references` do `config.json` do laboratório
+  ([ligação](workspace-binding.md#referências-do-laboratório)): nó e notas do cérebro
+  pelo `cerebro.py` do vault, bibliotecas pelos manifestos, anatomias por menção nos
+  documentos do projeto. É candidato: estudo não é cânone, biblioteca citada não prova
+  que o jogo a segue, e nada é executado. Sem a chave, `not_configured`.
 
 1. **Contexto.** Resolva projeto e tarefa; execute `context <projeto> --focus <foco>`.
    Leia os AGENTS aplicáveis, `foundation.read_first`/`records`, os catálogos em
-   `studies` e somente as referências em `read_next`. O núcleo é agnóstico;
+   `studies`, as referências do laboratório em `references` e somente as referências
+   em `read_next`. O núcleo é agnóstico;
    `read_next` inclui o [pacote de plataforma](../packs/README.md) quando a engine foi
    identificada e o de gênero quando você passou `--genre`. Se `packs.genre.suggested`
    trouxer um gênero lido de documento, confirme com a conversa e repita o `context`

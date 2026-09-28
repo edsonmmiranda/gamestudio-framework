@@ -65,7 +65,7 @@ INSTRUCTION_FILES = (
 EVENTS = ("task", "direction-approved", "resume", "initialize")
 REFERENCES = (
     "process", "quality", "preproduction", "project-audit", "game-design-system", "sources",
-    "ambition", "aaa-checklist", "production-bar", "gates",
+    "ambition", "aaa-checklist", "production-bar", "gates", "shipped-games",
 )
 # Pacotes: o núcleo é agnóstico; um pacote só entra quando a plataforma foi identificada ou o gênero foi declarado.
 PLATFORM_PACKS = {
@@ -5535,6 +5535,8 @@ def select_references(focus, stage, document_minimum):
         references.append(FRAMEWORK / "references/ambition.md")
     if focus in ("create", "feel", "audio", "production") or stage in ("aaa", "vertical-slice", "qa", "milestone"):
         references.append(FRAMEWORK / "references/aaa-checklist.md")
+    if focus in ("create", "mechanics", "content"):
+        references.append(FRAMEWORK / "references/shipped-games.md")
     if stage == "aaa":
         references.extend(FRAMEWORK / f"recipes/{extra}.md" for extra in ("feel", "audio"))
     if stage:
@@ -6398,11 +6400,14 @@ def workspace_module(project, root=None):
     return None
 
 
+REFERENCE_KINDS = ("studies", "libraries", "anatomy")
+
+
 def workspace_profile(root):
     """Read local context references; all reusable rules remain in this repository."""
     root = Path(root).resolve()
     config = root / "framework/config.json"
-    result = {"root": str(root), "config": None, "context_files": [], "missing": []}
+    result = {"root": str(root), "config": None, "context_files": [], "missing": [], "references": {}}
     if not config.is_file():
         return result
     data = workspace.load_config(root)
@@ -6417,7 +6422,260 @@ def workspace_profile(root):
         collection = result["context_files"] if path.is_file() else result["missing"]
         if str(path) not in collection:
             collection.append(str(path))
+    result["references"] = reference_roots(root, data.get("references"))
     return result
+
+
+def reference_roots(root, declared):
+    """`references` do config.json: {studies|libraries|anatomy: pasta relativa à raiz do workspace}."""
+    if declared is None:
+        return {}
+    valid = isinstance(declared, dict) and all(
+        isinstance(name, str) and isinstance(value, str) and value.strip("/") for name, value in declared.items()
+    )
+    if not valid:
+        raise ValueError("references precisa ser um objeto {studies|libraries|anatomy: caminho relativo}")
+    roots = {}
+    for name, value in declared.items():
+        if name not in REFERENCE_KINDS:
+            raise ValueError(f"referência desconhecida em references: {name!r} (aceitas: {', '.join(REFERENCE_KINDS)})")
+        path = (root / value).resolve()
+        if not path.is_relative_to(root):
+            raise ValueError("Referência de personalização fora do workspace")
+        roots[name] = {"path": str(path), "relative": PurePosixPath(value).as_posix().strip("/"), "exists": path.is_dir()}
+    return roots
+
+
+def reference_scope():
+    return (
+        "Candidatos lidos da configuração do laboratório, não fila validada: estudo não é cânone do jogo; "
+        "biblioteca citada não prova que o jogo a segue; modo, snapshot e capacidades vêm do manifesto, "
+        "não de execução; anatomia é base de fatos do código, não observação do runtime."
+    )
+
+
+def reference_documents(project, instructions, read_first):
+    """Documentos do próprio projeto: só neles citar uma biblioteca ou anatomia conta como declaração do jogo."""
+    project = Path(project).resolve()
+    candidates = [Path(item) for item in instructions]
+    candidates.extend(project / relative for relative in read_first)
+    candidates.append(project / "README.md")
+    documents = []
+    for path in candidates:
+        try:
+            resolved = path.resolve()
+        except OSError:
+            continue
+        # O AGENTS do laboratório cita bibliotecas como exemplo; isso não liga um jogo a elas.
+        if resolved.is_relative_to(project) and resolved.is_file() and resolved not in documents:
+            documents.append(resolved)
+    return documents
+
+
+def reference_mentions(documents, relative_root, max_bytes=400_000):
+    """Primeira menção `<raiz>/<nome>` nos documentos: nome → arquivo e linha."""
+    pattern = re.compile(r"(?<![\w-])" + re.escape(relative_root.strip("/")) + r"/([A-Za-z0-9][A-Za-z0-9._-]*)")
+    found = {}
+    for path in documents:
+        try:
+            if path.stat().st_size > max_bytes:
+                continue
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for number, line in enumerate(text.splitlines(), 1):
+            for match in pattern.finditer(line):
+                name = match.group(1).rstrip(".")
+                if name:
+                    found.setdefault(name, {"path": str(path), "line": number})
+    return found
+
+
+def library_summary(folder, manifest_name="library.json"):
+    """O que o manifesto da biblioteca declara; nada aqui a executa."""
+    manifest = folder / manifest_name
+    summary = {
+        "name": folder.name, "path": str(folder), "manifest": str(manifest) if manifest.is_file() else None,
+        "status": None, "project_id": None, "label": None, "mode": None,
+        "snapshot": {"id": None, "revision": None}, "capabilities": {}, "scope": None,
+    }
+    if not manifest.is_file():
+        summary["status"] = "no_manifest"
+        return summary
+    try:
+        data = read_json(manifest)
+    except (OSError, ValueError) as error:
+        summary.update({"status": "invalid_manifest", "reason": str(error)[:200]})
+        return summary
+    if not isinstance(data, dict):
+        summary.update({"status": "invalid_manifest", "reason": "manifesto não é um objeto"})
+        return summary
+    snapshot = data.get("snapshot") if isinstance(data.get("snapshot"), dict) else {}
+    capabilities = data.get("capabilities") if isinstance(data.get("capabilities"), dict) else {}
+    summary.update({
+        "status": "listed",
+        "project_id": data.get("projectId"),
+        "label": data.get("label"),
+        "mode": data.get("mode"),
+        "snapshot": {"id": snapshot.get("id"), "revision": snapshot.get("revision")},
+        "capabilities": {
+            name: (value.get("status") if isinstance(value, dict) else value) for name, value in capabilities.items()
+        },
+        "scope": data.get("scope"),
+    })
+    return summary
+
+
+def library_projects_game(folder, summary, project, root, max_bytes=400_000):
+    """Biblioteca `own` que projeta este jogo: projectId igual à pasta, ou o caminho do jogo nos documentos dela."""
+    if summary.get("mode") != "own":
+        return None
+    project = Path(project).resolve()
+    if summary.get("project_id") and summary["project_id"] == project.name:
+        return {"path": summary["manifest"], "line": None, "basis": "projectId"}
+    try:
+        relative = project.relative_to(Path(root).resolve()).as_posix()
+    except ValueError:
+        relative = project.name
+    needle = re.compile(r"(?<![\w-])" + re.escape(relative) + r"(?![\w-])")
+    for name in ("library.json", "README.md", "mandate.md", "checkpoint.md"):
+        path = folder / name
+        try:
+            if not path.is_file() or path.stat().st_size > max_bytes:
+                continue
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for number, line in enumerate(text.splitlines(), 1):
+            if needle.search(line):
+                return {"path": str(path), "line": number, "basis": "path"}
+    return None
+
+
+def studies_from_vault(vault, root, project, timeout=60):
+    """Nó e notas do cérebro ligadas ao jogo, pelo `buscar --jogo --json` do kit que mora no vault."""
+    vault = Path(vault)
+    tool = vault / "_sistema" / "cerebro.py"
+    block = {"vault": str(vault), "tool": str(tool), "status": None, "command": None,
+             "node": None, "notes": [], "count": 0, "by_type": {}}
+    if not tool.is_file():
+        block.update({"status": "tool_missing", "message": "o vault não tem _sistema/cerebro.py (kit em assets/cerebro)"})
+        return block
+    project = Path(project).resolve()
+    try:
+        target = project.relative_to(Path(root).resolve()).as_posix()
+    except ValueError:
+        target = project.name
+    argv = ["buscar", "--jogo", target, "--json"]
+    block["command"] = shlex.join(["python3", str(tool), *argv])
+    try:
+        run = subprocess.run([sys.executable, str(tool), *argv], cwd=str(root), capture_output=True,
+                             text=True, timeout=timeout)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        block.update({"status": "error", "message": str(error)[:300]})
+        return block
+    if run.returncode != 0:
+        first = ((run.stdout.strip() or run.stderr.strip()).splitlines() or [""])[0]
+        block.update({"status": "game_not_in_vault" if "não encontrado" in first else "error", "message": first[:300]})
+        return block
+    try:
+        items = json.loads(run.stdout)
+    except ValueError:
+        block.update({"status": "error", "message": "a saída do buscar não é JSON"})
+        return block
+    by_type = {}
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict):
+            continue
+        entry = {
+            "path": str(vault / str(item.get("caminho") or "")), "title": item.get("titulo"),
+            "type": item.get("tipo"), "status": item.get("status"), "summary": item.get("resumo"),
+            "themes": item.get("temas") or [], "games": item.get("jogos") or [],
+        }
+        if entry["type"] == "jogo":
+            if block["node"] is None:
+                block["node"] = entry["path"]
+            continue
+        block["notes"].append(entry)
+        by_type[entry["type"]] = by_type.get(entry["type"], 0) + 1
+    block["count"] = len(block["notes"])
+    block["by_type"] = dict(sorted(by_type.items(), key=lambda pair: str(pair[0])))
+    block["status"] = "listed"
+    return block
+
+
+def related_libraries(project, root, entry, documents):
+    folder = Path(entry["path"])
+    mentions = reference_mentions(documents, entry["relative"])
+    result = {"root": entry["path"], "status": "listed" if entry["exists"] else "root_missing",
+              "folders": 0, "available": 0, "related": [], "mentioned_missing": []}
+    if not entry["exists"]:
+        result["mentioned_missing"] = [dict(name=name, **where) for name, where in mentions.items()]
+        return result
+    for child in sorted(path for path in folder.iterdir() if path.is_dir() and not path.name.startswith(".")):
+        result["folders"] += 1
+        summary = library_summary(child)
+        if summary["status"] == "listed":
+            result["available"] += 1
+        relation = None
+        if child.name in mentions:
+            relation = {"kind": "mentioned_by_game", **mentions[child.name]}
+        else:
+            projects = library_projects_game(child, summary, project, root)
+            if projects:
+                relation = {"kind": "projects_game", **projects}
+        if relation:
+            result["related"].append(dict(summary, relation=relation))
+    result["mentioned_missing"] = [
+        dict(name=name, **where) for name, where in mentions.items() if not (folder / name).is_dir()
+    ]
+    return result
+
+
+def related_anatomy(entry, documents, folder_name="anatomia"):
+    folder = Path(entry["path"])
+    mentions = reference_mentions(documents, entry["relative"])
+    result = {"root": entry["path"], "status": "listed" if entry["exists"] else "root_missing",
+              "available": 0, "related": []}
+    if entry["exists"]:
+        result["available"] = sum(
+            1 for path in folder.iterdir()
+            if path.is_dir() and not path.name.startswith(".") and (path / folder_name).is_dir()
+        )
+    for name, where in mentions.items():
+        target = folder / name
+        facts = target / folder_name
+        result["related"].append({
+            "name": name, "path": str(target), "exists": target.is_dir(),
+            "facts": str(facts) if facts.is_dir() else None,
+            "relation": {"kind": "mentioned_by_game", **where},
+        })
+    return result
+
+
+def workspace_references(project, root, profile, documents):
+    """Referências do laboratório que dizem respeito a este jogo: estudos, bibliotecas e anatomias."""
+    roots = profile.get("references") or {}
+    block = {"scope": reference_scope()}
+    if not roots:
+        block["status"] = "not_configured"
+        block["how_to"] = (
+            'framework/config.json → "references": {"studies": "docs", "libraries": "libraries", '
+            '"anatomy": "outputs/decoded"}; cada valor é uma pasta dentro do workspace.'
+        )
+        return block
+    block["status"] = "listed"
+    if "studies" in roots:
+        entry = roots["studies"]
+        block["studies"] = (
+            studies_from_vault(entry["path"], root, project) if entry["exists"]
+            else {"vault": entry["path"], "status": "root_missing", "notes": [], "count": 0, "by_type": {}}
+        )
+    if "libraries" in roots:
+        block["libraries"] = related_libraries(project, root, roots["libraries"], documents)
+    if "anatomy" in roots:
+        block["anatomy"] = related_anatomy(roots["anatomy"], documents)
+    return block
 
 
 def context(project, focus, stage=None, studies_root=None, event="task", root=None, genre=None, scale=None):
@@ -6462,11 +6720,14 @@ def context(project, focus, stage=None, studies_root=None, event="task", root=No
         if pack:
             references.insert(references.index(recipe) + 1 if recipe in references else len(references), pack)
     references = list(dict.fromkeys(references))
-    profile = workspace_profile(root if root is not None else default_root())
+    workspace_root = root if root is not None else default_root()
+    profile = workspace_profile(workspace_root)
     references.extend(path for path in profile["context_files"] if path not in references)
     if initializing and str(FRAMEWORK / "recipes/architecture.md") not in references:
         references.append(str(FRAMEWORK / "recipes/architecture.md"))
     studies = studies_for(focus, STUDIES_ROOT if studies_root is None else studies_root)
+    studio_references = workspace_references(
+        project, workspace_root, profile, reference_documents(project, instructions, foundation["read_first"]))
     source_scope = continuity_source_scope()
     return {
         "schema_version": 3, "project": str(project), "exists": project.is_dir(), "kind": kind,
@@ -6474,7 +6735,7 @@ def context(project, focus, stage=None, studies_root=None, event="task", root=No
         "workspace": profile,
         "focus": focus, "stage": stage, "event": event, "instructions": instructions, "records": records,
         "scale": read_scale(foundation["scale_mentions"], scale),
-        "read_next": references, "packs": packs, "studies": studies,
+        "read_next": references, "packs": packs, "studies": studies, "references": studio_references,
         "git": git_summary(project) if project.is_dir() else None,
         "source_index": str(FRAMEWORK / "references/sources.md"),
         "package_manager": manager,
@@ -6552,6 +6813,7 @@ def context(project, focus, stage=None, studies_root=None, event="task", root=No
             "Sem packageManager ou lockfile, npm é apenas a convenção do executor de package.json.",
             "Consulte as instruções mais específicas (AGENTS.md e equivalentes em instructions) ao escolher os arquivos que serão alterados; git.recent é histórico, não prova.",
             "studies lista catálogos do foco se existirem no irmão Games-Frameworks; ausência não é evidência negativa.",
+            "references vem da chave references do config.json do laboratório (nó e notas do cérebro pelo cerebro.py do vault, bibliotecas pelos manifestos, anatomias por menção nos documentos do projeto); lista candidatos, não prova que o jogo segue a referência nem executa a biblioteca. Sem a chave, status not_configured.",
             "capabilities.mentioned é só token em arquivo de inspeção. Não prova pause, reset, seed nem determinismo.",
             "capabilities.unknown significa não localizado na lista fixa de arquivos de inspeção, não capacidade ausente; rastreie o entrypoint e os consumidores na auditoria.",
             "Áudio novo: se shared/sfx tiver sons, busque (`sfx search`) antes de baixar. Sem acervo, o starter já fala em public/sfx; sfx search nomeia o stem que casa, sfx info lê a chave e nomeia o stem que o recibo lista e o disco perdeu, roles --fill nomeia o mesmo stem, roles --apply e sfx copy levam bytes e créditos, sfx verify nomeia os stems sem cruzar o que não existe, nomeia o stem que o recibo lista e o disco perdeu e sfx serve recusa. Com sons, sfx serve abre a página de escuta — se ui/ faltar, o harness gera a lista — e sfx verify nomeia o som que o catálogo lista e o disco perdeu. Tocar nessa página não é mix ouvida. Crescer o acervo é `sfx import ARQUIVO --metadata JSON` (ffmpeg); `sfx info` lê a ficha do acervo ou a chave do stem — o recibo que lista um stem e o disco perdeu não é id desconhecido; se o inspect já mediu o pico, o sfx info nomeia o pico que o inspect já mede — e `sfx export ID --to PASTA` copia bytes e créditos do acervo ou do stem e nomeia o stem que o recibo lista e o disco perdeu; exportar não inventa bytes. Importar e exportar não é ouvir. Piso de gravação licenciada; 8-bit, chiptune, jsfxr e Kenney arcade não são o padrão.",
@@ -8611,6 +8873,18 @@ def doctor(root):
         "studies", False, studies.is_dir(), str(studies) if studies.is_dir() else f"ausente: {studies}",
         "Sem Games-Frameworks (ou GAMES_FRAMEWORKS_ROOT), `studies` vem vazio; ausência não é evidência negativa.",
     )
+    try:
+        declared = workspace_profile(root).get("references", {}) if root.is_dir() else {}
+    except (OSError, ValueError) as error:
+        declared = {}
+        add("references", False, False, f"config.json inválido: {error}",
+            "Corrija `references` em framework/config.json: {studies|libraries|anatomy: pasta dentro do workspace}.")
+    for name, entry in sorted(declared.items()):
+        add(
+            f"references.{name}", False, entry["exists"],
+            entry["path"] if entry["exists"] else f"ausente: {entry['path']}",
+            None if entry["exists"] else f"Crie a pasta ou ajuste `references.{name}` em framework/config.json.",
+        )
     # Num laboratório de trabalho os jogos já existem, e contá-los sem nomeá-los
     # obriga quem chega a adivinhar os caminhos que este comando acabou de ler.
     named = ", ".join(Path(item["project"]).name for item in projects[:6])
