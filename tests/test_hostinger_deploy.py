@@ -1,5 +1,6 @@
 """Static Hostinger publishing: vercel.json translation, build resolution and archive contents."""
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -141,6 +142,47 @@ class ResolveUsernameTests(unittest.TestCase):
         with mock.patch.object(deploy, "cli", cli), self.assertRaises(SystemExit):
             deploy.resolve_username("rabisco.net")
         self.assertEqual(len(calls), 1)
+
+
+class ExpectTests(unittest.TestCase):
+    """Nada vai para a Hostinger sem a configuração pública declarada (placar fora do ar em 28/09/2026)."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.project = self.root / "games/alpha"
+        (self.project / "dist/assets").mkdir(parents=True)
+        (self.project / "dist/index.html").write_text("<title>x</title>")
+        (self.project / "dist/assets/a.js").write_text('const e={VITE_API:"https://api.test"};')
+        (self.root / "workspace.json").write_text(json.dumps({"modules": [{"id": "alpha", "path": "games/alpha",
+            "deploy": {"domain": "alpha.test", "env": {"VITE_API": None, "FIXO": "1"}}}]}))
+
+    def run_main(self, *extra, root=None):
+        argv = ["--domain", "alpha.test", "--project", str(self.project), "--dry-run", *extra]
+        with mock.patch.dict(deploy.os.environ, {"GAMES_WORKSPACE_ROOT": str(root or self.root)}), \
+                mock.patch.object(deploy, "make_zip", wraps=deploy.make_zip) as zipped, \
+                mock.patch("builtins.print"):
+            deploy.os.environ.pop("VITE_API", None)
+            return deploy.main(argv), zipped.called
+
+    def test_build_without_the_expected_value_is_refused_before_the_zip(self):
+        self.assertEqual(self.run_main("--expect", "VITE_API=https://outra.test"), (3, False))
+        self.assertEqual(self.run_main("--expect", "VITE_API=https://api.test"), (0, True))
+
+    def test_npm_shortcut_reads_the_declaration_and_the_project_env_files(self):
+        self.assertEqual(deploy.declared_expectations("alpha.test", self.project, str(self.root)), ({}, ["VITE_API"]))
+        self.assertEqual(self.run_main(), (3, False))
+        (self.project / ".env.local").write_text("VITE_API=https://api.test\n")
+        self.assertEqual(deploy.declared_expectations("alpha.test", self.project, str(self.root)),
+                         ({"VITE_API": "https://api.test"}, []))
+        self.assertEqual(self.run_main(), (0, True))
+        (self.project / ".env.local").write_text("VITE_API=https://outra.test\n")
+        self.assertEqual(self.run_main(), (3, False))
+
+    def test_undeclared_domain_or_missing_workspace_checks_nothing(self):
+        self.assertEqual(deploy.declared_expectations("outro.test", self.project, str(self.root)), ({}, []))
+        self.assertEqual(self.run_main(root=self.root / "sem-workspace"), (0, True))
 
 
 if __name__ == "__main__":

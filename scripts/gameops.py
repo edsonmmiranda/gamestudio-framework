@@ -21,6 +21,7 @@ import sys
 import time
 import urllib.parse
 
+import build_env
 from workspace import ROOT, load_config, load_manifest, parent_of
 
 
@@ -694,7 +695,7 @@ def declared_gates(root, repo, label):
     return gates, "package.json" + (" (sem node_modules: rode npm ci antes)" if needs_install else "")
 
 
-def gates(root, modules, target, run=False, include_all=False, timeout=1800):
+def gates(root, modules, target, run=False, include_all=False, timeout=1800, env=None):
     repo, label, _, owner = resolve_target(root, modules, target)
     declared, source = declared_gates(root, repo, owner)
     changes = changed_paths(repo) if any(gate["when"] for gate in declared) else []
@@ -714,7 +715,8 @@ def gates(root, modules, target, run=False, include_all=False, timeout=1800):
         else:
             started = time.monotonic()
             try:
-                result = subprocess.run(gate["argv"], cwd=repo, capture_output=True, text=True, timeout=timeout)
+                result = subprocess.run(gate["argv"], cwd=repo, capture_output=True, text=True, timeout=timeout,
+                                        env=env)
                 item["status"] = "passed" if result.returncode == 0 else "failed"
                 item["exit"] = result.returncode
                 if result.returncode:
@@ -746,7 +748,7 @@ def print_gates(report):
 # Deploy: o commit já publicado no GitHub, montado num worktree limpo, vai para o site da Hostinger.
 # O que está no ar é sempre um commit que existe no remoto; trabalho fora do commit não sobe.
 
-DEPLOY_KEYS = {"domain", "dist", "spa", "build", "public"}
+DEPLOY_KEYS = {"domain", "dist", "spa", "build", "public", "env"}
 
 
 def deploy_config(module):
@@ -757,13 +759,17 @@ def deploy_config(module):
             or set(config) - DEPLOY_KEYS):
         raise ValueError(f"deploy inválido em {module['id']}: precisa de domain e aceita só "
                          + ", ".join(sorted(DEPLOY_KEYS)))
+    try:
+        build_env.declared(config)
+    except ValueError as exc:
+        raise ValueError(f"{module['id']}: {exc}") from None
     return config
 
 
-def run_step(report, name, argv, cwd, timeout):
+def run_step(report, name, argv, cwd, timeout, env=None):
     started = time.monotonic()
     try:
-        result = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=env)
         ok, tail = result.returncode == 0, (result.stdout + result.stderr).strip().splitlines()[-20:]
     except (OSError, subprocess.TimeoutExpired) as exc:
         ok, tail = False, [str(exc)]
@@ -794,6 +800,14 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
     modified, untracked = working_tree(repo)
     if modified or untracked:
         report["info"].append(f"fora do deploy: {len(modified)} modificados, {untracked} não rastreados")
+    # O worktree limpo não tem .env*: sem isto o build sai sem a configuração e ninguém vê (build_env.py).
+    values, sources, missing = build_env.resolve(config, repo)
+    report["env"] = sources
+    if missing:
+        report["blocking"].append(
+            "variáveis do build ausentes: " + ", ".join(missing) + f"; defina no ambiente ou em "
+            f"{module['path']}/.env.local (fora do Git). Nada foi montado")
+        return report
     if publish is None:
         import hostinger_deploy
         publish = hostinger_deploy.main
@@ -802,6 +816,13 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
     try:
         subprocess.run(["git", "-C", str(repo), "worktree", "add", "--quiet", "--detach", str(tree), head],
                        check=True, capture_output=True, text=True)
+        undeclared = sorted(build_env.referenced(tree) - set(values))
+        if undeclared:
+            report["blocking"].append(
+                "o código lê " + ", ".join(undeclared) + " e o deploy não declara; acrescente em \"env\" no "
+                "workspace.json (null: vem da máquina; \"\": desligada de propósito). Nada foi montado")
+            return report
+        environ = {**os.environ, **values}
         package = tree / "package.json"
         data = json.loads(package.read_text(encoding="utf-8")) if package.is_file() else {}
         scripts = data.get("scripts", {}) if isinstance(data, dict) else {}
@@ -811,10 +832,10 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
             return report
         # Build antes dos gates: há testes que leem o build (worker do Sites no Sucata Viva).
         command = config.get("build") or ("npm run build" if "build" in scripts else None)
-        if command and not run_step(report, command, shlex.split(command), tree, timeout):
+        if command and not run_step(report, command, shlex.split(command), tree, timeout, env=environ):
             report["result"] = "build falhou; nada foi enviado"
             return report
-        checked = gates(root, modules, str(tree), run=True, timeout=timeout)
+        checked = gates(root, modules, str(tree), run=True, timeout=timeout, env=environ)
         for gate in checked["gates"]:
             report["steps"].append({"name": gate["name"], "status": gate["status"],
                                     **{key: gate[key] for key in ("seconds", "tail", "reason") if key in gate}})
@@ -824,6 +845,9 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
         argv = ["--domain", config["domain"], "--project", str(tree)]
         argv += ["--dist", config["dist"]] if config.get("dist") else []
         argv += ["--spa"] if config.get("spa") else []
+        # O envio confere no build o que vai para o cliente; faltando, recusa antes do zip.
+        for key, value in build_env.expected(values).items():
+            argv += ["--expect", f"{key}={value}"]
         argv += ["--dry-run"] if dry_run else []
         try:
             code = publish(argv)
@@ -833,8 +857,9 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
         except Exception as exc:  # CLI, rede ou upload: o relatório diz onde parou; o worktree sai no finally.
             code = 1
             report["info"].append(f"{type(exc).__name__}: {exc}")
-        report["result"] = ("montado sem enviar" if dry_run else "publicado e conferido") if code == 0 else (
-            "publicado com pendência na conferência" if code == 2 else "envio falhou")
+        report["result"] = ("montado sem enviar" if dry_run else "publicado e conferido") if code == 0 else {
+            2: "publicado com pendência na conferência",
+            3: "build sem a configuração declarada; nada foi enviado"}.get(code, "envio falhou")
         report["exit"] = code
         return report
     finally:
@@ -847,6 +872,8 @@ def print_deploy(report):
     print(f"{report['repository']} · {report['commit']} → {report['domain']} ({report['mode']})")
     for line in report["info"]:
         print(f"  info: {line}")
+    if report.get("env"):
+        print("  ambiente do build: " + ", ".join(f"{key} ({source})" for key, source in report["env"].items()))
     for step in report["steps"]:
         extra = step.get("reason") or (f"{step['seconds']} s" if "seconds" in step else "")
         print(f"  {step['status']:8} {step['name']}" + (f"  ({extra})" if extra else ""))

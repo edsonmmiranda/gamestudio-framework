@@ -8,7 +8,11 @@ files are compared byte for byte with the build. API calls go through the authen
 stay in memory during the upload.
 
 usage: hostinger_deploy.py --domain rabisco.net [--project .] [--dist dist/client]
-                           [--spa] [--origin 82.180.153.55] [--dry-run | --verify-only]
+                           [--spa] [--origin 82.180.153.55] [--expect NOME=VALOR]
+                           [--dry-run | --verify-only]
+
+Before zipping, the build must contain every public variable the domain declares in
+`deploy.env` of workspace.json (build_env.py); otherwise nothing is sent (exit 3).
 """
 import argparse
 import fnmatch
@@ -25,6 +29,9 @@ import urllib.error
 from urllib.parse import quote
 import urllib.request
 import zipfile
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # também quando carregado pelo caminho (testes)
+import build_env
 
 CHUNK = 16 * 1024 * 1024
 SKIP = {".DS_Store", ".gitignore", ".gitattributes", ".gitmodules", ".vercelignore", ".npmrc", ".nvmrc"}
@@ -241,6 +248,22 @@ def verify(domain: str, dist: Path, paths: list[str], origin: str | None) -> lis
     return problems
 
 
+def declared_expectations(domain: str, project: Path, root: str | None = None):
+    """Atalho `npm run deploy` (sem --expect): o deploy.env do domínio no workspace.json, com os valores
+    lidos do ambiente e dos .env* da pasta do projeto. Devolve (esperado, VITE_ sem valor)."""
+    root = root or os.environ.get("GAMES_WORKSPACE_ROOT")
+    manifest = Path(root) / "workspace.json" if root else None
+    if not manifest or not manifest.is_file():
+        return {}, []
+    modules = json.loads(manifest.read_text(encoding="utf-8")).get("modules", [])
+    config = next((m["deploy"] for m in modules if isinstance(m.get("deploy"), dict)
+                   and m["deploy"].get("domain") == domain), None)
+    if not config:
+        return {}, []
+    values, _, missing = build_env.resolve(config, project)
+    return build_env.expected(values), [key for key in missing if key.startswith("VITE_")]
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--domain", required=True, help="site na Hostinger, ex.: rabisco.net")
@@ -251,13 +274,28 @@ def main(argv=None):
     ap.add_argument("--sample", type=int, default=8, help="arquivos conferidos por hash além do index.html")
     ap.add_argument("--dry-run", action="store_true", help="só monta o zip e o .htaccess")
     ap.add_argument("--verify-only", action="store_true", help="só confere se o site no ar serve este build")
+    ap.add_argument("--expect", action="append", default=[], metavar="NOME=VALOR",
+                    help="configuração pública que o build tem de conter (repetível); sem ela, vale o "
+                         "deploy.env do domínio no workspace.json")
     a = ap.parse_args(argv)
+    if any(not key or not value for key, _, value in (item.partition("=") for item in a.expect)):
+        ap.error("--expect espera NOME=VALOR, com valor")
 
     project = Path(a.project).resolve()
     cfg = load_vercel(project)
     dist = resolve_dist(project, cfg, a.dist)
     if not (dist / "index.html").is_file():
         sys.exit(f"build ausente: {dist}/index.html (rode o build antes)")
+    if not a.verify_only:
+        if a.expect:
+            expectations, unresolved = dict(item.partition("=")[::2] for item in a.expect), []
+        else:
+            expectations, unresolved = declared_expectations(a.domain, project)
+        absent = unresolved + build_env.missing_in_build(dist, expectations)
+        if absent:
+            print(f"RECUSADO: o build em {dist.name}/ não contém {', '.join(absent)} (deploy.env do "
+                  "workspace.json). Refaça o build com essas variáveis; nada foi enviado.", flush=True)
+            return 3
     files = build_files(dist, project)
     paths = sample(files, dist, a.sample)
     if a.verify_only:

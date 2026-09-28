@@ -165,6 +165,18 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
     `.json`, `.md`, `.txt` e `.webmanifest` com `no-cache` em qualquer pasta. Caso Rabisco War
     (26/09/2026): `voice/manifest.json` e `sfx-map.json` saíam imutáveis por um ano.
   - **Limite:** o cabeçalho do host só se confirma num deploy de prévia.
+- Configuração pública do build (`import.meta.env.VITE_*`, flags do `vite.config`):
+  - **Falha muda:** o Vite compila sem erro com a variável ausente e o recurso some do ar
+    sem aviso. Um build num checkout limpo ou noutra hospedagem não tem os `.env*` nem o
+    painel do host anterior.
+  - **Declarar:** `deploy.env` no `workspace.json`: `{"NOME": null}` vem da máquina (ambiente
+    ou `.env*` do módulo, nunca do Git); `{"NOME": "valor"}` é fixo e versionado, só para o
+    que é público; `""` desliga de propósito. O `gameops deploy` bloqueia variável ausente e
+    `VITE_` lida pelo código sem declaração; o `hostinger_deploy.py`, também no atalho
+    `npm run deploy`, recusa o build que não contém cada `VITE_` com valor.
+  - **Caso:** a saída da Vercel (25–28/09/2026) publicou rabisco.net, Boom, Fight e Arena sem
+    `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`: placar e comunidade fora do ar, com
+    testes e conferência por hash verdes. Só a leitura do bundle servido mostrou `env={}`.
 - Lojas web (itch.io, Poki, Newgrounds) e wrappers (Electron, Tauri, Capacitor) têm
   requisitos próprios — consulte a fonte oficial.
 - Empacotar o mesmo jogo para desktop, Steam e lojas móveis (fatos de 24/09/2026; o

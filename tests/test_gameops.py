@@ -461,6 +461,70 @@ class DeployTest(GameOpsTest):
             gameops.deploy(self.hub, [dict(self.modules[0], deploy=None)], "alpha")
         with self.assertRaisesRegex(ValueError, "deploy inválido"):
             gameops.deploy(self.hub, [dict(self.modules[0], deploy={"dominio": "x"})], "alpha")
+        with self.assertRaisesRegex(ValueError, "deploy.env inválido"):
+            gameops.deploy(self.hub, [dict(self.modules[0], deploy={"domain": "x", "env": {"A": 1}})], "alpha")
+
+    def push(self, message, files):
+        for name, text in files.items():
+            (self.alpha / name).parent.mkdir(parents=True, exist_ok=True)
+            (self.alpha / name).write_text(text)
+            self.git(self.alpha, "add", name)
+        self.git(self.alpha, "commit", "-m", message)
+        self.git(self.alpha, "push", "origin", "main")
+
+    @unittest.skipUnless(shutil.which("node"), "node ausente")
+    def test_declared_env_reaches_the_build_from_outside_the_clean_worktree(self):
+        # 28/09/2026: o worktree limpo não tinha o .env.local e quatro sites foram ao ar sem o Supabase.
+        self.push("build lê o ambiente", {"build.js": "require('fs').writeFileSync('index.html', "
+                  "`<script>${process.env.VITE_API}|${process.env.FIXO}</script>`)\n"})
+        (self.alpha / ".env.local").write_text('VITE_API="https://api.test"\nSEGREDO=nunca-lido\n')
+        self.modules[0]["deploy"].update(build="node build.js", env={"VITE_API": None, "FIXO": "1"})
+        built = []
+        def publish(argv):
+            built.append((Path(argv[argv.index("--project") + 1]) / "index.html").read_text())
+            return self.publish(argv)
+        with patch.dict(os.environ):
+            os.environ.pop("VITE_API", None)
+            report = gameops.deploy(self.hub, self.modules, "alpha", publish=publish)
+        self.assertEqual(report["result"], "publicado e conferido")
+        self.assertEqual(report["env"], {"VITE_API": ".env.local", "FIXO": "workspace.json"})
+        self.assertEqual(built, ["<script>https://api.test|1</script>"])
+        argv = self.calls[0]["argv"]
+        self.assertEqual(argv[argv.index("--expect") + 1], "VITE_API=https://api.test")
+        self.assertNotIn("SEGREDO", " ".join(argv))
+        self.assertNotIn(".env.local", self.calls[0]["files"])
+
+    def test_missing_build_variable_blocks_before_anything_is_built(self):
+        self.modules[0]["deploy"]["env"] = {"VITE_API": None}
+        with patch.dict(os.environ):
+            os.environ.pop("VITE_API", None)
+            report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        self.assertIn("variáveis do build ausentes: VITE_API", "\n".join(report["blocking"]))
+        self.assertIn("games/alpha/.env.local", "\n".join(report["blocking"]))
+        self.assertEqual((report["steps"], self.calls, self.worktrees()), ([], [], 1))
+
+    def test_code_reading_an_undeclared_vite_variable_blocks(self):
+        self.push("lê o Supabase", {
+            "src/app.js": "export const url = import.meta.env?.VITE_SUPABASE_URL;\n"
+                          "export const via = import.meta.env.VITE_DISTRIBUTION;\n",
+            "vite.config.mjs": "export default { define: { \"import.meta.env.VITE_DISTRIBUTION\": '\"web\"' } };\n",
+            "tests/app.test.mjs": "import.meta.env.VITE_SO_NO_TESTE;\n"})
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        blocking = "\n".join(report["blocking"])
+        self.assertIn("o código lê VITE_SUPABASE_URL e o deploy não declara", blocking)
+        self.assertNotIn("VITE_DISTRIBUTION", blocking)
+        self.assertNotIn("VITE_SO_NO_TESTE", blocking)
+        self.assertEqual((self.calls, self.worktrees()), ([], 1))
+        # Desligada de propósito: declarada vazia, nada a conferir no build.
+        self.modules[0]["deploy"]["env"] = {"VITE_SUPABASE_URL": ""}
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=self.publish)
+        self.assertEqual(report["result"], "publicado e conferido")
+        self.assertNotIn("--expect", self.calls[0]["argv"])
+
+    def test_publisher_refusing_the_build_says_nothing_was_sent(self):
+        self.modules[0]["deploy"]["env"] = {"VITE_API": "https://api.test"}
+        report = gameops.deploy(self.hub, self.modules, "alpha", publish=lambda argv: 3)
+        self.assertEqual(report["result"], "build sem a configuração declarada; nada foi enviado")
 
     def test_status_says_who_serves_each_destination_and_flags_npm_mismatch(self):
         self.modules[0]["deploy"]["public"] = "https://alpha.vercel.app"
