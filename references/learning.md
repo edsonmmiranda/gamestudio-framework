@@ -26,6 +26,25 @@ Não promover uma hipótese a técnica comprovada e não deixar uma descoberta u
 presa ao laboratório. A execução desta revisão cabe ao agente: o scanner localiza
 documentos, mas não decide sozinho se uma afirmação é transferível ou verdadeira.
 
+## IA com percepção e decisão em cadências diferentes
+
+Ao separar escolha de alvo, percepção, rota e disparo, uma amostra de visibilidade
+precisa pertencer à identidade do alvo atual. Trocar de rival entre duas amostras
+não autoriza usar a posição, a reação ou a visão do anterior. Antes do tiro, conferir
+identidade, visibilidade, reação, linha livre e orientação do corpo; seguir um caminho
+não deve sobrescrever a direção da mira. Exercitar troca de alvo durante uma rajada.
+
+Para recuperar rotas, medir deslocamento acumulado em uma janela de tempo, nunca
+um limiar fixo por quadro. Reter uma meta navegável até chegada/invalidação, limitar
+quanto uma busca pendente adia o diagnóstico e não zerar progresso a cada decisão.
+Ao fugir de uma área em fechamento, a margem da meta deve superar a margem que
+dispara a fuga mais a tolerância de chegada, evitando reescolher o mesmo ponto na borda.
+
+Caso: adaptação MineNite → Última Página, 27/9/2026; provas locais em
+`games/distrito-rabisco/production/evidence/ultima-pagina-minenite-20260927/`.
+Comparar cenários em movimento e registrar tarefas concorrentes: contagem de tiros
+ou tempo de quadro em mapas/RNG diferentes não constitui A/B causal nem aceite de diversão.
+
 ## Extrair de históricos de agentes
 
 Um avaliador pode ordenar sessões para revisão, mas sua nota não escreve nem valida
