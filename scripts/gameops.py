@@ -30,7 +30,7 @@ from workspace import ROOT, load_config, load_manifest, parent_of
 
 def git_process(repo, *args):
     return subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True,
-                          env={**os.environ, "GIT_OPTIONAL_LOCKS": "0"})
+                          errors="replace", env={**os.environ, "GIT_OPTIONAL_LOCKS": "0"})
 
 
 def run_git(repo, *args):
