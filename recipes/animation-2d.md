@@ -186,11 +186,9 @@ teste, inspecionado pelo agente e aprovado pelo criador.
 - [Adobe — Principles of animation](https://www.adobe.com/creativecloud/animation/discover/principles-of-animation.html):
   poses, antecipação, arcos e movimento secundário. Intensidade depende do estilo.
 
-Caso de aplicação: Bastiões de Eldoria, revisão de 24/09/2026 registrada no
-`game-design.md` e em `arena/roster-render.js` do projeto. Pescoços, faces exclusivas,
-camadas e apoios foram inspecionados em HTML. O elenco novo ainda depende de aceite
-artístico. A prova sustenta diagnóstico de montagem, não certifica outros rigs,
-engines ou ferramentas automaticamente.
+Pescoços, faces exclusivas, camadas e apoios podem ser inspecionados em HTML. Elenco novo
+ainda depende de aceite artístico. Essa prova sustenta diagnóstico de montagem, não
+certifica outros rigs, engines ou ferramentas automaticamente.
 
 A aplicação da skill encontrou também cauda e outras oscilações que continuavam
 após a queda. Corrigir o peso do movimento secundário e conferir o renderer entre

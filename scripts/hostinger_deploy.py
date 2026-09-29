@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Publish a static build to a Hostinger website and verify what is actually served.
 
-Flow proven on 2026-09-25 with 17 sites (the Vercel exit): vercel.json -> .htaccess for
+Flow: vercel.json -> .htaccess for
 LiteSpeed, zip of the build, TUS upload, `deploy-static-site-archive`, then the served
 files are compared byte for byte with the build. API calls go through the authenticated
 `hostinger` CLI; no token is read or stored here. Only the short-lived upload credentials
 stay in memory during the upload.
 
-usage: hostinger_deploy.py --domain rabisco.net [--project .] [--dist dist/client]
-                           [--spa] [--origin 82.180.153.55] [--expect NOME=VALOR]
+usage: hostinger_deploy.py --domain example.com [--project .] [--dist dist/client]
+                           [--spa] [--origin <IP do servidor>] [--expect NOME=VALOR]
                            [--dry-run | --verify-only]
 
 Before zipping, the build must contain every public variable the domain declares in
@@ -75,8 +75,8 @@ def htaccess_from_vercel(cfg: dict, source: str = "vercel.json", spa: bool = Fal
     out.append('    Header set Cache-Control "no-cache"')
     out.append("  </FilesMatch>")
     # Data files keep their name across releases (sound maps, manifests, credits): never immutable, whatever
-    # vercel.json says for their folder (packs/platforms/web.md, "Imutável só com versão"). Rabisco War, 26/09:
-    # /(audio|…)/(.*) served audio/sfx-map.json and voice/manifest.json as immutable for a year.
+    # vercel.json says for their folder (packs/platforms/web.md, "Imutável só com versão"). A catch-all
+    # rule like /(audio|…)/(.*) served audio/sfx-map.json and voice/manifest.json as immutable for a year.
     out.append('  <FilesMatch "\\.(json|md|txt|webmanifest)$">')
     out.append('    Header set Cache-Control "no-cache"')
     out.append("  </FilesMatch>")
@@ -173,7 +173,7 @@ def cli(*args):
 
 
 def resolve_username(domain: str) -> str:
-    # A lista é paginada (25 por página): com 39 sites em 26/09, war.rabisco.net estava na página 2 e o
+    # A lista é paginada (25 por página): numa conta com muitos sites, o domínio pode estar na página 2 e o
     # deploy dizia que o site não existia. Filtra pelo domínio (substring) e percorre as páginas.
     page = 1
     while True:
@@ -268,7 +268,7 @@ def declared_expectations(domain: str, project: Path, root: str | None = None):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--domain", required=True, help="site na Hostinger, ex.: rabisco.net")
+    ap.add_argument("--domain", required=True, help="site na Hostinger, ex.: example.com")
     ap.add_argument("--project", default=".", help="pasta com o vercel.json (padrão: a atual)")
     ap.add_argument("--dist", help="build a publicar (padrão: outputDirectory do vercel.json ou dist)")
     ap.add_argument("--spa", action="store_true", help="rota desconhecida serve o index.html")

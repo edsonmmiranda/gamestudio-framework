@@ -67,9 +67,7 @@ Fatos de documentação verificados em 24/09/2026; o traço sem shader continua 
   a saída, captura a tela e insere assets ([Studio MCP](https://create.roblox.com/docs/studio/mcp));
   o `Roblox/studio-rust-mcp-server` foi descontinuado em abril de 2026. Rojo 7.7 mantém
   o código em arquivos e no Git.
-- Caso de origem: série Rabisco do laboratório (24/09/2026), com a variante Roblox do
-  Rabisco Fight como primeiro projeto. Invalida: Roblox passar a aceitar shader próprio
-  ou código de outra origem.
+- Invalida: Roblox passar a aceitar shader próprio ou código de outra origem.
 
 ## O que o harness faz aqui
 

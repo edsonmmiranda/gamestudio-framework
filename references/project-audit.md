@@ -1,6 +1,6 @@
 # Checagem inicial e documentação automática
 
-Direção atualizada de Alan em 2026-09-08: checar o mínimo em qualquer pedido sobre
+Direção do processo desde 2026-09-08: checar o mínimo em qualquer pedido sobre
 um jogo e, quando não localizado, **avisar e começar a documentar, sem pedir
 consentimento**. Isso substitui a oferta de auditoria da versão 0.4. A checagem
 inicial é automática no `context` e também está disponível em `scan <projeto>`.
@@ -11,11 +11,11 @@ Isso não é um daemon nem um hook que intercepta ferramentas externas ao agente
 
 Quando o pedido ou a convenção do workspace define inicialização documental,
 **inicializar o projeto inicia análise profunda e organização documental**. Esse é o significado
-padrão no processo Games quando não há um alvo operacional mais específico.
+padrão neste processo quando não há um alvo operacional mais específico.
 O agente resolve a intenção pelo objeto e pelo contexto da conversa, sem exigir que
 a pessoa conheça o termo auditoria ou os comandos do harness.
 
-- “Inicialize o Combate Lendário” ou “vamos começar a organizar este projeto”:
+- “Inicialize o meu jogo” ou “vamos começar a organizar este projeto”:
   levantar implementação, confrontar documentos, organizar a base e definir continuidade.
 - “Inicie o servidor”, “abra o jogo para eu jogar” ou “inicie a partida”: realizar
   essa operação explícita, respeitando o escopo; não substituir por uma auditoria ampla.
@@ -32,7 +32,7 @@ esse levantamento e documentação; implementar além dele segue o pedido já au
 Execute internamente, com o projeto resolvido:
 
 ```sh
-python3 framework/scripts/game.py context games/combate-lendario --focus architecture --event initialize
+python3 framework/scripts/game.py context games/meu-jogo --focus architecture --event initialize
 ```
 
 O evento seleciona `documentation.action: audit_and_document`, carrega auditoria e

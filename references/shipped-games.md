@@ -1,10 +1,9 @@
 # O que os jogos publicados têm em comum
 
-Regras de ofício lidas em 25 jogos publicados, do jogo de luta ao tower defense, pela fonte primária
-(cliente instalado ou pacote de loja), em setembro de 2026 no laboratório de origem. Cada regra diz quando
-aplicar, o que verificar e o que a invalida; `n` é o número de estúdios independentes em que a leitura
-confirmou a prática. O caso, os números e as exceções de cada jogo ficam no laboratório
-(`docs/estudos/Estudo Anatomia comparada.md` e `docs/padroes/`); aqui fica a regra.
+Regras de ofício comuns a jogos publicados de gêneros diferentes, do jogo de luta ao tower defense. Cada
+regra diz quando aplicar, o que verificar e o que a invalida; `n` é o número de estúdios independentes em
+que a prática foi confirmada. O caso, os números e as exceções de cada jogo ficam no workspace que fez a
+leitura; aqui fica a regra.
 
 Boa prática, aqui, é o que aparece em estúdios de gêneros diferentes **e** cuja remoção o próprio estudo
 descreve como perda. Nenhuma exige o nome, a arte ou o modelo de negócio da referência. Nenhuma prova que
@@ -26,7 +25,7 @@ a folha de regras lista a origem de cada número (`observed`, `inferred`, `exter
 constante que é fórmula do código fica na fórmula, com a fórmula citada. Invalida: o padrão de um campo
 vazio e o que o código computa em runtime não estão na tabela; leia o código ou marque `unknown`.
 Receita: [conteúdo](../recipes/content.md); contrato do número em
-[adaptação de referências](reference-adaptation.md#4-quando-a-referência-é-uma-biblioteca-do-estúdio).
+[adaptação de referências](reference-adaptation.md#4-quando-o-workspace-declara-referências).
 
 **3. Regra e aparência moram em contêineres separados; skin não muda número** (n = 6).
 Aplicar em qualquer jogo com mais de uma aparência por entidade. Verificar: trocar a aparência não muda
@@ -139,7 +138,6 @@ móvel, 30–33 Hz no tower defense) e o tamanho do saguão (jogo ao vivo com re
 pago sem relógio). Nenhuma delas é regra de partida; cada uma é escolha de plataforma e de negócio que
 arrasta as regras acima. Declare a escolha no brief antes de copiar uma prática que dependa dela.
 
-Origem: 25 jogos publicados lidos pela fonte primária no laboratório de origem (anatomias em
-`outputs/decoded/`, bibliotecas em `libraries/`, notas de pontos cegos, contratos de gênero e simulações de
-estudo), consolidados em 28/09/2026. Os números de cada jogo e as exceções nomeadas ficam lá; revisão
-futura incorpora contraprovas aqui, pelo [procedimento](learning.md).
+Origem: leitura comparada de jogos publicados, consolidada em setembro de 2026. Os números de cada jogo e
+as exceções nomeadas ficam no workspace que fez a leitura; revisão futura incorpora contraprovas aqui, pelo
+[procedimento](learning.md).

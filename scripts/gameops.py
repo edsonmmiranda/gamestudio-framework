@@ -659,7 +659,7 @@ def print_preflight(report):
 
 # Gates: verificações declaradas pelo próprio repositório ou pela configuração local.
 
-# Build antes de test: há suítes que leem o build (Sites do Distrito e do Sucata Viva). Num worktree
+# Build antes de test: há suítes que leem o build (por exemplo, um worker de site). Num worktree
 # novo, test primeiro dava vermelho falso — e um vermelho que se aprende a ignorar esconde o real.
 GATE_ORDER = ("lint", "typecheck", "build", "test", "doctor", "verify", "check")
 
@@ -832,7 +832,7 @@ def deploy(root, modules, target, dry_run=False, allow_unpushed=False, timeout=1
                 report, "npm ci", ["npm", "ci", "--no-audit", "--no-fund"], tree, timeout):
             report["result"] = "dependências não instalaram"
             return report
-        # Build antes dos gates: há testes que leem o build (worker do Sites no Sucata Viva).
+        # Build antes dos gates: há testes que leem o build (por exemplo, um worker de site).
         command = config.get("build") or ("npm run build" if "build" in scripts else None)
         if command and not run_step(report, command, shlex.split(command), tree, timeout, env=environ):
             report["result"] = "build falhou; nada foi enviado"

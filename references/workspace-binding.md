@@ -74,7 +74,7 @@ não conhece nenhuma delas por padrão.
   declaram em `jogos:` (`notes`, com tipo, status e resumo). Sem o kit no vault,
   `tool_missing`; jogo sem nó, `game_not_in_vault`; pasta ausente, `root_missing`.
 - `libraries`: pasta com uma biblioteca por subpasta, cada uma com `library.json`
-  (contrato da skill game-library-studio). Entram em `related` as bibliotecas que os
+  (manifesto da biblioteca). Entram em `related` as bibliotecas que os
   documentos do próprio jogo citam por caminho (`libraries/<nome>`, com arquivo e linha
   da primeira menção) e as de modo `own` que projetam o jogo (`projectId` igual à pasta
   do jogo, ou o caminho do jogo no manifesto, README, mandato ou checkpoint). Cada uma
@@ -88,7 +88,7 @@ Só documentos do próprio projeto (AGENTS, README e os localizados em
 bibliotecas como exemplo e não liga um jogo a elas. Tudo é candidato: estudo não é
 cânone do jogo, e biblioteca citada não prova que o jogo a segue. Sem a chave,
 `context.references.status` é `not_configured`; o `doctor` lista cada raiz declarada.
-Como usar isso ao implementar: [referência como biblioteca](reference-adaptation.md#4-quando-a-referência-é-uma-biblioteca-do-estúdio).
+Como usar isso ao implementar: [referências declaradas](reference-adaptation.md#4-quando-o-workspace-declara-referências).
 
 ## Módulos
 

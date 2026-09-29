@@ -62,18 +62,16 @@ jogo (ex.: Mario Kart). O que verificar:
 - **Linhas:** cronometrar setores com a linha forçada e contar incidentes nela. Linha mais
   rápida com risco medido zero não é escolha.
 - **Assimetrias escondidas antes de mexer em números:** procure limites que só os rivais têm
-  (ex.: teto de velocidade de curva por prévia do traçado, cadência de armas). No Corrida
-  Rabisco, a "cautela de curva" exclusiva da IA era a causa principal da fuga do jogador
-  habilidoso; tirar a cautela de um único rival (o ás) levou o habilidoso de 36–39% para
-  53–57% do tempo em disputa, com o seguro ainda vencendo 6–19%.
-- Teste cada hipótese de reagrupamento isoladamente. Contraprovas do mesmo caso: zerar a ajuda
-  de ritmo quase não mudou o pelotão; igualar a cadência de armas espalhou mais; invulnerabilidade
-  após golpe protegeu o líder.
+  (ex.: teto de velocidade de curva por prévia do traçado, cadência de armas). Uma "cautela
+  de curva" exclusiva da IA pode ser a causa principal da fuga do jogador habilidoso; tirar a
+  cautela de um único rival mede o efeito no tempo em disputa.
+- Teste cada hipótese de reagrupamento isoladamente. Contraprovas possíveis: zerar a ajuda de
+  ritmo, igualar a cadência de armas, remover a invulnerabilidade após golpe; nem toda hipótese
+  plausível muda o pelotão, e algumas o espalham ou protegem o líder.
 
 O que invalida: bots de referência que tocam no estado da corrida, sementes diferentes entre
 antes e depois, ou clipes que não reproduzem a corrida medida. Limites: números de um jogo não
 viram alvo de outro; disputa medida não é diversão — playtest humano decide.
-Caso: `games/corrida-rabisco/docs/qa.md#barra-mario-kart--24092026` (laboratório Games).
 
 ## Câmera de perseguição: métrica que enxerga o que o jogador vê
 
@@ -84,10 +82,10 @@ de um quadro para o outro, típico de duas poses trocando) de **panorâmica** (v
 contínua). Troca de pose (loop, anti-gravidade, túnel) se mistura por distância; mirar em
 parte a pista 10–18 m à frente revela a curva antes do painel lateral, ao custo de o carro sair
 mais do centro em curvas fortes — registre esse custo. Câmera mais baixa e centrada dá
-"sensação de kart" mas pode esconder cristas; no caso Corrida ela foi reprovada por isso.
+"sensação de kart" mas pode esconder cristas; meça antes de aprovar.
 
 ## Receitas e fontes
 
 [visual](../../recipes/visual.md) (câmera, culling, GLTF), [feel](../../recipes/feel.md),
 [ciclo de vida](../../recipes/lifecycle.md), [mecânicas](../../recipes/mechanics.md).
-Ponto de partida no laboratório: Brasa-Pista ([criar](../../recipes/create.md)).
+Ponto de partida: [criar](../../recipes/create.md).

@@ -67,7 +67,7 @@ opcional em nenhuma delas. Não use “AAA” como adjetivo do build.
 
 ## Primeira sessão
 
-1. Consulte o [playground](https://games.alanicolas.com/) e o acervo local.
+1. Consulte o acervo local de jogos e starters.
    Identifique uma família compatível. Procure código, contratos e conteúdo
    reutilizável.    Sem destino no disco, o candidato local é um starter.
    `python3 scripts/game.py --idea "<fantasia>"` mapeia o start com a
@@ -131,11 +131,10 @@ publisher.
 
 Pontos de partida a **examinar**, não bases aprovadas automaticamente:
 
-- FPS em papel: Distrito Rabisco / Jogo Rabisco. Já tem briefing, bootstrap e marcos.
-  O bootstrap recusa divergência do manifesto de origem.
-- Contos Canvas: Era Uma Vez, no [playground](https://games.alanicolas.com/).
-- Corrida: Brasa-Pista, no playground.
-- Unity: protótipo local com verificações próprias; presença em `prototypes/` não
+- Famílias do acervo do workspace (FPS, contos em Canvas, corrida): uma família com
+  briefing, bootstrap e marcos serve de ponto de partida. O bootstrap recusa divergência
+  do manifesto de origem.
+- Unity: protótipo local com verificações próprias; presença numa pasta de protótipos não
   declara publicação.
 
 Não copie paleta, feel ou mix de uma família sem ADAPT e proveniência. O

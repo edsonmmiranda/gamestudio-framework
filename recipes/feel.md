@@ -282,7 +282,7 @@ confundir). Sem referência aprovada, registre que o piso ainda é proposta.
 Fontes de método: [qualidade](../references/quality.md),
 [ambição](../references/ambition.md), Art Bible do jogo, Swink / *Juice it
 or lose it* no [mapa](../references/sources.md#aaa-tier-e-piso-09). Estudos
-de câmera/tempo no laboratório, quando existirem, são precedentes — não um
+de câmera/tempo do projeto, quando existirem, são precedentes — não um
 kit de juice obrigatório.
 
 ## Limites

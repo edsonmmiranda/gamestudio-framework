@@ -133,11 +133,8 @@ Prove reproduzir → pausar → enquadrar/redesenhar/exportar: nenhum som de exe
 criado. Confira o estado e a consequência, não só ausência de exceção. O segundo
 cenário não comprova fidelidade da simulação, apenas isolamento da apresentação.
 
-Caso local: Brawlhalla Lab v9, revisão de 25/09/2026; regressões em
-`prototypes/brawlhalla-lab/character-lab/test_state_regression.mjs` e provas antes/depois
-em `character-lab/evidence/review-20260925-142144/`. Esses caminhos pertencem ao workspace
-que produziu o caso, não são dependências do núcleo. Revisar esta orientação quando
-um consumidor tiver semântica explícita de eventos durante scrubbing ou medição.
+Revisar esta orientação quando um consumidor tiver semântica explícita de eventos durante
+scrubbing ou medição.
 
 ## 4. Decidir com alternativas e contraprova
 
@@ -192,5 +189,4 @@ comando, arquivo existente ou fase salva não comprovam conclusão nem aprovaç�
 Execute o que ainda pertence ao pedido; apresente o próximo passo do projeto quando
 o escopo desta entrega terminar.
 
-Origem: estudo interno do Architect AIOX (sete rastros, limites no laboratório).
-Adaptação local do processo; runtime e hierarquia AIOX não são dependências.
+Adaptação do processo; runtime e hierarquia de agentes externos não são dependências.

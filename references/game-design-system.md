@@ -32,7 +32,7 @@ os jogos.
 
 **Jogo:** a instância preenchida. Todo jogo identificável precisa da sua. Um jogo
 pequeno pode reunir as seções no Art Bible, no `game-design.md` ou no README; a
-ausência é lacuna. Família (Rabisco, por exemplo) autoriza ADAPT com proveniência
+ausência é lacuna. Família (jogos que compartilham uma base, por exemplo) autoriza ADAPT com proveniência
 declarada; o destino continua tendo instância própria.
 
 Não exigir Storybook, tokens CSS nem biblioteca web. Jogo sem HUD, sem som ou sem

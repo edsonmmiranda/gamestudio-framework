@@ -1,8 +1,8 @@
 # Handoff — contrato para a próxima sessão
 
 **Branch:** `main`. **HEAD:** ver `git log -1`.
-**Suítes no HEAD:** `python3 -m unittest discover -s tests -t tests` → 526 OK.
-`cd assets/starters/canvas-arcade && npm test` → 516 OK.
+**Suítes no HEAD:** `python3 -m unittest discover -s tests -t tests` e
+`cd assets/starters/canvas-arcade && npm test` precisam passar.
 
 Inspecione o working tree **antes** de confiar neste texto. Se algo aqui
 estiver velho, corrija aqui — este arquivo é o contrato, e um contrato

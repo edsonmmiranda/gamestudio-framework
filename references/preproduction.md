@@ -278,6 +278,6 @@ responsabilidade do agente. O comando não preenche design, revisa mérito ou cr
 PRD/GDD. `verify` executa comandos técnicos explícitos; não aprova criatividade.
 As revisões desta página dependem de execução e julgamento do agente/pessoa, com
 limites declarados. Exemplo completo sem criar documentos paralelos:
-[estudo aplicado a Era Uma Vez](../examples/era-uma-vez-preproduction.md).
+[estudo aplicado à trilha de João e Maria](../examples/era-uma-vez-preproduction.md).
 
 Referências usadas e limites de adaptação: [fontes](sources.md#pré-produção-e-checagem).

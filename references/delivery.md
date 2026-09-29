@@ -21,8 +21,8 @@ motivo relacionado ao escopo, nunca apenas de evidência ausente.
   exige pedido, ações e resultado reais. Arte e experiência continuam separadas.
   Alegação técnica em README, GDD ou comentário — determinístico, em pool, streaming,
   nítido em alta densidade, comprimido, dentro do orçamento — é `claimed` até apontar
-  o trecho, teste ou medição que a sustenta; no acervo externo, esse descompasso foi
-  o defeito de processo mais repetido ([origem](sources.md#acervo-externo-swipe)).
+  o trecho, teste ou medição que a sustenta; o descompasso entre alegação e prova é um
+  defeito de processo comum.
 - **Continuidade:** o registro descreve o estado que acabou de ser comprovado?
   Se existe próximo recorte definido, o [prompt pronto](gauntlet.md) está no registro
   e na resposta, com projeto, ação, fonte, limites e prova? “Próximo: melhorar o jogo”
@@ -72,4 +72,4 @@ aprovados em garantia de obediência universal ou de trabalho por horas.
 
 Origem: revisão por aceite e por causa do [BMad e estudos](sources.md), disciplina
 de evidência já adotada em [qualidade](quality.md), e casos de inicialização e
-continuidade registrados na [adoção](../adoption.md).
+continuidade já adotados.

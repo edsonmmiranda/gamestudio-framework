@@ -1,4 +1,4 @@
-"""Entrada do harness para o acervo em shared/sfx, se existir no laboratório."""
+"""Entrada do harness para o acervo em shared/sfx, se existir no workspace."""
 from pathlib import Path
 import json
 import math

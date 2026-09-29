@@ -129,23 +129,23 @@ class ResolveUsernameTests(unittest.TestCase):
         return cli, calls
 
     def test_finds_site_on_a_later_page_filtering_by_domain(self):
-        cli, calls = self.fake_cli([[{"domain": "central.rabisco.net", "username": "a"},
-                                     {"domain": "arena.rabisco.net", "username": "a"}],
-                                    [{"domain": "war.rabisco.net", "username": "u1"}]])
+        cli, calls = self.fake_cli([[{"domain": "central.example.com", "username": "a"},
+                                     {"domain": "arena.example.com", "username": "a"}],
+                                    [{"domain": "war.example.com", "username": "u1"}]])
         with mock.patch.object(deploy, "cli", cli):
-            self.assertEqual(deploy.resolve_username("war.rabisco.net"), "u1")
+            self.assertEqual(deploy.resolve_username("war.example.com"), "u1")
         self.assertEqual(len(calls), 2)
         self.assertIn("--domain", calls[0])
 
     def test_substring_match_is_not_accepted(self):
-        cli, calls = self.fake_cli([[{"domain": "central.rabisco.net", "username": "a"}]])
+        cli, calls = self.fake_cli([[{"domain": "central.example.com", "username": "a"}]])
         with mock.patch.object(deploy, "cli", cli), self.assertRaises(SystemExit):
-            deploy.resolve_username("rabisco.net")
+            deploy.resolve_username("example.com")
         self.assertEqual(len(calls), 1)
 
 
 class ExpectTests(unittest.TestCase):
-    """Nada vai para a Hostinger sem a configuração pública declarada (placar fora do ar em 28/09/2026)."""
+    """Nada vai para a Hostinger sem a configuração pública declarada."""
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()

@@ -1360,7 +1360,7 @@ def main(argv: list[str]) -> int:
     i = sub.add_parser("indice", help="regenera Índice.md")
     i.set_defaults(func=cmd_indice)
     b = sub.add_parser("buscar", help="lista notas por jogo, tema, tipo ou texto")
-    b.add_argument("--jogo", help="nome do nó, pasta (games/rabisco-boom) ou slug (rabisco-boom)")
+    b.add_argument("--jogo", help="nome do nó, pasta (games/oficina) ou slug (oficina)")
     b.add_argument("--tema", choices=sorted(TEMAS))
     b.add_argument("--tipo", choices=sorted(TIPOS))
     b.add_argument("--texto", help="procura no título e no resumo")

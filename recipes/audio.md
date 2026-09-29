@@ -218,7 +218,7 @@ Casos e limites em [aprendizados de aplicações](../references/sources.md#apren
 
 ## Aprendizados de carregamento, formato e entrega
 
-Caso de origem: Distrito Rabisco, 23/09/2026 ([origem e limites](../references/sources.md#aprendizados-de-aplicações)).
+[Origem e limites](../references/sources.md#aprendizados-de-aplicações).
 Detalhes de navegador ficam no [pack Web](../packs/platforms/web.md#conteúdo-e-pipeline).
 
 - **O som do verbo não pode chegar depois do verbo.**

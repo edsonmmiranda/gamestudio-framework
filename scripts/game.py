@@ -875,7 +875,7 @@ def declaration_sources(project, fixed):
     """Documentos onde uma declaração (barra, gate) pode viver: os caminhos fixos e os
     homônimos em qualquer subpasta de documentação.
 
-    O Rabisco Boom guarda o QA em `docs/planning/qa.md`; `scan` o localizava e `bar` não,
+    Um projeto pode guardar o QA em `docs/planning/qa.md`; `scan` o localizava e `bar` não,
     então a tabela declarada ficava invisível para o harness. A busca é pelo mesmo nome de
     arquivo (`qa.md`, `devlog.md`…), até quatro níveis, fora das pastas de build.
     """
@@ -2154,9 +2154,9 @@ PERSIST_USE = re.compile(
     r"localStorage|sessionStorage|indexedDB|saveProgress|loadProgress|PROGRESS_KEY|SETTINGS_KEY"
 )
 # Versionar um save é uma FORMA, não um nome. Listar nomes internos falhava em
-# todo projeto que escolhe o seu: `schemaVersion` no distrito-rabisco,
-# `CAREER_VERSION` no brasa-pista. O que se procura é uma constante de versão,
-# um campo de versão no documento gravado, ou uma migração.
+# todo projeto que escolhe o seu: `schemaVersion` num, `CAREER_VERSION` noutro.
+# O que se procura é uma constante de versão, um campo de versão no documento
+# gravado, ou uma migração.
 PERSIST_VERSION = re.compile(
     r"\b[A-Z][A-Z_0-9]*_(?:VERSION|SCHEMA)\b"      # CAREER_VERSION, PROGRESS_SCHEMA
     r"|\bSCHEMA_VERSION\b|\bSAVE_VERSION\b"

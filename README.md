@@ -374,7 +374,7 @@ Um gate tem nome do que você está pedindo, não da etapa que acabou: `design`,
 
 O projeto declara uma linha por critério, em `README.md` ou num `qa.md`,
 `devlog.md`, `release.md` ou `prd.md` em qualquer subpasta de documentação
-(o Rabisco Boom guarda o seu em `docs/planning/`; `sources` na saída diz o que foi lido).
+(`sources` na saída diz o que foi lido).
 Se a tabela declara o gate, o `gate` nomeia o gate que a tabela já declara. Linha no disco não é passagem concedida. Sem chave `gate`. Se o roteiro recusa que o silêncio seja aprovação, o `gate` nomeia o silêncio que o roteiro já recusa. Linha vazia no disco não é passagem. Sem chave `silêncio`. Se o roteiro recusa que must_meet seja dispensável, o `gate` nomeia a dispensa que o roteiro já recusa. Linha no disco não é passagem. Sem chave `dispensa`. Se o roteiro recusa que fora de escopo seja dispensa, o `gate` nomeia o escopo que o roteiro já recusa. Linha no disco não é passagem. Sem chave `escopo`:
 
 ```markdown
@@ -382,7 +382,7 @@ Se a tabela declara o gate, o `gate` nomeia o gate que a tabela já declara. Lin
 | --- | --- | --- | --- |
 | `deliver` | `runbook` | `met` | Ana construiu do zero em 2026-09-02, log em /tmp/qa-07 |
 | `deliver` | `foreign_machine` | `unmet` | só rodou na máquina de dev |
-| `deliver` | `save_migration` | `out_of_scope` | jogo sem save — Alan, 2026-09-05 |
+| `deliver` | `save_migration` | `out_of_scope` | jogo sem save — Ana, 2026-09-05 |
 ```
 
 **As três saídas de um gate são passar, cortar escopo e abandonar.** A terceira é
@@ -951,9 +951,9 @@ O que o `verify` não cobre — observação de pessoa em movimento, medição d
 decisão de marco — entra por `record`, em pasta inédita e ligado ao HEAD do projeto:
 
 ```sh
-python3 scripts/game.py record /caminho/do/jogo --kind observation --author "Alan" --note "Completou a volta sem instrução." --field scenario=travessia --field role=human --attach /tmp/playtest.mp4 --output /tmp/jogo-obs-01 --root /caminho/do/laboratorio
-python3 scripts/game.py record /caminho/do/jogo --kind budget --author "Alan" --note "Travessia completa" --field metric=frame_p99 --field value=14.2 --field unit=ms --field platform=tablet-ref --field tool=devtools --output /tmp/jogo-budget-01 --root /caminho/do/laboratorio
-python3 scripts/game.py record /caminho/do/jogo --kind milestone --author "Alan" --note "Critérios com evidência ligada." --field milestone=alpha --field decision=declared --field declared_by=Alan --field role=human --output /tmp/jogo-alpha-gate --root /caminho/do/laboratorio
+python3 scripts/game.py record /caminho/do/jogo --kind observation --author "Ana" --note "Completou a volta sem instrução." --field scenario=travessia --field role=human --attach /tmp/playtest.mp4 --output /tmp/jogo-obs-01 --root /caminho/do/laboratorio
+python3 scripts/game.py record /caminho/do/jogo --kind budget --author "Ana" --note "Travessia completa" --field metric=frame_p99 --field value=14.2 --field unit=ms --field platform=tablet-ref --field tool=devtools --output /tmp/jogo-budget-01 --root /caminho/do/laboratorio
+python3 scripts/game.py record /caminho/do/jogo --kind milestone --author "Ana" --note "Critérios com evidência ligada." --field milestone=alpha --field decision=declared --field declared_by=Ana --field role=human --output /tmp/jogo-alpha-gate --root /caminho/do/laboratorio
 ```
 
 Campos obrigatórios por tipo: `observation` → `scenario`, `role` (`human`/`agent`);
@@ -978,7 +978,7 @@ Não há engine comum, API universal de ações, avaliação automática de dive
 medição automática de performance ou publicação automática. “AAA” neste texto é piso
 de acabamento observável, não tier de publisher, orçamento nem certificado de mercado;
 o alvo honesto com IA é AA / Triple-I nesse piso. Os jogos do
-[playground](https://games.alanicolas.com/) continuam com a própria engine; este
+playground linkado no topo continuam com a própria engine; este
 harness não reivindica tê-los produzido.
 
 A barra de acabamento descreve o que observar; ela não observa. Nenhum comando
@@ -1009,7 +1009,7 @@ python3 ~/MeuCerebroDeJogos/_sistema/cerebro.py check --json         # código, 
 O diagnóstico é endereçável (nível, código, arquivo, linha), e a cópia já traz
 `.claude/settings.json` com o hook `_sistema/hook_pos_edicao.py`: num harness com hooks,
 cada edição de nota devolve ao agente os problemas **daquele** arquivo. O método também
-vai no kit, sem a prova do laboratório: [Métodos herdados](assets/cerebro/M%C3%A9todos%20herdados.md).
+vai no kit, sem as provas de aplicação: [Métodos herdados](assets/cerebro/M%C3%A9todos%20herdados.md).
 
 ## Testes
 

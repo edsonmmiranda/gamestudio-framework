@@ -5,8 +5,8 @@ plataforma para orientar leitura e verificação; confirme cada uma no projeto e
 versão do editor declarada. Não substitui AGENTS nem a documentação oficial.
 
 > **Curadoria** — revisado em 2026-09-14.
-> **Contempla:** Unity 6 (`6000.x`) com Test Framework 1.4, a linha que o
-> laboratório roda hoje (`bebe-geleia-unity`: `6000.6.0f1`). Para 2022 LTS ou
+> **Contempla:** Unity 6 (`6000.x`) com Test Framework 1.4, a linha
+> corrente. Para 2022 LTS ou
 > anterior, confirme cada comando na doc daquela versão.
 > **Verificar:** a linha de testes abaixo em EditMode deve gravar o XML e sair
 > com código 0; se o XML não existir, o editor saiu antes dos testes.
@@ -79,9 +79,9 @@ Núcleo: [ciclo de vida](../../recipes/lifecycle.md), [conteúdo](../../recipes/
 
 ## Aprendizados de migração e fidelidade
 
-Derivados de migrações observadas em HDRP no laboratório em setembro de 2026.
+Derivados de migrações observadas em HDRP.
 São pontos de investigação para a versão instalada, não promessa de equivalência
-entre engines. [Origem e limites](../../references/sources.md#aprendizados-de-aplicações).
+entre engines.
 
 - Confira configuração serializada, cena reaberta e player. Componentes vivos no
   Editor não comprovam que subassets, referências de lightmap ou materiais foram

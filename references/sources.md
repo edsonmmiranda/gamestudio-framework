@@ -119,9 +119,8 @@ repositório; comandos e nomes mudam entre versões. Cada pacote manda confirmar
 documentação oficial da versão em uso e no código do projeto. Fantasy consoles (PICO-8)
 invertem o piso sonoro do framework de propósito: ali o chiptune é a plataforma, e o
 pacote pede que a decisão fique registrada. Os pontos de partida do
-laboratório citados nos pacotes de gênero (Era Uma Vez, Brasa-Pista, Distrito Rabisco)
+laboratório citados nos pacotes de gênero
 seguem os limites já declarados em [criar](../recipes/create.md).
-
 
 ## Feel, áudio e ambição (0.9)
 
@@ -324,17 +323,16 @@ Cada um usa a própria engine. Este harness não reivindica tê-los produzido.
 ## Gauntlet de prompts
 
 Na 0.9, leitura adicional de fontes locais para o [modo prolongado](gauntlet.md),
-sem executar workflows de terceiros nem ampliar as extrações Code Anatomist:
+sem executar workflows de terceiros nem fazer novas extrações:
 
-- MKT book-research-gauntlet (estudo local do laboratório)
-  e manifesto (estudo local do laboratório):
+- Um gauntlet de pesquisa editorial e seu manifesto (estudos locais):
   escopo declarado, fonte/localizador e lacuna explícita. Adaptados para objetivo e
   evidência do recorte; não copiamos corpus mínimo nem regras de produção editorial.
-- Pesquisa local de gauntlet no MKT (estudo local do laboratório):
+- Uma pesquisa local sobre gauntlets (estudo local):
   insumo conceitual para rodadas, inspeção do artefato e preservação do melhor resultado.
   Suas alegações sobre modelos, custos e resultados externos não foram verificadas
-  nesta entrega e não fundamentam garantias do Games.
-- BMad quick-dev, revisão (estudo local do laboratório):
+  nesta entrega e não fundamentam garantias deste framework.
+- BMad quick-dev, revisão (estudo local):
   distinguir intenção, especificação, patch, achado anterior e alegação descartada;
   preservar o que funciona antes de corrigir. Adaptamos também a causa “ambiente/prova”.
   Não importamos fan-out obrigatório, número fixo de iterações ou rollback automático.
@@ -348,17 +346,17 @@ não demonstram uma sessão autônoma de várias horas.
 
 Na versão 0.2, leitura adicional dos templates no mesmo commit BMad
 `2486f5f5f3b8870baa6cee4615a870c0330f441c`. Esta leitura amplia o repertório de
-processo; não foi uma nova extração Code Anatomist nem execução dos workflows BMad.
+processo; não foi uma nova extração nem execução dos workflows BMad.
 
-- Game Brief (estudo local do laboratório):
+- Game Brief (estudo local):
   visão, público, pilares, diferenciação, escopo e risco.
-- GDD (estudo local do laboratório):
+- GDD (estudo local):
   ciclo, regras, controles, progressão, conteúdo e arte/áudio.
-- PRD (estudo local do laboratório):
+- PRD (estudo local):
   seções proporcionais, requisitos com IDs, hipóteses, prioridades e escopo.
-- Arquitetura (estudo local do laboratório):
+- Arquitetura (estudo local):
   decisões, contratos e vínculo com implementação; adaptado como TDD do Games.
-- Playtest (estudo local do laboratório):
+- Playtest (estudo local):
   hipótese, participantes, observação e interpretação separadas.
 - [MDA, artigo original](https://www.cs.northwestern.edu/~hunicke/MDA.pdf):
   mecânicas, dinâmicas e experiência estética. A ficha de hipótese/contraprova é
@@ -374,10 +372,9 @@ profundidade e evidência acompanham a tarefa, sem nove arquivos obrigatórios.
 
 ## Aprendizados de aplicações
 
-Extração dos registros do laboratório em setembro de 2026: workflow de criação
-com IA e rodadas de Fenda Arcana, Bebê Geleia (web/HDRP), Rabisco, Brasa-Pista,
-Satisfactory Blueprint, Megarealista, Guerra dos Rabiscos e Forja Lendária.
-Os relatos incluem contraprovas e correções de interpretações anteriores.
+Métodos extraídos, em setembro de 2026, de rodadas de aplicação em jogos do laboratório
+que mantém este framework. Os relatos incluem contraprovas e correções de interpretações
+anteriores; os casos, as provas e os números ficam com esse laboratório.
 
 - [Workflow](creative-workflow.md): intenção, materialização, QA e decisão num ciclo.
 - [Performance](../recipes/performance.md): comparação causal, custo, invalidação e física.
@@ -387,30 +384,6 @@ Os relatos incluem contraprovas e correções de interpretações anteriores.
   transporte íntegro, relógio da simulação e memória decodificada.
 - [Gestão de módulos](workspace-binding.md#módulos): extração por commit, links,
   seleção por manifesto, preservação de trabalho e política de publicação.
-- Landing do Universo Rabisco (23/9/2026): [web](../packs/platforms/web.md#aprendizados-de-páginas-interativas),
-  [imagens em camadas](../recipes/content.md#imagens-geradas-em-camadas),
-  [direção de arte](creative-workflow.md#aprendizados-de-direção-de-arte) e
-  [sessões paralelas](process.md#sessões-paralelas-no-mesmo-projeto).
-
-Áudio no navegador, Distrito Rabisco, 23/09/2026:
-- **Aplicado:** preparo das gravações antes da partida com contagem de sons mudos, FLAC com
-  WAV de reserva, 16 downloads simultâneos e cache versionado com manifesto revalidado. Serviu
-  às regras de [áudio](../recipes/audio.md#aprendizados-de-carregamento-formato-e-entrega), do
-  [pack Web](../packs/platforms/web.md) e de [performance](../recipes/performance.md).
-- **Provas no laboratório:** `games/distrito-rabisco/production/evidence/` (`audio-preparation-`,
-  `flac-lossless-` e `audio-cache-20260923`) e a pesquisa
-  `docs/pesquisas/Áudio em jogos Web — carregamento, formatos, memória e reprodução.md`.
-- **Limites:** medições em Mac com Chrome, Safari 17.6 e Firefox, em rede emulada e numa
-  conexão real. iPhone, Android, escuta e prioridade de vozes seguem pendentes.
-
-Engine e distribuição da série Rabisco, 24/09/2026:
-- **Aplicado:** fatos de plataforma em [Roblox](../packs/platforms/roblox.md#porte-de-jogo-de-outra-engine),
-  [UEFN](../packs/platforms/unreal.md#uefn-ilhas-do-fortnite) e no empacotamento do
-  [pack Web](../packs/platforms/web.md).
-- **Provas no laboratório:** `docs/pesquisas/Engine dos jogos Rabisco — celular, desktop, Steam, Roblox e Fortnite.md`
-  (39 fontes, duas rodadas) e o host desktop de `games/distrito-rabisco/platforms/desktop/`.
-- **Limites:** pesquisa documental; desempenho dos pacotes em aparelho e no Deck e o traço
-  sem shader no Roblox não foram medidos.
 
 As generalizações são pontos de aplicação condicionados ao contrato e à versão do
 projeto. Não comprovam ganhos em outros jogos, não tornam fornecedores obrigatórios
@@ -421,16 +394,13 @@ contraprova à fonte canônica conforme [o procedimento](learning.md).
 
 ## Acervo externo (swipe)
 
-Revisão crítica, em 23/09/2026, das 78 pastas de referência do laboratório
-(`swipe/`): 69 com runtime — 58 web (clientes publicados e snapshots de código) e 11
-não-web (NES, Rust, Godot, Python, C#, Unity) —, 1 ficha sem runtime e 8 coleções
-visuais. Método:
+Revisão crítica, em 23/09/2026, de um acervo de 78 projetos de referência de terceiros
+(69 com runtime, web e de outras plataformas; o resto são fichas e coleções visuais). Método:
 leitura dirigida do entrypoint, do laço e do carregamento com localizador por
 achado; inventário de assets por cabeçalho de arquivo; e uma bancada em Chrome
 headless (ANGLE/Metal, 1440×900, DPR 2, cache frio) que mede intervalo de quadro,
 tempo de callback, chamadas de desenho, uploads, compilações e bytes na cena inicial
-e depois de uma entrada. Estudo e dados: `docs/estudos/Estudo swipe de performance e
-estrutura.md` no laboratório.
+e depois de uma entrada. Estudo e dados ficam com o laboratório que fez a revisão.
 
 Viraram regra apenas relações vistas em duas ou mais fontes independentes:
 aquecimento, sombra e render sob demanda, carga cooperativa, destruição por região,
@@ -448,7 +418,7 @@ interação, não a partida de pior caso; uma máquina; impacto de custo por exp
 de alocação por quadro ficou como hipótese onde não foi medido. Autoria por IA ou
 humana não explicou a qualidade: o que separou bons e ruins foi restrição dura ou
 contrato verificável. Os números ilustram o acervo; não prometem ganho em outro jogo.
-Na revisão das melhorias aplicadas aos jogos do laboratório, uma amostra única de tempo
+Numa revisão de melhorias aplicadas a jogos, uma amostra única de tempo
 de callback mostrou ganho de 1,4 para 0,9 ms; três rodadas intercaladas de cada versão
 deram 1,1 para 0,8 ms, e duas das rodadas originais nem tinham chegado à cena medida.
 Um par antes/depois montado com capturas de execuções diferentes também produziu um
@@ -456,7 +426,7 @@ número errado. Daí a regra de repetição em [performance](../recipes/performa
 
 ## Autoria UGC pública
 
-Estudo do laboratório de 09/09/2026: Rezona e Crayon. Inspeção estática de quatro
+Estudo de 09/09/2026: Rezona e Crayon. Inspeção estática de quatro
 jogos públicos, frontend/iframe Crayon e pacote npm `rezona@0.2.0`; observações limitadas
 de interface/partida. Não executamos o kit, geração paga, exportação, multiplayer ou
 benchmark de autoria. Fontes públicas: [pacote versionado Rezona](https://registry.npmjs.org/rezona/-/rezona-0.2.0.tgz),
@@ -470,15 +440,13 @@ São procedimentos condicionais de engenharia, não implementação copiada ou p
 vantagem econômica. Preservam contratos e escolhas artísticas do projeto. Heurísticas
 de cena, limites universais e degradação automática não foram incorporados.
 
-Hashes, amostras, observações e plano de contraprova ficam no laboratório em
-`docs/pesquisas/Rezona e Crayon — autoria e execução com IA.md` e
-`docs/_anexos/ugc/rezona-crayon-2026-09-09.json`. Os métodos acima são utilizáveis sem esses
-arquivos e devem ser revistos quando o consumidor ou o contrato invalidar a hipótese.
+Hashes, amostras, observações e plano de contraprova ficam com o laboratório que fez o estudo.
+Os métodos acima são utilizáveis sem esses arquivos e devem ser revistos quando o consumidor ou o contrato invalidar a hipótese.
 
 ## Skill impeccable (0.10.2; referência atualizada em 2026-09-12)
 
 Estudo de 10/09/2026 da skill `impeccable` (design e iteração de interfaces de
-frontend, instalada em `~/.claude/skills/impeccable`): `SKILL.md`, 36 referências,
+frontend): `SKILL.md`, 36 referências,
 scripts (`load-context`, `pin`, `critique-storage`, detector de anti-padrões, modo
 `live`). Lida integralmente; scripts não executados neste repositório.
 
@@ -497,9 +465,9 @@ O que **não** foi adaptado, com motivo: pontuação Nielsen 0–40 (a barra rec
 somar dimensões: [production-bar](production-bar.md)); detector determinístico
 (opera sobre CSS/DOM estático; o análogo em jogo exige executar o jogo, que o
 harness não faz — hipótese registrada); modo `live` e geração de mocks (dependem
-de HMR e de geração de imagem no host; sem consumidor no laboratório hoje);
+de HMR e de geração de imagem no host);
 `.impeccable/critique/` como armazenamento próprio (aqui a persistência é `record`,
-ligado ao HEAD). Registro: [story](../docs/stories/2026-09-10-impeccable-study.md).
+ligado ao HEAD).
 Conteúdo de design de UI (OKLCH, tipografia, bans de CSS) não foi transposto: não
 é domínio deste harness.
 
@@ -511,8 +479,7 @@ entrada fina (83 linhas), navegação guiada por sinais, trabalho novo e
 [piso de execução](craft-floor.md) e [manual operacional](operations.md), sem
 copiar modos, bans ou agentes específicos de frontend.
 
-Em 12/09, Alan reafirmou Impeccable como referência máxima de aplicação e uso.
-Foi consultada a skill local `4.3.1` em `~/.agents/skills/impeccable`: entrada,
+Em 12/09 foi consultada a skill `4.3.1`: entrada,
 `routing`, `shape`, `craft` e trechos de `new-work` sobre autoridade, contrato,
 persistência e acabamento. O launcher `context` foi executado no núcleo; nenhum
 fluxo de construção de UI foi executado nesta manutenção.
@@ -523,5 +490,4 @@ documentação no agente. A reutilização de autorizações segue a conversa: n
 copiamos a confirmação obrigatória de Impeccable para repetir uma decisão já dada.
 Mecânicas, feel e apreciação humana continuam exigindo suas próprias provas.
 Também não acrescentamos torneio de conceitos, schemas de superfície ou agentes
-de frontend ao fluxo de jogos. O [registro da implementação](../docs/stories/2026-09-12-mda-player-experience-plan.md)
-liga diagnóstico, mudanças, verificação e o teste humano ainda pendente.
+de frontend ao fluxo de jogos. O teste humano ainda está pendente.

@@ -1509,7 +1509,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertEqual(game.quality_measure_source(), "references/quality.md")
         fields = game.parse_fields(["scenario=primeira travessia", "role=human"])
         report = game.record(
-            self.project, "observation", "Alan", "virou a curva sem ajuda.",
+            self.project, "observation", "Fulana", "virou a curva sem ajuda.",
             fields, [], self.root / "obs-408",
         )
         self.assertIn(
@@ -1523,7 +1523,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertFalse(game.quality_refuses_measure(""))
         with mock.patch.object(game, "quality_measure_source", return_value=None):
             silent = game.record(
-                self.project, "observation", "Alan", "virou a curva sem ajuda.",
+                self.project, "observation", "Fulana", "virou a curva sem ajuda.",
                 fields, [], self.root / "obs-408-silent",
             )
         self.assertNotIn("medir os critérios", silent["scope"])
@@ -1550,7 +1550,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         capture.write_bytes(b"frame")
         fields = game.parse_fields(["scenario=primeira travessia", "role=human"])
         report = game.record(
-            self.project, "observation", "Alan", "virou a curva sem ajuda.",
+            self.project, "observation", "Fulana", "virou a curva sem ajuda.",
             fields, [str(capture)], self.root / "obs-438",
         )
         self.assertTrue(report["attachments"], "o record já devolve anexos neste destino")
@@ -1565,7 +1565,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertFalse(game.quality_refuses_isolated_still(""))
         with mock.patch.object(game, "record_attachment_still_source", return_value=None):
             silent = game.record(
-                self.project, "observation", "Alan", "virou a curva sem ajuda.",
+                self.project, "observation", "Fulana", "virou a curva sem ajuda.",
                 fields, [str(capture)], self.root / "obs-438-silent",
             )
         self.assertNotIn("screenshot isolado comprove animação", silent["attachments"][0]["scope"])
@@ -2115,7 +2115,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertNotIn("HEAD substitua o julgamento", game.git_summary_scope())
         self.assertNotIn("HEAD substitua o julgamento", game.next_scope())
 
-    # 27/09/2026 (05db57c0): Alan tirou do processo a recusa de reuso automático. O
+    # Quando o processo deixa de recusar o reuso automático, o
     # escopo segue o documento: sem a frase não inventa a recusa; com ela, não a cala.
     def test_roles_fill_names_the_reuse_only_while_the_process_refuses_it(self):
         guide = (game.FRAMEWORK / "references/process.md").read_text(encoding="utf-8")
@@ -2303,8 +2303,8 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertNotIn("infira dependências", game.context_scope())
         self.assertNotIn("infira dependências", game.next_scope())
 
-    # 27/09/2026 (261002dc): Alan removeu o bloqueio de licença na entrega; o roteiro
-    # passou a dizer que recibo é origem declarada. O scan segue o documento.
+    # Quando o guia deixa de bloquear a licença na entrega e passa a dizer que recibo é
+    # origem declarada, o scan segue o documento.
     def test_scan_names_the_license_only_while_the_guide_refuses_it(self):
         guide = (game.FRAMEWORK / "references/gates.md").read_text(encoding="utf-8")
         self.assertFalse(game.gates_refuse_present_receipt(guide))
@@ -4317,7 +4317,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertEqual(pacing["next_tier"], "slice")
         self.assertTrue(pacing["source"].startswith("README.md:"))
 
-    # O Rabisco Boom guarda o QA em docs/planning/qa.md. `scan` o encontrava e
+    # Um projeto pode guardar o QA em docs/planning/qa.md. `scan` o encontrava e
     # `bar` não, então a tabela declarada era invisível para o harness — e `next`
     # propunha declarar o que já estava declarado. A declaração vive onde o
     # projeto guarda o documento, não onde o harness gostaria.
@@ -4663,8 +4663,8 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
     # a conta de dispensas — que existe para doer — inflava com linhas inócuas.
     def test_out_of_scope_leaves_the_count_of_waivers_alone(self):
         self.declare_gate({
-            ("deliver", "save_migration"): ("out_of_scope", "jogo sem save — Alan, 2026-09-08"),
-            ("deliver", "rollback"): ("waived", "primeira publicação, nada a reverter — Alan"),
+            ("deliver", "save_migration"): ("out_of_scope", "jogo sem save — Fulana, 2026-09-08"),
+            ("deliver", "rollback"): ("waived", "primeira publicação, nada a reverter — Fulana"),
         })
         entrega = game.gate_reading(self.project, "deliver")["gates"][0]
         self.assertEqual(entrega["out_of_scope"], ["save_migration"])
@@ -4739,7 +4739,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         # Responder a pergunta de valor não é acrescentar linha: é reescrever a
         # que estava lá, senão as duas discordam e o conflito vem antes de tudo.
         self.foundation_document()
-        rows[("scale", "worth_scaling")] = ("met", "custo estimado em 4 dias de agente, cabe — Alan")
+        rows[("scale", "worth_scaling")] = ("met", "custo estimado em 4 dias de agente, cabe — Fulana")
         self.declare_gate(rows)
         seguinte = self.proposals(game.next_step(self.project, "production"))
         proposal = next(item for item in seguinte if item["basis"] == "gates.pending")
@@ -7556,7 +7556,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertIn("migrate", proposal["why"])
 
     def test_save_reads_schema_version_as_versioned(self):
-        # Recorte real de distrito-rabisco (src/engine/core/interaction-settings.js):
+        # Recorte de um projeto real (src/engine/core/interaction-settings.js):
         # versiona o formato e recusa versão desconhecida, preservando o documento.
         # Antes desta leitura o relatório dizia unversioned e `next` propunha
         # versionar um save que já era versionado.
@@ -7580,12 +7580,12 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertNotIn("save.unversioned", bases)
 
     def test_save_version_is_a_shape_not_a_name(self):
-        # brasa-pista chama de CAREER_VERSION, distrito-rabisco de schemaVersion.
+        # Um projeto chama de CAREER_VERSION, outro de schemaVersion.
         # Listar nomes internos falhava nos dois; o que conta é a forma.
         (self.project / "index.html").write_text("<canvas></canvas>")
         (self.project / "campaign.js").write_text(
             "export const CAREER_VERSION = 1;\n"
-            "const CAREER_KEY = 'brasa:career';\n"
+            "const CAREER_KEY = 'alpha:career';\n"
             "export function saveCareer(storage, career) {\n"
             "  return storage.setItem(CAREER_KEY, JSON.stringify(career));\n"
             "}\n"
@@ -11297,7 +11297,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
             self.assertIn(genre, game.suggest_genres([{"value": genre.replace("-", " ")}]))
 
     def test_prose_suggests_a_genre_with_evidence_and_still_loads_no_pack(self):
-        # Nem todo brief declara um campo Gênero. distrito-rabisco diz em prosa
+        # Nem todo brief declara um campo Gênero. um projeto real diz em prosa
         # ("FPS de ondas dentro de um caderno") e a sugestão vinha vazia.
         self.package()
         (self.project / "README.md").write_text(
@@ -11374,7 +11374,7 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         capture = self.root / "playtest.mp4"
         capture.write_bytes(b"video")
         fields = game.parse_fields(["scenario=primeira travessia", "role=human", "device=iPad"])
-        report = game.record(self.project, "observation", "Alan", "A pessoa marcou a trilha e voltou sem ajuda.", fields, [str(capture)], self.root / "obs-01")
+        report = game.record(self.project, "observation", "Fulana", "A pessoa marcou a trilha e voltou sem ajuda.", fields, [str(capture)], self.root / "obs-01")
         self.assertEqual(report["status"], "declared")
         self.assertEqual(report["fields"]["role"], "human")
         self.assertEqual(report["attachments"][0]["sha256"], game.hashlib.sha256(b"video").hexdigest())
@@ -11382,32 +11382,32 @@ Assets desenhados neste projeto; autoria ainda não confirmada por auditoria.
         self.assertEqual(game.read_json(self.root / "obs-01/record.json"), report)
         self.assertNotIn("approved", json.dumps(report).casefold())
         with self.assertRaisesRegex(ValueError, "existente"):
-            game.record(self.project, "observation", "Alan", "de novo", fields, [], self.root / "obs-01")
+            game.record(self.project, "observation", "Fulana", "de novo", fields, [], self.root / "obs-01")
         self.assertEqual(sorted(p.name for p in (self.root / "obs-01").iterdir()), ["record.json"])
 
     def test_record_requires_kind_specific_fields_and_numeric_budget(self):
         with self.assertRaisesRegex(ValueError, "exige campos: metric, value"):
-            game.record(self.project, "budget", "Alan", "medido", {"unit": "ms", "platform": "web", "tool": "devtools"}, [], self.root / "b")
+            game.record(self.project, "budget", "Fulana", "medido", {"unit": "ms", "platform": "web", "tool": "devtools"}, [], self.root / "b")
         with self.assertRaisesRegex(ValueError, "numérico"):
-            game.record(self.project, "budget", "Alan", "medido", {"metric": "frame_p99", "value": "rápido", "unit": "ms", "platform": "web", "tool": "devtools"}, [], self.root / "b")
-        report = game.record(self.project, "budget", "Alan", "cena da fábrica, 60 s", {"metric": "frame_p99", "value": "14.2", "unit": "ms", "platform": "web", "tool": "devtools"}, [], self.root / "b")
+            game.record(self.project, "budget", "Fulana", "medido", {"metric": "frame_p99", "value": "rápido", "unit": "ms", "platform": "web", "tool": "devtools"}, [], self.root / "b")
+        report = game.record(self.project, "budget", "Fulana", "cena da fábrica, 60 s", {"metric": "frame_p99", "value": "14.2", "unit": "ms", "platform": "web", "tool": "devtools"}, [], self.root / "b")
         self.assertEqual(report["fields"]["value"], 14.2)
         with self.assertRaisesRegex(ValueError, "role deve ser um de"):
             game.record(self.project, "milestone", "bot", "alpha", {"milestone": "alpha", "decision": "declared", "declared_by": "bot", "role": "robot"}, [], self.root / "m")
         with self.assertRaisesRegex(ValueError, "decision deve ser um de"):
-            game.record(self.project, "milestone", "Alan", "alpha", {"milestone": "alpha", "decision": "approved", "declared_by": "Alan", "role": "human"}, [], self.root / "m")
+            game.record(self.project, "milestone", "Fulana", "alpha", {"milestone": "alpha", "decision": "approved", "declared_by": "Fulana", "role": "human"}, [], self.root / "m")
         with self.assertRaisesRegex(ValueError, "desconhecido"):
-            game.record(self.project, "release", "Alan", "x", {}, [], self.root / "r")
+            game.record(self.project, "release", "Fulana", "x", {}, [], self.root / "r")
         with self.assertRaisesRegex(ValueError, "anexo"):
-            game.record(self.project, "budget", "Alan", "x", {"metric": "m", "value": "1", "unit": "ms", "platform": "web", "tool": "t"}, [str(self.root / "absent.mp4")], self.root / "a")
+            game.record(self.project, "budget", "Fulana", "x", {"metric": "m", "value": "1", "unit": "ms", "platform": "web", "tool": "t"}, [str(self.root / "absent.mp4")], self.root / "a")
         with self.assertRaisesRegex(ValueError, "chave=valor"):
             game.parse_fields(["semigual"])
         self.assertFalse((self.root / "m").exists())
         self.assertFalse((self.root / "a").exists())
 
     def test_record_cli_declares_milestone_and_refuses_repository_text_as_approval(self):
-        argv = [sys.executable, str(SCRIPT), "record", str(self.project), "--kind", "milestone", "--author", "Alan", "--note", "Critérios do alpha com evidência ligada.",
-                "--field", "milestone=alpha", "--field", "decision=declared", "--field", "declared_by=Alan", "--field", "role=human", "--output", str(self.root / "alpha"), "--root", str(self.root)]
+        argv = [sys.executable, str(SCRIPT), "record", str(self.project), "--kind", "milestone", "--author", "Fulana", "--note", "Critérios do alpha com evidência ligada.",
+                "--field", "milestone=alpha", "--field", "decision=declared", "--field", "declared_by=Fulana", "--field", "role=human", "--output", str(self.root / "alpha"), "--root", str(self.root)]
         run = subprocess.run(argv, capture_output=True, text=True)
         self.assertEqual(run.returncode, 0, run.stderr)
         report = json.loads(run.stdout)

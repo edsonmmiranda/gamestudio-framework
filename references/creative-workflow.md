@@ -49,8 +49,8 @@ MDA ajuda a relacionar intenção, comportamento e escolhas de design. Inspeçã
 compreensão e controle antecipa obstáculos; observação e relato guiam a próxima
 rodada. Questionários, modelos numéricos e comparação controlada entram quando
 respondem a uma decisão concreta. Uma conversa de feedback não vira pesquisa formal
-por receber um recibo. O [estudo e seus limites](../docs/stories/2026-09-12-mda-player-experience-plan.md)
-registram a base dessas escolhas; o ciclo continua sendo o mesmo.
+por receber um recibo. Essas escolhas têm base em estudo próprio, com limites registrados fora deste guia;
+o ciclo continua sendo o mesmo.
 
 ## O que muda no roadmap
 
@@ -293,8 +293,7 @@ framework. Consulte [a separação de responsabilidades](workspace-binding.md).
 
 ## Aprendizados de direção de arte
 
-Do caso Universo Rabisco (23/9/2026). Valem para superfícies interativas de apresentação:
-landings, hubs, menus e telas de entrada.
+Valem para superfícies interativas de apresentação: landings, hubs, menus e telas de entrada.
 
 - **Encenar a premissa.** Uma página de série ganha identidade quando a interação conta a tese
   do mundo, e não quando lista produtos. Ler o documento de mundo e o design system antes de desenhar.
@@ -326,6 +325,6 @@ Este é o mapa conceitual do workflow. A execução detalhada continua no
 e a [revisão de entrega](delivery.md) confere o resultado
 contra o pedido.
 
-Origem: workflow aplicado no laboratório em setembro de 2026, generalizado para
-outros projetos. Decisões e resultados de cada aplicação continuam com o jogo.
+Este guia é um workflow generalizado para vários projetos. Decisões e resultados de cada
+aplicação continuam com o jogo.
 Este guia descreve um método; não afirma execução ou progresso de um projeto.

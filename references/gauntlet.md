@@ -61,13 +61,13 @@ definiu duração, inclua-a; orçamento é teto de tempo corrido, não meta de o
 Na retomada, um prazo ainda vigente no registro continua valendo mesmo se o novo
 arquivo de prompts omitir horas. Só mudança explícita do usuário altera esse prazo.
 
-O agente pode preparar o pacote pelo gerador existente, na raiz de Games:
+O agente pode preparar o pacote pelo gerador existente, na raiz do laboratório:
 
 ```sh
-python3 framework/scripts/game.py gauntlet games/era-uma-vez \
+python3 framework/scripts/game.py gauntlet games/alpha \
   --objective "Implementar e verificar o recorte definido no plano atual" \
   --focus mechanics \
-  --output /tmp/era-uma-vez-gauntlet.md
+  --output /tmp/alpha-gauntlet.md
 ```
 
 Acrescente `--hours 4` somente se essa duração tiver sido informada. Sem horas,
@@ -167,8 +167,8 @@ comandos; avaliação artística, experiência observada e aprovação humana s�
 
 **REUSE:** contexto, R→A→C, receitas, Devlog/QA e recibos existentes. **ADAPT:** geração
 de texto parametrizado e continuidade automática com orçamento opcional. **CREATE:** pacote e guia para
-a lacuna de sessões prolongadas. O mapa de [fontes](sources.md#gauntlet-de-prompts)
-registra o que foi aproveitado do MKT e do BMad.
+a lacuna de sessões prolongadas. O mapa de [fontes](sources.md)
+registra o que foi aproveitado de estudos externos.
 
 Testes do harness verificam geração, argumentos, ausência de execução e preservação
 de arquivos. Não provam obediência de modelos por horas, qualidade de um jogo nem

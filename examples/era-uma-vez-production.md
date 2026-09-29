@@ -25,10 +25,10 @@ floresta e a leitura das marcas a distância.
 Primeira medição vira recibo:
 
 ```sh
-python3 scripts/game.py record /lab/era-uma-vez --kind budget --author "Alan" \
+python3 scripts/game.py record games/alpha --kind budget --author "Ana" \
   --note "Travessia completa, tablet de referência, build 3f2c1" \
   --field metric=frame_p99 --field value=14.2 --field unit=ms \
-  --field platform=tablet-ref --field tool=devtools --output /lab/evidence/era-budget-01
+  --field platform=tablet-ref --field tool=devtools --output games/alpha/evidence/budget-01
 ```
 
 O recibo guarda HEAD e status do git; o plano passa a citar a pasta, e o estado da
@@ -52,16 +52,16 @@ linha muda de `hipótese` para `medido`.
 
 ## Revisão de marco, quando chegar a hora
 
-`context /lab/era-uma-vez --focus production --stage milestone` carrega a receita e o
+`context games/alpha --focus production --stage milestone` carrega a receita e o
 template. A revisão lê cada critério contra o recibo correspondente (`verify` para
 técnica, `record --kind observation` para experiência, `record --kind budget` para
 orçamentos). A passagem é registrada por pessoa:
 
 ```sh
-python3 scripts/game.py record /lab/era-uma-vez --kind milestone --author "Alan" \
+python3 scripts/game.py record games/alpha --kind milestone --author "Ana" \
   --note "Vertical slice: critérios com evidência em evidence/vs-*; desvio aceito: som da migalha provisório" \
-  --field milestone=vertical-slice --field decision=declared --field declared_by=Alan --field role=human \
-  --output /lab/evidence/era-vs-gate
+  --field milestone=vertical-slice --field decision=declared --field declared_by=Ana --field role=human \
+  --output games/alpha/evidence/vs-gate
 ```
 
 Um recibo com `role=agent` registra a avaliação do agente e não substitui essa decisão.
@@ -78,7 +78,7 @@ Um recibo com `role=agent` registra a avaliação do agente e não substitui ess
 - **Onde estamos:** first playable atingido; vertical slice pendente.
 - **Próximo passo:** TASK-VS-01 — aplicar a ilustração aprovada à travessia e medir o p99.
 - **Por que agora:** RISK-02 pode invalidar a direção de luz antes de haver mais conteúdo.
-- **Pronto quando:** comparação em movimento aprovada por Alan e recibo de orçamento dentro da meta.
+- **Pronto quando:** comparação em movimento aprovada por Ana e recibo de orçamento dentro da meta.
 - **Retomar por:** este plano, `record.json` em `evidence/`, e o design system do jogo.
 
 Este exemplo cabe em um documento porque o capítulo é pequeno. Um jogo com mais

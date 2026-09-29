@@ -75,7 +75,7 @@ Fatos verificados em 24/09/2026. Uma ilha não é um projeto Unreal completo.
   dentro e fora do Fortnite; Early Access previsto para o fim de 2027 (via imprensa; a
   página oficial recusou leitura automatizada). Nenhuma fonte cita alvo web. Até lá,
   projeto UE5 e ilha são entregas distintas.
-- Caso de origem: série Rabisco do laboratório (24/09/2026). Invalida: UEFN aceitar
+- Invalida: UEFN aceitar
   personagem próprio do jogador ou a UE6 entregar o projeto único.
 
 ## O que o harness faz aqui

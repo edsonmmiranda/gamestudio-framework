@@ -42,7 +42,7 @@ proveniência. Mix, interrupção e silêncio seguem [áudio](audio.md), não ap
 a cópia do arquivo. Registre origem e condições de uso; conteúdo baixado não
 recebe uma licença nova pelo simples reuso. Se o sidecar declara `Consumidor:`, o `origins` nomeia o consumidor que o sidecar já declara. Consumidor no disco não é licença válida. Sem chave `consumer`. Se o roteiro recusa que o sidecar sem rótulos declare, o `origins` nomeia os rótulos que o roteiro já recusa. Recibo no disco não é licença. Sem chave `rótulos`.
 
-Geração externa (Magnific e similares) distingue capacidades documentadas de
+Geração externa por serviços de IA distingue capacidades documentadas de
 integração comprovada. Não torna o fornecedor obrigatório.
 
 Para personagens montados com sprites, use [animação 2D](animation-2d.md): escolha
@@ -83,7 +83,6 @@ um bolso sem saída somente no fechamento. Quando rotas alternativas são requis
 verifique também gargalos de uma única célula e percorra a rota com a física real.
 Prévia, colisão, renderização e plano multiplayer devem consumir a mesma identidade
 e versão de nível; uma troca/revanche não pode herdar destruição da planta anterior.
-Prova de aplicação: Só Sobra Um, `docs/qa.md`, QA-EXP-M01 (22/09/2026).
 
 Para diversificar arenas, defina o que muda na decisão do jogador, inclusive no
 fechamento: ocultar-se, contornar, destruir, manter distância ou usar uma superfície
@@ -91,7 +90,6 @@ de ricochete. Trocar contagens de terreno ou cores não demonstra esse contraste
 Confira a interação com a física e observe partidas completas sem fabricar tempo,
 dano ou resultado; registre quando a entrada humana foi substituída pela IA.
 Uma rodada por arena não estima equilíbrio nem certifica diversão humana.
-Prova de aplicação: Só Sobra Um, `docs/qa.md`, QA-EXP-M03 (22/09/2026).
 
 Para narrativa, confirme como escolhas disponíveis dependem do histórico, quando
 efeitos são aplicados e qual estado uma escolha restaura. Teste caminhos alternativos,
@@ -148,7 +146,7 @@ conforme o contrato do consumidor e repetir a prova no projeto de destino.
 
 ### Imagens geradas em camadas
 
-Do caso Universo Rabisco (23/9/2026). Aplicar quando imagens geradas por IA substituem desenho
+Aplicar quando imagens geradas por IA substituem desenho
 em código ou se combinam como colagem animada.
 
 - Uma peça por imagem, fundo transparente, **luz comum** a todas e **sem sombra projetada no
@@ -158,12 +156,11 @@ em código ou se combinam como colagem animada.
 - Confira cada peça contra a ficha de identidade do personagem antes de entrar (olhos, acessórios,
   cores, o que é proibido). Registre procedência e hash; o original fica fora do repositório.
 - Espere ajustes de encaixe: capa sem título recebe a logo oficial por cima; peça grande demais
-  para a cena pode pedir mudança de mecânica, e não de escala. O carimbo que não cabia sobre a
-  fileira passou a imprimir uma cópia por vez.
-- Cada peça é aprovada pelo criador e reversível. Uma peça rejeitada (a régua de madeira) sai da
+  para a cena pode pedir mudança de mecânica, e não de escala.
+- Cada peça é aprovada pelo criador e reversível. Uma peça rejeitada sai da
   página sem afetar as outras.
 - Lettering e marcas gerados não substituem o master da logo; registre a decisão do criador
   quando uma arte gerada levar a marca, como numa imagem de compartilhamento.
 
-Referências: Era Uma Vez no playground, troca de assets em protótipo Unity, Ink `RE-INK-004/007/009`
+Referências: troca de assets em protótipo Unity, Ink `RE-INK-004/007/009`
 e LDtk `RE-LDTK-005/006/010` ([fontes](../references/sources.md)).

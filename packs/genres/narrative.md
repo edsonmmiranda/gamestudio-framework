@@ -40,4 +40,4 @@ riscos e provas; o GDD do jogo decide. Não é regra universal.
 ## Receitas e fontes
 
 [conteúdo](../../recipes/content.md) (Ink: histórico, versões), [feel](../../recipes/feel.md),
-[qualidade](../../references/quality.md). Exemplo: [Era Uma Vez](../../examples/era-uma-vez-preproduction.md).
+[qualidade](../../references/quality.md). Exemplo: [a trilha de João e Maria](../../examples/era-uma-vez-preproduction.md).

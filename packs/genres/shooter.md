@@ -16,8 +16,8 @@ riscos e provas; o GDD do jogo decide. Não é regra universal.
 > **Limites:** o harness não mede latência de input → tiro, não ouve o mix e não
 > observa a curva de dificuldade. Essas provas são de sessão, por
 > `record --kind observation`.
-> **Exemplo rastreável:** `games/distrito-rabisco` é um FPS de ondas
-> (`production/game-design.md:349`), com combate de armas e katana.
+> **Exemplo rastreável:** registre o papel de cada arma com o arquivo do GDD em que a
+> decisão está (`arquivo:linha`).
 
 ## Verbo central e decisões
 
@@ -59,4 +59,4 @@ riscos e provas; o GDD do jogo decide. Não é regra universal.
 
 [feel](../../recipes/feel.md), [rede](../../recipes/network.md),
 [visual](../../recipes/visual.md), [mecânicas](../../recipes/mechanics.md).
-Ponto de partida no laboratório: Distrito Rabisco ([criar](../../recipes/create.md)).
+Ponto de partida: [criar](../../recipes/create.md).

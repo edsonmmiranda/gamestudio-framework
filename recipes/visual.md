@@ -40,7 +40,7 @@ depois de um `note`, `start` e `next` apontam esses comandos.
 Ferramenta no disco não é alguém de fora nem comparação em movimento.
 
 Leia [a qualidade](../references/quality.md) e os aprendizados de performance
-do laboratório, quando existirem.
+do projeto, quando existirem.
 Reutilize materiais, modelos, efeitos, tokens e métodos coerentes com essa direção;
 adapte seus consumidores antes de criar variantes paralelas. A instância canônica
 é o design system do jogo (Art Bible); o contrato do estúdio está no
@@ -115,8 +115,7 @@ assimetria sem suavizar IDs/profundidade nem remover detalhes da cena. Valide no
 shader real: plano inclinado sem falsos contornos, degrau ainda desenhado e tintas
 preservadas, com mais de um raio/resolução. Tire a pauta e outras marcas legítimas
 da região de medição; não relaxe o limiar para absorvê-las. Depois compare o jogo
-em movimento. Caso e prova: Rabisco Boom, `art/validation/2026-09-11-gameplay-hardening/`
-no laboratório, 11/09/2026.
+em movimento.
 
 Efeitos que precisam sobreviver a pausa, replay ou snapshots devem guardar a decisão
 visual no estado e reconstruir pose/partículas pela idade do evento e seed cosmética.
@@ -128,7 +127,6 @@ Registre efeito visual, custo e hipóteses descartadas. Teste técnico não apro
 Sem comparação suficiente, declare a lacuna; não redefina uma versão degradada como
 novo piso. Não marque aprovação do usuário a partir da opinião da IA.
 
-Fontes históricas no laboratório: estudos de FPS, corrida e demos visuais.
 Excalibur `RE-EXCAL-020/021` descreve infraestrutura de teste visual, não um critério
 universal de qualidade artística ([fonte](https://github.com/excaliburjs/Excalibur)).
 
@@ -137,38 +135,34 @@ confira a escala espacial pressuposta no shader. Afastar a câmera para caber o 
 pode apagar pigmento e contornos sem qualquer mudança de geometria. Uma escala explícita de
 distância artística por câmera permite manter a leitura da prévia e restaurar exatamente o
 valor original nas câmeras jogáveis. Preserve resolução, materiais e sombra; compare entrada,
-troca de mapa e retorno à partida. Caso: Corrida Rabisco, QA “Home com mapas — 2026-09-11”.
+troca de mapa e retorno à partida.
 
 Em renderizadores que codificam identificadores, sombra e normais num buffer intermediário,
 alpha RGBA convencional não representa transparência válida. Componha o material transparente
 na passagem de cor final, consultando a profundidade opaca e preservando antialiasing e
 oclusão. Confira objetos na frente e atrás, vistas internas, descarte e reconstrução da cena.
 O formato do buffer deve orientar a integração; não tornar o vidro opaco nem remover sua malha
-para mascarar o problema. Caso e prova: Distrito Rabisco,
-`production/evidence/arena-identity-20260912/`, 12/9/2026.
+para mascarar o problema.
 
 Em telas de seleção com rolagem interna, confira a altura dos cartões e de seus
 filhos, além do overflow da página. Uma linha `minmax(0, 1fr)` dentro de uma tela
 limitada ao viewport pode comprimir os cartões enquanto retratos e controles
 continuam pintando por fora. Deixe o conteúdo definir a altura nas composições
-estreitas e confira topo, rodapé e início da partida pelo caminho real. Caso:
-Rabisco Boom, `art/validation/2026-09-13-polish/confirmation/` no laboratório.
+estreitas e confira topo, rodapé e início da partida pelo caminho real.
 
 Em partidas que continuam durante notificações, avisos de início, perigo e
 mudança de fase precisam ocupar espaço reservado fora da arena e dos controles.
 `pointer-events: none` não resolve a oclusão visual. Compare os retângulos de
 canvas, aviso, HUD e direcional antes/depois da mensagem; a arena não deve mudar
 de enquadramento nem receber texto sobre uma rota de fuga. Inclua mensagens
-longas, celulares em retrato/paisagem e estados de derrota. Caso: Rabisco Boom,
-`art/validation/2026-09-12-gameplay-design/checks/`, após relato de morte por banner.
+longas, celulares em retrato/paisagem e estados de derrota.
 
 Ao integrar um canvas 3D a uma página contínua, elimine somente o fundo duplicado,
 preservando material e profundidade dos objetos. O alpha deve sobreviver ao
 passe de cor, antialiasing e composição final; num canvas premultiplicado, RGB
 não nulo em pixels de alpha zero pode produzir uma placa branca. Verifique os
 pixels vazios e as bordas suavizadas, além da imagem composta. Este ajuste não
-pode tornar transparentes personagens cujo corpo aprovado é opaco. Caso: Rabisco
-Boom, `src/view/three/renderer.js` e capturas `2026-09-12-gameplay-design/shipped/`.
+pode tornar transparentes personagens cujo corpo aprovado é opaco.
 
 Ao compor um lobby com backplate e avatar 3D numa camada própria de câmera,
 trate a máscara de visibilidade e a exposição como estado de apresentação.
@@ -176,15 +170,13 @@ Restaure-as em todas as saídas, inclusive editores de equipamento abertos pelos
 ajustes, não apenas em Jogar. Exercite troca de visual, gesto, editor, retorno
 e início de partida; um botão que funciona com a cena invisível não passa.
 Backplate deve preservar proporção e deixar o personagem/contato 3D reais.
-Caso e prova: MineNite, `docs/qa/fortnite-presentation.json`, 20/09/2026.
 
 Quando o polimento troca a representação de um personagem (instâncias por
 volumes modelados, por exemplo), confira os consumidores do tipo da malha:
 sombra, culling, primeira pessoa, espelhos e pontos de arma/mão. Renderizar bem
 em pose neutra não basta. Retratos de seleção podem vir do mesmo rig/material,
 desde que a câmera caiba também nos acessórios mais altos e a geração restaure
-o estado do renderer sem consumir o RNG da simulação. Caso: MineNite,
-`tests/hero-presentation.mjs` e `docs/qa/hero-polish.json`, 20/09/2026.
+o estado do renderer sem consumir o RNG da simulação.
 
 Antes de trocar a linguagem de um efeito, confira o que carrega a identidade dele. Num jogo
 em que o tiro é luz (clarão que ilumina o chão, bloom, brilho na cor do kit), uma forma
@@ -195,9 +187,8 @@ com formas opacas: o efeito muda de linguagem (vira desenho animado) e deixa de 
 com o resto do jogo. Melhore dentro da luz e compare em movimento com o dono da direção
 antes de trocar o padrão. Quando o dono disser que "antes era melhor", compare a versão
 antiga rodando lado a lado (um worktree do commit anterior) em vez de adivinhar pelo código.
-Caso: Só Sobra Um, 22/09/2026 — clarão, rastro e estrela recortados, e silhuetas com
-contorno de tinta sobre projéteis que antes eram luz, ambos recusados; os tiros voltaram
-aos feixes de luz do começo (devlog "Tiros de luz do começo do jogo").
+Exemplos que mudam a linguagem do efeito: clarão, rastro e estrela recortados, e silhuetas com contorno de tinta
+sobre projéteis que antes eram luz.
 
 Em câmera alta (top-down, isométrica íngreme), julgue o personagem primeiro pela silhueta
 preta na câmera real da partida. Vista de cima, a cabeça ou o chapéu cobre a maior parte
@@ -206,5 +197,4 @@ dois ou três blocos grandes de cor. Botões, cintos e bolsos somem nesse tamanh
 acessório atrás da cabeça ou do mesmo lado de outra massa também some: confira na
 silhueta. Peças de cabeça precisam respeitar a troca de visuais (chapéus alternativos),
 e peças novas nas costas precisam conviver com capas. Prove em partida, andando, e nos
-visuais alternativos. Caso: Só Sobra Um, 22/09/2026 (Galo de Briga como referência; Slick,
-Rebita e Fuse).
+visuais alternativos.

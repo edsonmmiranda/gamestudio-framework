@@ -71,7 +71,7 @@ Direção visual e câmera continuam em [visual](visual.md).
 
 ## Comparações que permitem concluir alguma coisa
 
-Aprendizados de aplicações reais, com [origem e limites](../references/sources.md#aprendizados-de-aplicações):
+Aprendizados de aplicações reais:
 
 - Identifique o build servido, backend gráfico, dispositivo, visibilidade da página,
   dimensões do buffer, DPR e escala interna. Tamanho CSS igual não garante pixels
@@ -92,8 +92,7 @@ Aprendizados de aplicações reais, com [origem e limites](../references/sources
   iluminação antes da ação; retenha recursos compartilhados enquanto tiverem dono.
   Não descarte e recrie todos os programas a cada partida, nem retenha recursos sem
   limite para evitar recompilação. Confira três partidas e o descarte final, além
-  da equivalência visual em movimento. Caso: sessões S09/S14 do piloto Beacon/Jev
-  do laboratório em 22/09/2026; os números locais não são metas universais.
+  da equivalência visual em movimento. Números locais não são metas universais.
 - **Tempo até jogar:** separe pedidos, bytes e decodificação antes de escolher a técnica.
   - *Como medir:* com cache frio, repita o carregamento variando uma coisa por vez
     (concorrência, formato, rede emulada). Meça também na produção real: a emulação de rede
@@ -101,8 +100,8 @@ Aprendizados de aplicações reais, com [origem e limites](../references/sources
   - *Junto do tempo:* conte a regressão que ele pode esconder. Um início mais rápido que toca
     a ação sem som é pior, não melhor.
   - *Cache:* depois de um deploy, confira que quem já tem cache recebe a versão nova.
-  - *Caso Distrito Rabisco (23/09/2026):* com FLAC, a espera ficou limitada por idas e voltas
-    (4 → 16 downloads: 1,79 → 0,57 s em produção). Regras em
+  - *Exemplo:* com FLAC, a espera fica limitada por idas e voltas; subir os downloads
+    simultâneos ajuda até um ponto, medido em produção. Regras em
     [áudio](audio.md#aprendizados-de-carregamento-formato-e-entrega) e no
     [pack Web](../packs/platforms/web.md#build-plataformas-e-distribuição).
 - No navegador, quando execuções separadas variam mais que a diferença procurada, abra
@@ -111,16 +110,15 @@ Aprendizados de aplicações reais, com [origem e limites](../references/sources
   o timer de GPU do WebGL quando existir e conclua só por razões entre variantes: com
   várias abas, o valor absoluto não é o tempo de quadro. Antes de afirmar "sem diferença",
   prove a sensibilidade com uma alteração de custo conhecido; se ela não aparecer, o
-  método não decide. Caso: Só Sobra Um, 22/09/2026, onde builds idênticos variaram até 25%
-  entre execuções separadas.
+  método não decide. Builds idênticos podem variar dezenas de pontos percentuais entre
+  execuções separadas.
 - Ao cronometrar desenhos no navegador em sequência, sincronize a GPU antes e depois de
   cada um, por exemplo com a leitura de 1 pixel. Sem isso, o timer pode somar trabalho que
   ainda estava na fila do desenho anterior e inventar custo. Com GPU disputada, meça as
   variantes intercaladas no mesmo instante da simulação e conclua pela mediana da razão por
   instante, com intervalo. Custo que não muda quando a área desenhada cai a uma fração é
-  sinal de artefato do método, não de preenchimento. Caso: Só Sobra Um, 22/09/2026 — efeito
-  medido em +30% a +47% sem sincronizar e em 0% a +2,4% sincronizado, com a contraprova do
-  AO (−20% a −28%) visível nos dois métodos.
+  sinal de artefato do método, não de preenchimento. Uma contraprova de custo conhecido
+  precisa aparecer nos dois métodos.
 - Separe bytes transferidos, buffers decodificados, heap, recursos GPU e memória total.
   Contador de objetos ou heap JavaScript sozinho não mede PCM nem VRAM. Remover
   referências e desconectar áudio não demonstram coleta imediata pelo sistema.
@@ -131,7 +129,7 @@ Aprendizados de aplicações reais, com [origem e limites](../references/sources
   e tire antes e depois de execuções rotuladas, nunca de capturas avulsas. Para o
   que acontece durante um evento — perda de contexto, aba oculta, pausa —, leia o
   estado do jogo antes, durante e depois (relógio, placar, tela visível), em vez de
-  deduzir por uma captura final ([origem](../references/sources.md#acervo-externo-swipe)).
+  deduzir por uma captura final.
 - Faça contraprovas que deveriam falhar: trocar a variante, zerar o dado suspeito,
   desativar o diagnóstico ou comparar reconstrução completa com atualização parcial.
   Uma ferramenta de medição também pode desenhar na cena e falsificar seu resultado.
@@ -159,8 +157,7 @@ Aprendizados de aplicações reais, com [origem e limites](../references/sources
 - Texturas procedurais geradas por laços de pixel no JavaScript podem ir para a GPU. Crie
   um único contexto de bake por sessão (criar um por uso custa e o navegador limita o
   total), compare pixel a pixel com a versão de CPU e mantenha a CPU como alternativa
-  quando a extensão necessária faltar. Números do caso Só Sobra Um: 608 → 57 ms num mapa
-  de 2816², sem prometer o mesmo ganho em outro hardware.
+  quando a extensão necessária faltar. Não prometa o mesmo ganho em outro hardware.
 - Copiar um mapa grande ou compor estático/dinâmico pode custar mais que redesenhar
   o conteúdo visível. Conte transferências, sincronização e submissões efetivas.
 - Subdividir apenas a integração de movimento pode reduzir dependência da taxa de
@@ -200,9 +197,8 @@ Aprendizados de aplicações reais, com [origem e limites](../references/sources
 
 ## Adaptadores automáticos de qualidade
 
-Grande parte da web 3D adapta a qualidade sozinha: no acervo externo estudado em
-setembro de 2026, 20 de 58 clientes e snapshots web cortavam resolução, AO, sombra,
-LOD, partículas ou efeitos por tempo de quadro, e outros escolhiam o perfil pelo
+Grande parte da web 3D adapta a qualidade sozinha: muitos clientes web cortam resolução, AO, sombra,
+LOD, partículas ou efeitos por tempo de quadro, e outros escolhem o perfil pelo
 dispositivo ao iniciar. Para este framework isso é degradação. Separe três casos:
 
 - **Por tempo de quadro, em runtime:** nunca como ação. O mecanismo — janela,
@@ -234,7 +230,7 @@ aquecimento; texturas e geometrias não crescem depois de reiniciar a partida N
 vezes; chamadas de desenho não passam da referência; bytes até o primeiro quadro
 jogável dentro do declarado. Limiar em milissegundos só vira gate em hardware
 dedicado e declarado. Estourar um orçamento abre investigação, nunca corte da
-qualidade aprovada. [Origem e limites](../references/sources.md#acervo-externo-swipe).
+qualidade aprovada.
 
 Os detalhes de carregador, sombras e migração ficam nos packages de
 [web](../packs/platforms/web.md) e [Unity](../packs/platforms/unity.md).

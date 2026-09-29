@@ -134,7 +134,6 @@ ou cópia atualizada. Gravação atômica evita JSON parcial, e um lock impede d
 sobrescrevendo saídas compartilhadas. `pass` com teste deliberadamente ignorado deve
 manter o recorte incompleto explícito; não confundir ausência de falha com cobertura total.
 
-Caso: `prototypes/brawlhalla-lab/character-lab/test_validation.py`, revisão de 25/09/2026.
 Testes do instrumento usam fixtures próprias; regressão visual e consumo real do Lab
 são verificações separadas. O uso local de processos POSIX não é implementação portátil
 para todo host: adapte criação, encerramento e locks à plataforma do consumidor.
@@ -142,7 +141,7 @@ para todo host: adapte criação, encerramento e locks à plataforma do consumid
 ## Idiomas: um registro, um arquivo por língua, fonte por escrita
 
 Entrada: o jogo vai ganhar um idioma, ou já tem dois e o texto começou a nascer fora
-do dicionário. Caso de origem: quarto idioma (chinês) do Distrito Rabisco, 2026-09-12.
+do dicionário.
 
 - **Um registro.** Uma lista de definições por idioma (código, `lang` do HTML, locale
   do Open Graph, nome no seletor, expressão do `navigator.language`, escrita). Seletor,

@@ -1,6 +1,6 @@
 """Ambiente de build de um site publicado: o que o workspace.json declara em "deploy.env".
 
-Origem: em 28/09/2026 rabisco.net, boom, fight e arena foram ao ar sem VITE_SUPABASE_URL e
+Origem: sites publicados por deploy foram ao ar sem VITE_SUPABASE_URL e
 VITE_SUPABASE_PUBLISHABLE_KEY. O build do deploy roda num worktree limpo, sem os arquivos
 .env*, e o Vite compila sem erro com a variável ausente: placar e comunidade saíram do ar
 sem nenhum aviso. Desde então uma variável que o build usa é declarada, resolvida antes do

@@ -56,25 +56,21 @@ Examine separadamente:
   um parâmetro não prova que ele afeta RNG ou que toda a simulação é determinística.
   Declarar “determinístico” exige RNG de jogo semeado e separado do cosmético, nenhum
   `Math.random` (ou equivalente) no módulo de simulação e um replay por entradas que
-  compare o hash do estado. No acervo externo, só os projetos com contrato escrito de
-  determinismo o testavam; nenhum dos sete de luta e não-web que dependiam dele tinha
-  esse teste ([origem](../references/sources.md#acervo-externo-swipe)).
+  compare o hash do estado. Sem esse contrato escrito, o teste costuma não existir.
 - Voltar no tempo (Frame Step, depuração, rollback local): com a simulação determinística, refazer a partida da
   semente com as entradas gravadas até o tick pedido devolve o mesmo estado sem clonar objetos. Verifique que voltar e
   avançar um tick dá o mesmo hash de antes; CPUs e outros agentes pensam de novo durante o replay (vale a entrada
   gravada) para manter o próprio estado; edição manual do estado (ferramenta de teste que teletransporta) não é
   reproduzível e quebra a volta. O custo cresce com a duração da partida; com partidas longas, guarde pontos a cada N
-  ticks e resimule a partir do mais perto (é o que o cliente do Brawlhalla faz). Invalida: RNG, relógio ou entrada
-  fora da semente e do registro. Caso: Frame Step do Modo Treino do Último Rabisco, 25/09/2026
-  (`games/ultimo-rabisco/docs/aprendizados.md` §2).
+  ticks e resimule a partir do mais perto. Invalida: RNG, relógio ou entrada
+  fora da semente e do registro.
 
 Adapte o teste que já existe; crie um controle novo somente se o caso exigir e a
 capacidade não estiver disponível. Observação de estado deve conter o necessário
 à tarefa, sem transportar memória interna ilimitada para a IA a cada quadro.
 
-Referências no laboratório: ciclo do Distrito Rabisco, verificador Unity de
-protótipo e ambientes de estudo em `swipe/`. Ausência desses arquivos neste
-repositório não invalida a receita.
+Referências de projeto (ciclo de um jogo, verificador Unity, ambientes de estudo) ficam
+fora deste repositório; a ausência delas não invalida a receita.
 Phaser `RE-PHASER-005..010`, Excalibur `RE-EXCAL-004/007`, Godot
 `RE-DODGE-002/003/010` e PettingZoo `RE-PZ-002/005/007` fornecem precedentes
 distintos, incluindo callbacks que sobrevivem e seed ignorada. [Fontes](../references/sources.md).

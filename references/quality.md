@@ -181,7 +181,7 @@ Instrumento: [checklist de piso](aaa-checklist.md). O `context` diz o perfil
 em `finish` (núcleo / produto / promessa). `--stage aaa` só imprime o
 rascunho inteiro. Não some itens para uma nota.
 
-Origens: o [playground](https://games.alanicolas.com/), os recortes em
-[sources.md](sources.md) e a direção de qualidade deste repositório. Os estudos
+Origens: os recortes em [sources.md](sources.md) e a direção de qualidade deste
+repositório. Os estudos
 são referências históricas; suas medições não foram repetidas só por entrarem
 neste roteiro.

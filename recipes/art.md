@@ -6,5 +6,4 @@ dois ou três blocos grandes de cor. Botões, cintos e bolsos somem nesse tamanh
 acessório atrás da cabeça ou do mesmo lado de outra massa também some: confira na
 silhueta. Peças de cabeça precisam respeitar a troca de visuais (chapéus alternativos),
 e peças novas nas costas precisam conviver com capas. Prove em partida, andando, e nos
-visuais alternativos. Caso: Só Sobra Um, 22/09/2026 (Galo de Briga como referência; Slick,
-Rebita e Fuse).
+visuais alternativos.

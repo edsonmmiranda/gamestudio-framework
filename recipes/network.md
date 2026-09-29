@@ -30,9 +30,7 @@ derrota, encerramento administrativo e troca de mapa podem compartilhar o fluxo,
 mas não a interpretação do resultado. Transporte o motivo aos consumidores de UI,
 placar e analytics; no COOP, encerrar pelo anfitrião não significa perder para a
 máquina. Prove os motivos aplicáveis em cada modo, com anfitrião e convidado; uma
-prova PVP não cobre automaticamente a cópia e o resultado do COOP. Caso e prova:
-sessão S17, `qa/verify-coop-end.mjs` do Distrito Rabisco e piloto de memória do
-laboratório, 22/09/2026. Modos sem vitória ou derrota mantêm sua própria semântica.
+prova PVP não cobre automaticamente a cópia e o resultado do COOP. Modos sem vitória ou derrota mantêm sua própria semântica.
 
 Separe presença atual de resultado concluído. Depois de encerrar uma rodada,
 congele participantes, classificação, tempos e conteúdo que compõem o placar por
@@ -40,9 +38,8 @@ identificador da rodada. Sair ou reconectar muda presença e liderança, sem ree
 quem disputou ou venceu. Uma revanche abre uma nova rodada com a lista vigente.
 Prove resultado → saída de participante → recarga do anfitrião → revanche.
 
-Caso observado e testes: `games/desnhe-um-cavalo/docs/qa.md` no laboratório,
-11/09/2026. A inspeção com duas abas encontrou remoção do rival após recarga; os
-testes de sessão cobrem também eventos atrasados. Não presume teste humano.
+Inspecione com duas abas (a remoção do rival após recarga é um defeito típico) e cubra
+eventos atrasados nos testes de sessão. Não presume teste humano.
 
 Em salas com papéis, filtre ações no host antes de encaminhá-las a outro par:
 remover o corpo visual do espectador não impede dano, itens ou eventos forjados.
@@ -56,9 +53,8 @@ inventário. Segredos de admissão passam somente ao sucessor por canal privado;
 nunca em roster ou convite. Declare se cobre saída explícita ou falha abrupta,
 e se o histórico persistido acompanha a transferência. Prove uma segunda sucessão.
 
-Caso e provas: `games/distrito-rabisco/production/evidence/m9-sala-vagas-20260922/`
-no laboratório. Três clientes verificaram código/IDs estáveis, sucessão para
-espectador, senha e bloqueios preservados, FFA e COOP. Transporte em memória e
+Verifique com três clientes: código e IDs estáveis, sucessão para espectador, senha e
+bloqueios preservados, FFA e COOP. Transporte em memória e
 WebRTC com sinalização real são provas distintas; uma máquina não comprova TURN
 forçado nem redes físicas diferentes.
 
@@ -74,9 +70,7 @@ presença: desconectar o autor não pode retirar um abate. Prove entrada tardia 
 sucessão com pontos já marcados. Reinício de rodada deve limpar limites temporais
 e deduplicação vinculados à rodada anterior; exercite uma revanche imediata,
 pois aguardar a intermissão inteira pode esconder estado herdado indevidamente.
-Caso e prova: `games/distrito-rabisco/production/evidence/m10-equipes-20260922/`.
 
-Referências no laboratório: testes de rede do Distrito Rabisco e estudos em `swipe/`.
-boardgame.io `RE-BGIO-005/009` e PettingZoo `RE-PZ-004/005/010`
+Referências: boardgame.io `RE-BGIO-005/009` e PettingZoo `RE-PZ-004/005/010`
 ([fontes](../references/sources.md)). O estudo externo não demonstra a segurança
 ou o comportamento de rede do jogo em edição.

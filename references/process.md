@@ -147,7 +147,7 @@ satisfazer o scanner. Respeite restrições explícitas da conversa.
 Declare mudança, partes herdadas/adaptadas/criadas, comandos/resultados, observação
 da experiência e lacunas. Conclusão da IA é uma alegação sustentada por evidência.
 Registre tentativas descartadas, motivo das decisões e como reproduzir a comparação
-no registro existente. Performance tem registro próprio no laboratório, quando existir.
+no registro existente. Performance tem registro próprio no projeto, quando existir.
 
 Antes de encerrar, se houve aprendizado transferível, aplique [a extração](learning.md):
 registre a regra, suas condições e sua contraprova na receita, package, checklist ou
@@ -204,7 +204,7 @@ está autorizada, registre e execute no mesmo turno. Apresente o prompt de retom
 quando encerrar uma entrega com sequência real; objetivo concluído não exige inventar
 mais trabalho nem pedir que o usuário escolha tempo.
 
-Exemplo de encerramento depois de documentar o Satisfactory, antes das PoCs:
+Exemplo de encerramento depois de documentar um jogo de fábrica de referência, antes das PoCs:
 
 > A base documental está pronta para iniciar as provas; a fábrica 2D ainda não foi
 > implementada. O próximo passo é TASK-2D-01: construir uma pequena linha temporal
@@ -213,7 +213,6 @@ Exemplo de encerramento depois de documentar o Satisfactory, antes das PoCs:
 > pausa/save/recarga preservarem o estado, com resultado equivalente em 30/60/144 FPS.
 > Ao dizer “vamos avançar”, retomo essa tarefa pelo plano de produção.
 
-Esse recorte é um exemplo baseado em um plano de produção do laboratório.
 É exemplo de continuidade, não autorização de implementação nesta manutenção do framework.
 
 **Retomada:** o agente identifica “continue”, “vamos avançar” ou equivalente na conversa
@@ -251,7 +250,7 @@ aplicação e revisão deste procedimento.
 
 ## Sessões paralelas no mesmo projeto
 
-Do caso Universo Rabisco (23/9/2026): até oito sessões no workspace e três no mesmo app.
+Com várias sessões no mesmo workspace e no mesmo app:
 
 - **Declare o escopo por arquivo** antes de editar, e responda aos avisos das outras sessões.
   Prefira edições pontuais e blocos próprios (por exemplo, CSS novo no fim do arquivo) a
@@ -277,8 +276,7 @@ ser reavaliados quando ele muda; neutralidade de interface não prova substituti
 
 ## Origem e autoridade
 
-Os 18 princípios da suplementação Games/MKT/Sinkra (estudo no laboratório)
-foram traduzidos aqui: reuso, estado canônico, falha antes de estrutura, repetição,
+Os princípios de processo foram traduzidos aqui: reuso, estado canônico, falha antes de estrutura, repetição,
 contratos portáteis, determinismo/julgamento, menor mudança, causa-raiz, entrada real,
 honestidade do mecanismo, prova externa, criação/revisão/escolha, contexto sob demanda,
 tarefa primeiro, processo antes de modelo, parada/aprendizado, contexto por parâmetro

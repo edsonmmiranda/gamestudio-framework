@@ -136,8 +136,8 @@ Uma tabela em `README.md` ou num documento chamado `qa.md`, `devlog.md`,
 | --- | --- | --- | --- |
 | `deliver` | `runbook` | `met` | Ana construiu do zero em 2026-09-02, log em /tmp/qa-07 |
 | `deliver` | `foreign_machine` | `unmet` | só rodou na máquina de dev |
-| `deliver` | `save_migration` | `out_of_scope` | jogo sem save — Alan, 2026-09-05 |
-| `deliver` | `rollback` | `waived` | primeira publicação, nada a reverter — Alan, 2026-09-05 |
+| `deliver` | `save_migration` | `out_of_scope` | jogo sem save — Ana, 2026-09-05 |
+| `deliver` | `rollback` | `waived` | primeira publicação, nada a reverter — Ana, 2026-09-05 |
 ```
 
 Estados: `met`, `unmet`, `waived`, `out_of_scope`. A última coluna é o que sustenta o estado —

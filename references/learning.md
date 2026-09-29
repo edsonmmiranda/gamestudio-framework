@@ -81,9 +81,9 @@ confirme o contrato comum e separe parâmetros de identidade, caminhos e políti
 Uma técnica reutilizável pode viver como orientação em um package sem transformar
 o código de um jogo inteiro numa biblioteca. O harness continua fino.
 
-## Jogos publicados lidos pela fonte
+## Práticas comuns aos jogos publicados
 
-Vinte e cinco jogos lidos pela fonte primária em setembro de 2026 convergiram, sem combinar, em dezoito
+Jogos publicados de gêneros diferentes convergem, sem combinar, em dezoito
 práticas de máquina, partida e desenho: relógio fixo com tabelas na unidade dele, número em tabela com nome,
 regra separada da aparência, modo e mapa como dados, golpe no clipe, música como estado, bot no corpo do
 jogador, freio para o líder e porta para quem está atrás. Cada uma com quando aplicar, verificar e invalidar

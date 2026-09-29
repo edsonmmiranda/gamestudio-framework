@@ -25,7 +25,7 @@ O arquivo de entrada orienta; detalhes operacionais vivem nas referências.
    de workflow, siga [navegação contextual](references/routing.md). Para jogo ou
    direção realmente novos, leia [trabalho novo](references/new-work.md). A verdade já aprovada vence
    qualquer default. Quando houver jogo-modelo, universo, IDV, imagens indicadas ou
-   uma biblioteca do estúdio em `context.references`, leia
+   referências do workspace em `context.references`, leia
    [adaptação de referências](references/reference-adaptation.md) antes de
    implementar: observe as fontes, construa a cena principal e prove o ciclo inteiro.
 3. **Carregue o piso no momento certo.** Imediatamente antes de editar design,
