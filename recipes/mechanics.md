@@ -31,8 +31,10 @@ Para progressão, economia ou ondas, um teste de campanha joga o laço inteiro p
 API pública, com o orçamento real e sem recurso injetado, e precisa vencer; um
 controle negativo — estratégia ruim ou recurso mínimo — precisa perder. Sem o
 controle negativo, uma regra quebrada que facilita tudo também passa. O teste só é
-possível se a regra vive fora do render; peça essa separação no documento de design
-([origem](../references/sources.md#acervo-externo-swipe)).
+possível se a regra vive fora do render; peça essa separação no documento de design.
+Para temporada, passe, missões, loja e moeda, esse teste é o simulador de
+[gamificação](gamification.md): três personas, várias sementes, e o catálogo quebrado
+como controle negativo.
 
 Ao adaptar IA de grade para movimento contínuo, compare o primeiro trecho da rota
 com a posição real do corpo. Recomeçar cada busca como se o agente estivesse no
@@ -42,12 +44,10 @@ perigo terá acabado na chegada não garante travessia segura da borda. Reproduz
 ameaças próximas com posições fracionárias, em vários passos consecutivos; uma
 rota válida somente no instante do plantio não comprova fuga executável.
 
-Caso e contraprovas: Rabisco Boom, revisão de gameplay de 2026-09-09 no laboratório,
-`tests/gameplay-v2.test.js` (fogo ativo na borda e replanejamento entre duas bombas).
-A condição é técnica; não estabelece pesos universais de IA nem comprova diversão.
+Teste fogo ativo na borda e replanejamento entre duas bombas. A condição é técnica; não
+estabelece pesos universais de IA nem comprova diversão.
 
-Referências: testes de Era Uma Vez e simulação de Brasa-Pista no laboratório;
-boardgame.io `RE-BGIO-003`, `RE-BGIO-006`, `RE-BGIO-011`
+Referências: boardgame.io `RE-BGIO-003`, `RE-BGIO-006`, `RE-BGIO-011`
 ([fonte](https://github.com/boardgameio/boardgame.io)).
 As regras externas descrevem aquele fluxo; não obrigam outros gêneros a usar turnos.
 
@@ -59,5 +59,3 @@ mesmo waypoint exato pode causar oscilação permanente. Verifique recálculo, t
 segura dos pontos intermediários e saída de unidades sobrepostas a novas fundações.
 O teste de economia/IA deve alcançar produção e contato com o adversário; apenas
 avançar de era pode deixar passar bloqueios de habitação e navegação.
-Caso e regressões: RTS do laboratório, V7 de 2026-09-22,
-`prototypes/rts/tests/opening.test.cjs` e `prototypes/rts/OPENING.md`.

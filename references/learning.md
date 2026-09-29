@@ -23,7 +23,7 @@ Quando uma rodada produz um método, falha recorrente ou correção transferíve
 
 Se o conhecimento for uma hipótese, registre como hipótese com sua prova pendente.
 Não promover uma hipótese a técnica comprovada e não deixar uma descoberta utilizável
-presa ao laboratório. A execução desta revisão cabe ao agente: o scanner localiza
+presa ao jogo de origem. A execução desta revisão cabe ao agente: o scanner localiza
 documentos, mas não decide sozinho se uma afirmação é transferível ou verdadeira.
 
 ## IA com percepção e decisão em cadências diferentes
@@ -40,8 +40,6 @@ quanto uma busca pendente adia o diagnóstico e não zerar progresso a cada deci
 Ao fugir de uma área em fechamento, a margem da meta deve superar a margem que
 dispara a fuga mais a tolerância de chegada, evitando reescolher o mesmo ponto na borda.
 
-Caso: adaptação MineNite → Última Página, 27/9/2026; provas locais em
-`games/distrito-rabisco/production/evidence/ultima-pagina-minenite-20260927/`.
 Comparar cenários em movimento e registrar tarefas concorrentes: contagem de tiros
 ou tempo de quadro em mapas/RNG diferentes não constitui A/B causal nem aceite de diversão.
 
@@ -60,9 +58,7 @@ Confira o projeto de origem antes de atribuir memória ao destino. Uma orientaç
 aprovada deve atualizar o consumidor existente, com condição de invalidação; se
 for exportada, a atualização ou retirada precisa alcançar os arquivos consumidores.
 
-Caso e limites: piloto de 24 históricos do laboratório em
-`docs/registros/Beacon e Jev — piloto de triagem de sessões.md`, 22/09/2026.
-A comparação mede triagem contra um revisor agente, não aprendizado autônomo,
+Limites: a comparação mede triagem contra um revisor agente, não aprendizado autônomo,
 economia de execução nem ganho posterior entre ferramentas.
 
 ## Destino do conteúdo
@@ -74,10 +70,11 @@ economia de execução nem ganho posterior entre ferramentas.
 | Carregador, renderizador ou serialização de uma plataforma | Package de [web](../packs/platforms/web.md) ou [Unity](../packs/platforms/unity.md), conforme o caso |
 | Exportação, animação, buffers e proveniência | [Conteúdo](../recipes/content.md), [áudio](../recipes/audio.md) |
 | Gestão de módulos e extração de repositórios | [Ferramentas de workspace](workspace-binding.md#módulos) |
+| Gamificação e economia (temporada, passe, missões, loja, livro-razão, proteção de menor) | [Gamificação](../recipes/gamification.md) e [package](../packages/gamification/README.md) |
 | Preferência artística, fornecedor excluído, endereço de publicação | AGENTS/configuração do workspace ou documento do jogo |
-| Medição bruta, captura, decisão aplicada e histórico | Jogo ou laboratório que produziu a prova |
-| Segundo cérebro (estudos, padrões, grafo com evidência) | [Kit replicável](../assets/cerebro/Como%20replicar.md); o caso do estúdio permanece no vault do laboratório |
-| Prática comum aos jogos publicados (relógio, tabela, modo como dado, bot, freio, som) | [O que os jogos publicados têm em comum](shipped-games.md); o caso de cada jogo fica no estudo e nos padrões do vault |
+| Medição bruta, captura, decisão aplicada e histórico | Jogo ou workspace que produziu a prova |
+| Segundo cérebro (estudos, padrões, grafo com evidência) | [Kit replicável](../assets/cerebro/Como%20replicar.md); o caso de cada estúdio permanece no vault do próprio workspace |
+| Prática comum aos jogos publicados (relógio, tabela, modo como dado, bot, freio, som) | [O que os jogos publicados têm em comum](shipped-games.md); o caso de cada jogo fica no vault do próprio workspace |
 
 Código específico permanece com seus consumidores. Para compartilhar uma implementação,
 confirme o contrato comum e separe parâmetros de identidade, caminhos e políticas.
@@ -97,7 +94,7 @@ em [O que os jogos publicados têm em comum](shipped-games.md). O `context` a in
 
 O ciclo de criação, métodos de medição, invalidação de sombras, preservação de
 identidade de instâncias, paridade entre renderizadores, exportação/serialização,
-cadência de animação e custo de áudio foram extraídos dos registros de aplicações
-do laboratório de setembro de 2026. As receitas e os packages acima contêm as
+cadência de animação e custo de áudio foram extraídos dos registros de aplicações reais.
+As receitas e os packages acima contêm as
 condições generalizadas; resultados e tentativas descartadas permanecem nos registros
-originais. A [origem](sources.md#aprendizados-de-aplicações) delimita essa evidência.
+originais.

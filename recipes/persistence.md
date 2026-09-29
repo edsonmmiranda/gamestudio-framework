@@ -17,6 +17,9 @@ Separe as três categorias antes de escrever qualquer coisa no disco:
 
 Derivado não se salva: salvar o que pode ser recalculado cria dois caminhos que
 divergem e uma inconsistência impossível de reproduzir.
+Moeda e posse seguem a mesma regra: o saldo é a soma de um livro-razão que só
+acrescenta, com origem rotulada e `txId` idempotente
+([gamificação](gamification.md)).
 
 Versione o formato desde a primeira gravação e escreva a migração junto da mudança,
 não depois. Uma versão sem migração transforma qualquer atualização em perda de

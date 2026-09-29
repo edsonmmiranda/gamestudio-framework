@@ -146,6 +146,9 @@ Nenhuma destas barras é “ser AAA de publisher”.
 - **Primeiro minuto:** com tela, a primeira superfície é a porta; a primeira
   ação ensina o verbo sem mural de texto; tutorial que bloqueia o jogo não é
   onboarding. O primeiro minuto também denuncia float, atraso e stutter.
+  Quando o jogo não cabe na primeira carga (celular, web pesada), o primeiro
+  minuto roda com um pacote mínimo e o resto baixa durante ele
+  ([primeiro minuto como pacote](../packs/platforms/web.md#primeiro-minuto-como-pacote)).
 - **Acesso:** contraste, forma além da cor, foco, toque, movimento reduzido
   quando o recorte os exige — e quando a promessa de público os exige.
 - **Confiança:** iniciar, pausar, perder, ganhar, reiniciar e sair têm
@@ -170,7 +173,7 @@ lidos em recortes; seus testes não foram executados aqui. A literatura de
 tier AAA não foi reproduzida neste harness: orçamentos e headcounts citados
 são contexto, não meta.
 
-O playground da Alan Studios é acervo de famílias e precedentes, não prova
+Um playground de jogos publicados é acervo de famílias e precedentes, não prova
 de que este harness produziu aqueles jogos e não base aprovada para copiar
 paleta ou feel.
 

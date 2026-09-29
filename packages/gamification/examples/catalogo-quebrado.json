@@ -1,0 +1,2042 @@
+{
+  "$schema": "../schemas/catalog.schema.json",
+  "format": "alanstudio.gamification/1",
+  "id": "exemplo.catalogo-quebrado",
+  "version": 1,
+  "hash": "9d9e71ebf676d110",
+  "title": "Controle negativo: fonte sem sumidouro e passe impossível",
+  "sections": {
+    "series": {
+      "id": "serie-exemplo",
+      "name": "Série de exemplo",
+      "games": [
+        {
+          "id": "ondas",
+          "name": "Ondas",
+          "event": "match.finished",
+          "players": 1,
+          "waves": true
+        },
+        {
+          "id": "batalha",
+          "name": "Batalha",
+          "event": "match.finished",
+          "players": 10
+        },
+        {
+          "id": "fases",
+          "name": "Fases",
+          "event": "level.won"
+        },
+        {
+          "id": "corrida",
+          "name": "Corrida",
+          "event": "match.finished",
+          "players": 8
+        },
+        {
+          "id": "duelo",
+          "name": "Duelo",
+          "event": "match.finished",
+          "players": 2
+        },
+        {
+          "id": "cerco",
+          "name": "Cerco",
+          "event": "match.finished",
+          "players": 2
+        }
+      ]
+    },
+    "currencies": [
+      {
+        "id": "moedas",
+        "version": 1,
+        "name": "Moedas",
+        "earned": true,
+        "purchasable": false,
+        "expiresWith": null,
+        "dailyCap": 50
+      },
+      {
+        "id": "fichas",
+        "version": 1,
+        "name": "Fichas de evento",
+        "earned": true,
+        "purchasable": false,
+        "expiresWith": "season",
+        "dailyCap": null
+      },
+      {
+        "id": "estrelas",
+        "version": 1,
+        "name": "Estrelas de caderno",
+        "earned": true,
+        "purchasable": false,
+        "expiresWith": null,
+        "dailyCap": null
+      }
+    ],
+    "clocks": {
+      "resetHourUtc": 9,
+      "weekStartsOn": 1,
+      "list": [
+        {
+          "id": "dia",
+          "period": "daily",
+          "resets": [
+            "missions.daily",
+            "rerolls.daily",
+            "caps.daily",
+            "consolation.daily"
+          ],
+          "accumulates": [
+            "wallet",
+            "collection",
+            "pass.progress",
+            "trail.points"
+          ],
+          "expires": []
+        },
+        {
+          "id": "semana",
+          "period": "weekly",
+          "resets": [
+            "missions.weekly"
+          ],
+          "accumulates": [
+            "wallet",
+            "collection",
+            "pass.progress"
+          ],
+          "expires": []
+        },
+        {
+          "id": "temporada",
+          "period": "season",
+          "resets": [
+            "pass.progress",
+            "pass.premium",
+            "missions.season",
+            "offers.purchases"
+          ],
+          "accumulates": [
+            "wallet",
+            "collection",
+            "trail.points"
+          ],
+          "expires": [
+            "currency:fichas"
+          ]
+        }
+      ]
+    },
+    "season": {
+      "id": "t1",
+      "version": 1,
+      "name": "Temporada 1",
+      "validFrom": "2026-10-01T09:00:00Z",
+      "validTo": "2026-11-26T09:00:00Z",
+      "endWarningDays": 5
+    },
+    "pass": {
+      "id": "passe.t1",
+      "version": 1,
+      "season": "t1",
+      "name": "Passe da temporada 1",
+      "tracks": {
+        "free": "Trilha grátis",
+        "premium": "Trilha premium"
+      },
+      "tiers": [
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "item": "retrato.e"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "item": "retrato.b"
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "fichas",
+              "amount": 10
+            }
+          ],
+          "premium": [
+            {
+              "item": "retrato.f"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "item": "visual.protagonista.acenando"
+            }
+          ],
+          "premium": [
+            {
+              "item": "visual.espadachim.em-guarda"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "item": "retrato.g"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "item": "retrato.c"
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "fichas",
+              "amount": 10
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "item": "retrato.h"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "item": "visual.soldado.pose"
+            }
+          ],
+          "premium": [
+            {
+              "item": "visual.grandalhao.pose"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "item": "retrato.i"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "fichas",
+              "amount": 10
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "item": "retrato.d"
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "item": "retrato.j"
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            }
+          ],
+          "premium": [
+            {
+              "currency": "moedas",
+              "amount": 15
+            }
+          ]
+        },
+        {
+          "xp": 4000,
+          "free": [
+            {
+              "currency": "moedas",
+              "amount": 100
+            }
+          ],
+          "premium": [
+            {
+              "item": "visual.protagonista.desenhando"
+            }
+          ]
+        }
+      ],
+      "premium": {
+        "price": {
+          "currency": "moedas",
+          "amount": 1000
+        }
+      },
+      "xp": {
+        "match": {
+          "base": 30,
+          "topHalf": 15,
+          "podium": 10,
+          "win": 10,
+          "cap": 65
+        },
+        "level": {
+          "base": 35,
+          "perStar": 10,
+          "cap": 65
+        },
+        "dailyCap": 300,
+        "idle": {
+          "minDurationS": 45
+        }
+      },
+      "tokens": {
+        "xpPerToken": 100
+      }
+    },
+    "rewards": {
+      "currency": "moedas",
+      "match": {
+        "base": 6,
+        "topHalf": 3,
+        "podium": 2,
+        "win": 3
+      },
+      "level": {
+        "base": 7,
+        "perStar": 2
+      }
+    },
+    "missions": {
+      "daily": {
+        "slots": 3,
+        "freeRerolls": 1
+      },
+      "weekly": {
+        "slots": 2
+      },
+      "pool": [
+        {
+          "id": "d.qualquer.partidas",
+          "version": 1,
+          "cycle": "daily",
+          "game": null,
+          "title": "Jogue 3 partidas de qualquer jogo",
+          "when": "match.finished",
+          "goal": {
+            "count": 3
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.qualquer.metade",
+          "version": 1,
+          "cycle": "daily",
+          "game": null,
+          "title": "Fique na metade de cima 2 vezes",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "players",
+              "op": ">",
+              "value": 1
+            },
+            {
+              "field": "placement",
+              "op": "<=",
+              "ref": "players",
+              "times": 0.5
+            }
+          ],
+          "goal": {
+            "count": 2
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.qualquer.variar",
+          "version": 1,
+          "cycle": "daily",
+          "game": null,
+          "title": "Jogue 2 jogos diferentes",
+          "when": "match.finished",
+          "goal": {
+            "distinct": "game",
+            "target": 2
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.batalha.metade",
+          "version": 1,
+          "cycle": "daily",
+          "game": "batalha",
+          "title": "Batalha: fique na metade de cima",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "placement",
+              "op": "<=",
+              "ref": "players",
+              "times": 0.5
+            }
+          ],
+          "goal": {
+            "count": 1
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.batalha.abates",
+          "version": 1,
+          "cycle": "daily",
+          "game": "batalha",
+          "title": "Batalha: faça 6 abates",
+          "when": "match.finished",
+          "goal": {
+            "sum": "kills",
+            "target": 6
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.fases.fases",
+          "version": 1,
+          "cycle": "daily",
+          "game": "fases",
+          "title": "Fases: vença 2 fases",
+          "when": "level.won",
+          "goal": {
+            "count": 2
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.fases.estrelas",
+          "version": 1,
+          "cycle": "daily",
+          "game": "fases",
+          "title": "Fases: junte 5 estrelas",
+          "when": "level.won",
+          "goal": {
+            "sum": "stars",
+            "target": 5
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.ondas.onda",
+          "version": 1,
+          "cycle": "daily",
+          "game": "ondas",
+          "title": "Ondas: chegue à onda 6",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "wave",
+              "op": ">=",
+              "value": 6
+            }
+          ],
+          "goal": {
+            "count": 1
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.corrida.podio",
+          "version": 1,
+          "cycle": "daily",
+          "game": "corrida",
+          "title": "Corrida: suba no pódio",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "placement",
+              "op": "<=",
+              "value": 3
+            }
+          ],
+          "goal": {
+            "count": 1
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.duelo.vitoria",
+          "version": 1,
+          "cycle": "daily",
+          "game": "duelo",
+          "title": "Duelo: vença uma luta",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "placement",
+              "op": "==",
+              "value": 1
+            }
+          ],
+          "goal": {
+            "count": 1
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "d.cerco.vitoria",
+          "version": 1,
+          "cycle": "daily",
+          "game": "cerco",
+          "title": "Cerco: vença uma partida",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "placement",
+              "op": "==",
+              "value": 1
+            }
+          ],
+          "goal": {
+            "count": 1
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 20
+            },
+            {
+              "passXp": 100
+            },
+            {
+              "currency": "estrelas",
+              "amount": 5
+            }
+          ]
+        },
+        {
+          "id": "w.qualquer.partidas",
+          "version": 1,
+          "cycle": "weekly",
+          "game": null,
+          "title": "Jogue 12 partidas na semana",
+          "when": "match.finished",
+          "goal": {
+            "count": 12
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 40
+            },
+            {
+              "currency": "fichas",
+              "amount": 10
+            },
+            {
+              "passXp": 350
+            }
+          ]
+        },
+        {
+          "id": "w.qualquer.podio",
+          "version": 1,
+          "cycle": "weekly",
+          "game": null,
+          "title": "Suba no pódio 4 vezes",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "players",
+              "op": ">",
+              "value": 2
+            },
+            {
+              "field": "placement",
+              "op": "<=",
+              "value": 3
+            }
+          ],
+          "goal": {
+            "count": 4
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 40
+            },
+            {
+              "currency": "fichas",
+              "amount": 10
+            },
+            {
+              "passXp": 350
+            }
+          ]
+        },
+        {
+          "id": "w.fases.fases",
+          "version": 1,
+          "cycle": "weekly",
+          "game": "fases",
+          "title": "Fases: vença 5 fases",
+          "when": "level.won",
+          "goal": {
+            "count": 5
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 40
+            },
+            {
+              "currency": "fichas",
+              "amount": 10
+            },
+            {
+              "passXp": 350
+            }
+          ]
+        },
+        {
+          "id": "w.qualquer.variar",
+          "version": 1,
+          "cycle": "weekly",
+          "game": null,
+          "title": "Jogue 3 jogos diferentes",
+          "when": "match.finished",
+          "goal": {
+            "distinct": "game",
+            "target": 3
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 40
+            },
+            {
+              "currency": "fichas",
+              "amount": 10
+            },
+            {
+              "passXp": 350
+            }
+          ]
+        },
+        {
+          "id": "s.serie.variar",
+          "version": 1,
+          "cycle": "season",
+          "game": null,
+          "title": "Jogue 4 jogos diferentes",
+          "when": "match.finished",
+          "goal": {
+            "distinct": "game",
+            "target": 4
+          },
+          "reward": [
+            {
+              "item": "visual.zumbi.pose"
+            },
+            {
+              "passXp": 300
+            }
+          ]
+        },
+        {
+          "id": "s.serie.vitorias",
+          "version": 1,
+          "cycle": "season",
+          "game": null,
+          "title": "Vença 20 partidas",
+          "when": "match.finished",
+          "where": [
+            {
+              "field": "players",
+              "op": ">",
+              "value": 1
+            },
+            {
+              "field": "placement",
+              "op": "==",
+              "value": 1
+            }
+          ],
+          "goal": {
+            "count": 20
+          },
+          "reward": [
+            {
+              "currency": "moedas",
+              "amount": 150
+            },
+            {
+              "passXp": 400
+            }
+          ]
+        },
+        {
+          "id": "s.fases.estrelas",
+          "version": 1,
+          "cycle": "season",
+          "game": "fases",
+          "title": "Fases: junte 60 estrelas",
+          "when": "level.won",
+          "goal": {
+            "sum": "stars",
+            "target": 60
+          },
+          "reward": [
+            {
+              "item": "retrato.u"
+            },
+            {
+              "passXp": 300
+            }
+          ]
+        }
+      ]
+    },
+    "firstTime": [
+      {
+        "id": "primeira.partida",
+        "version": 1,
+        "title": "Primeira partida",
+        "when": "match.finished",
+        "game": null,
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "primeira.vitoria.batalha",
+        "version": 1,
+        "title": "Primeira vitória no Batalha",
+        "when": "match.finished",
+        "game": "batalha",
+        "where": [
+          {
+            "field": "placement",
+            "op": "==",
+            "value": 1
+          }
+        ],
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 50
+          },
+          {
+            "passXp": 100
+          }
+        ]
+      },
+      {
+        "id": "primeira.vitoria.corrida",
+        "version": 1,
+        "title": "Primeira vitória no Corrida",
+        "when": "match.finished",
+        "game": "corrida",
+        "where": [
+          {
+            "field": "placement",
+            "op": "==",
+            "value": 1
+          }
+        ],
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 50
+          },
+          {
+            "passXp": 100
+          }
+        ]
+      },
+      {
+        "id": "primeira.vitoria.duelo",
+        "version": 1,
+        "title": "Primeira vitória no Duelo",
+        "when": "match.finished",
+        "game": "duelo",
+        "where": [
+          {
+            "field": "placement",
+            "op": "==",
+            "value": 1
+          }
+        ],
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 50
+          },
+          {
+            "passXp": 100
+          }
+        ]
+      },
+      {
+        "id": "primeira.vitoria.cerco",
+        "version": 1,
+        "title": "Primeira vitória no Cerco",
+        "when": "match.finished",
+        "game": "cerco",
+        "where": [
+          {
+            "field": "placement",
+            "op": "==",
+            "value": 1
+          }
+        ],
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 50
+          },
+          {
+            "passXp": 100
+          }
+        ]
+      },
+      {
+        "id": "primeira.vitoria.ondas",
+        "version": 1,
+        "title": "Primeira vitória no Ondas",
+        "when": "match.finished",
+        "game": "ondas",
+        "where": [
+          {
+            "field": "won",
+            "op": "==",
+            "value": true
+          }
+        ],
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 50
+          },
+          {
+            "passXp": 100
+          }
+        ]
+      },
+      {
+        "id": "primeira.vitoria.fases",
+        "version": 1,
+        "title": "Primeira fase vencida no Fases",
+        "when": "level.won",
+        "game": "fases",
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 50
+          },
+          {
+            "passXp": 100
+          }
+        ]
+      }
+    ],
+    "cosmetics": [
+      {
+        "id": "visual.protagonista.classico",
+        "version": 1,
+        "character": "protagonista",
+        "name": "Protagonista clássico",
+        "kind": "visual",
+        "rarity": "comum",
+        "origin": "inicio",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "visual.protagonista.acenando",
+        "version": 1,
+        "character": "protagonista",
+        "name": "Protagonista acenando",
+        "kind": "visual",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "visual.protagonista.desenhando",
+        "version": 1,
+        "character": "protagonista",
+        "name": "Protagonista desenhando",
+        "kind": "visual",
+        "rarity": "lendaria",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 200
+          }
+        ]
+      },
+      {
+        "id": "visual.espadachim.classico",
+        "version": 1,
+        "character": "espadachim",
+        "name": "Espadachim clássico",
+        "kind": "visual",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "visual.espadachim.boom",
+        "version": 1,
+        "character": "espadachim",
+        "name": "Espadachim das fases",
+        "kind": "visual",
+        "rarity": "rara",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "visual.espadachim.em-guarda",
+        "version": 1,
+        "character": "espadachim",
+        "name": "Espadachim em guarda",
+        "kind": "visual",
+        "rarity": "epica",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "visual.grandalhao.classico",
+        "version": 1,
+        "character": "grandalhao",
+        "name": "Grandalhão clássico",
+        "kind": "visual",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "visual.grandalhao.pose",
+        "version": 1,
+        "character": "grandalhao",
+        "name": "Grandalhão posando",
+        "kind": "visual",
+        "rarity": "epica",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "visual.soldado.classico",
+        "version": 1,
+        "character": "soldado",
+        "name": "Soldado clássico",
+        "kind": "visual",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "visual.soldado.pose",
+        "version": 1,
+        "character": "soldado",
+        "name": "Soldado em posição",
+        "kind": "visual",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "visual.robo.classico",
+        "version": 1,
+        "character": "robo",
+        "name": "Robô clássico",
+        "kind": "visual",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t0",
+        "validFrom": "2026-06-01T09:00:00Z",
+        "validTo": "2026-08-01T09:00:00Z",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "visual.robo.pose",
+        "version": 1,
+        "character": "robo",
+        "name": "Robô em pose",
+        "kind": "visual",
+        "rarity": "epica",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "visual.zumbi.classico",
+        "version": 1,
+        "character": "zumbi",
+        "name": "Zumbi clássico",
+        "kind": "visual",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t0",
+        "validFrom": "2026-06-01T09:00:00Z",
+        "validTo": "2026-08-01T09:00:00Z",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "visual.zumbi.pose",
+        "version": 1,
+        "character": "zumbi",
+        "name": "Zumbi posando",
+        "kind": "visual",
+        "rarity": "epica",
+        "origin": "conquista",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "retrato.a",
+        "version": 1,
+        "character": "retrato-a",
+        "name": "Retrato A",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "inicio",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.b",
+        "version": 1,
+        "character": "retrato-b",
+        "name": "Retrato B",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.c",
+        "version": 1,
+        "character": "retrato-c",
+        "name": "Retrato C",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.d",
+        "version": 1,
+        "character": "retrato-d",
+        "name": "Retrato D",
+        "kind": "retrato",
+        "rarity": "epica",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "retrato.e",
+        "version": 1,
+        "character": "retrato-e",
+        "name": "Retrato E",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.f",
+        "version": 1,
+        "character": "retrato-f",
+        "name": "Retrato F",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.g",
+        "version": 1,
+        "character": "retrato-g",
+        "name": "Retrato G",
+        "kind": "retrato",
+        "rarity": "epica",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "retrato.h",
+        "version": 1,
+        "character": "retrato-h",
+        "name": "Retrato H",
+        "kind": "retrato",
+        "rarity": "epica",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "retrato.i",
+        "version": 1,
+        "character": "retrato-i",
+        "name": "Retrato I",
+        "kind": "retrato",
+        "rarity": "epica",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      },
+      {
+        "id": "retrato.j",
+        "version": 1,
+        "character": "retrato-j",
+        "name": "Retrato J",
+        "kind": "retrato",
+        "rarity": "lendaria",
+        "origin": "passe",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 200
+          }
+        ]
+      },
+      {
+        "id": "retrato.k",
+        "version": 1,
+        "character": "retrato-k",
+        "name": "Retrato K",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "evento",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.l",
+        "version": 1,
+        "character": "retrato-l",
+        "name": "Retrato L",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "evento",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.m",
+        "version": 1,
+        "character": "retrato-m",
+        "name": "Retrato M",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "evento",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.n",
+        "version": 1,
+        "character": "retrato-n",
+        "name": "Retrato N",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.o",
+        "version": 1,
+        "character": "retrato-o",
+        "name": "Retrato O",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.p",
+        "version": 1,
+        "character": "retrato-p",
+        "name": "Retrato P",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.q",
+        "version": 1,
+        "character": "retrato-q",
+        "name": "Retrato Q",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.r",
+        "version": 1,
+        "character": "retrato-r",
+        "name": "Retrato R",
+        "kind": "retrato",
+        "rarity": "lendaria",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 200
+          }
+        ]
+      },
+      {
+        "id": "retrato.s",
+        "version": 1,
+        "character": "retrato-s",
+        "name": "Retrato S",
+        "kind": "retrato",
+        "rarity": "rara",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "retrato.t",
+        "version": 1,
+        "character": "retrato-t",
+        "name": "Retrato T",
+        "kind": "retrato",
+        "rarity": "comum",
+        "origin": "loja",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 30
+          }
+        ]
+      },
+      {
+        "id": "retrato.u",
+        "version": 1,
+        "character": "retrato-u",
+        "name": "Retrato U",
+        "kind": "retrato",
+        "rarity": "epica",
+        "origin": "conquista",
+        "season": "t1",
+        "duplicate": [
+          {
+            "currency": "moedas",
+            "amount": 120
+          }
+        ]
+      }
+    ],
+    "store": {
+      "currency": "moedas",
+      "prices": {
+        "comum": 150,
+        "rara": 300,
+        "epica": 600,
+        "lendaria": 1000
+      },
+      "rotation": {
+        "slots": 4,
+        "pool": [
+          "visual.espadachim.classico",
+          "visual.espadachim.boom",
+          "visual.grandalhao.classico",
+          "visual.soldado.classico",
+          "visual.robo.pose",
+          "retrato.n",
+          "retrato.o",
+          "retrato.p"
+        ]
+      },
+      "vault": {
+        "returnsAfterDays": 30,
+        "pool": [
+          "visual.robo.classico",
+          "visual.zumbi.classico"
+        ]
+      },
+      "starter": [
+        "visual.protagonista.classico",
+        "retrato.a"
+      ]
+    },
+    "offers": [
+      {
+        "id": "oferta.semana-2",
+        "version": 1,
+        "title": "Retrato K",
+        "validFrom": "2026-10-08T09:00:00Z",
+        "validTo": "2026-10-22T09:00:00Z",
+        "price": {
+          "currency": "fichas",
+          "amount": 40
+        },
+        "grants": [
+          {
+            "item": "retrato.k"
+          }
+        ],
+        "limit": 1
+      },
+      {
+        "id": "oferta.semana-4",
+        "version": 1,
+        "title": "Retrato L",
+        "validFrom": "2026-10-22T09:00:00Z",
+        "validTo": "2026-11-05T09:00:00Z",
+        "price": {
+          "currency": "fichas",
+          "amount": 40
+        },
+        "grants": [
+          {
+            "item": "retrato.l"
+          }
+        ],
+        "limit": 1
+      },
+      {
+        "id": "oferta.semana-6",
+        "version": 1,
+        "title": "Retrato M",
+        "validFrom": "2026-11-05T09:00:00Z",
+        "validTo": "2026-11-26T09:00:00Z",
+        "price": {
+          "currency": "fichas",
+          "amount": 40
+        },
+        "grants": [
+          {
+            "item": "retrato.m"
+          }
+        ],
+        "limit": 1
+      }
+    ],
+    "dampers": {
+      "consolation": {
+        "afterLosses": 3,
+        "perDay": 1,
+        "reward": [
+          {
+            "currency": "moedas",
+            "amount": 15
+          },
+          {
+            "passXp": 60
+          }
+        ],
+        "suggest": "easier_match"
+      },
+      "trail": {
+        "id": "trilha.serie",
+        "name": "Trilha da série",
+        "thresholds": [
+          0,
+          60,
+          150,
+          300,
+          500,
+          800,
+          1200,
+          1700,
+          2300,
+          3000
+        ],
+        "points": {
+          "played": 2,
+          "topHalf": 3,
+          "podium": 2,
+          "win": 3,
+          "loss": 0
+        },
+        "protection": {
+          "maxLossPerMatch": 5,
+          "tierBuffer": 10
+        }
+      }
+    },
+    "luck": {
+      "enabled": false,
+      "tables": [
+        {
+          "id": "sorte.envelope",
+          "version": 1,
+          "name": "Envelope surpresa",
+          "currency": "moedas",
+          "cost": 100,
+          "odds": [
+            {
+              "item": "retrato.r",
+              "p": 0.05
+            },
+            {
+              "item": "retrato.s",
+              "p": 0.1
+            },
+            {
+              "item": "retrato.q",
+              "p": 0.15
+            },
+            {
+              "item": "retrato.t",
+              "p": 0.2
+            },
+            {
+              "currency": "moedas",
+              "amount": 50,
+              "p": 0.5
+            }
+          ],
+          "pity": {
+            "after": 8,
+            "pool": [
+              "retrato.r"
+            ]
+          }
+        }
+      ]
+    },
+    "safety": {
+      "adultAge": 18,
+      "childBelow": 12,
+      "trustSelfDeclaredAdult": false,
+      "minorNeedsGuardian": true,
+      "minorMonthlyLimitCents": 3000,
+      "luckForMinors": false,
+      "paidLuck": false
+    },
+    "realPurchase": {
+      "enabled": false,
+      "products": [
+        {
+          "id": "passe.premium.real",
+          "version": 1,
+          "name": "Trilha premium com dinheiro real",
+          "priceCents": 1490,
+          "grants": "pass.premium"
+        }
+      ]
+    },
+    "experiments": [
+      {
+        "id": "ab.missoes-primeiro",
+        "version": 1,
+        "title": "Missões antes do passe no caderno",
+        "startsAt": "2026-10-01T09:00:00Z",
+        "endsAt": "2026-10-29T09:00:00Z",
+        "target": "ui",
+        "variants": [
+          "padrao",
+          "missoes-primeiro"
+        ]
+      }
+    ]
+  }
+}

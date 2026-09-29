@@ -5,20 +5,19 @@ orientar leitura e verificação; confirme cada uma no código do projeto. Não 
 AGENTS, `package.json` nem a documentação oficial dos navegadores e bibliotecas.
 
 > **Curadoria** — revisado em 2026-09-14.
-> **Contempla:** a stack que o laboratório roda hoje — Node ≥ 22 (`node --test`,
+> **Contempla:** a stack web corrente — Node ≥ 22 (`node --test`,
 > `WebSocket` global), Vite 6.x, three.js 0.17x. Versões anteriores mudam APIs de
 > cor e de renderer no three; confirme no `package.json` do projeto antes de
 > aplicar qualquer item de renderização.
 > **Verificar:** `npm test` do projeto deve passar, e a captura headless do
-> `capture-bench.mjs` deve produzir um quadro com a cena carregada — não um
+> projeto deve produzir um quadro com a cena carregada — não um
 > screenshot em branco. Um teste unitário verde não prova comportamento no
 > navegador.
 > **Limites:** o harness não abre navegador, não mede quadro nem heap. Medições
 > entram por `record --kind budget`, observações por `record --kind observation`.
 > Requisitos de loja (itch.io, Poki) e wrappers ficam na fonte oficial.
-> **Exemplo rastreável:** os aprendizados de renderização abaixo vêm de casos do
-> laboratório com arquivo e data — `games/corrida-rabisco/scripts/capture-bench.mjs`
-> (2026-09-11) e `games/desnhe-um-cavalo/docs/qa.md` (2026-09-11).
+> **Exemplo rastreável:** os aprendizados de renderização abaixo vêm de casos com
+> arquivo e data; registre o seu por `record`, com o arquivo da prova.
 
 ## Executar e verificar
 
@@ -51,8 +50,7 @@ AGENTS, `package.json` nem a documentação oficial dos navegadores e biblioteca
   diferentes; adapte o enquadramento ou preserve o aspect-ratio. Meça a proporção
   real do canvas da corrida ao redimensionar. No cenário de lotação máxima, reserve
   espaço para rótulos sem reduzir o personagem a um ícone ilegível. Compare o mesmo
-  traço em desktop, celular e corrida cheia. Caso: `games/desnhe-um-cavalo/docs/qa.md`
-  no laboratório, 11/09/2026.
+  traço em desktop, celular e corrida cheia.
 
 ### Jogo embutido e troca de versão
 
@@ -91,16 +89,14 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
   - **Concorrência:** sobre HTTP/2, dezenas de arquivos pequenos esperam mais por idas e voltas
     do que por bytes. Meça a concorrência do carregador em produção antes de juntar arquivos
     em sprite.
-  - **Caso Distrito Rabisco (23/09/2026):**
-    - FLAC: −43% de bytes, com amostras idênticas em Safari 17.6, Chrome e Firefox.
-    - Concorrência em produção: 4 → 16 downloads levou a espera de 1,79 s a 0,57 s; 64 piorou.
-      O valor ótimo é local.
+  - **Prova:** compare os bytes do FLAC com os do WAV e confira amostras idênticas em Safari, Chrome
+    e Firefox. Na concorrência, meça em produção: subir o número de downloads simultâneos ajuda até um
+    ponto e piora depois. O valor ótimo é local.
   - **Hipótese com prova pendente:** no iOS, a sessão `ambient` padrão silencia Web Audio com a
     chave de silêncio, e elemento de mídia pode seguir outra regra. `navigator.audioSession`
     (Safari 16.4+) escolhe a categoria. Teste no aparelho.
-- Confira os arquivos publicados antes de cada release; foi a fraqueza mais comum no
-  acervo externo, inclusive em projetos com loop e renderização bem resolvidos
-  ([origem](../../references/sources.md#acervo-externo-swipe)):
+- Confira os arquivos publicados antes de cada release; é uma fraqueza comum,
+  inclusive em projetos com loop e renderização bem resolvidos:
   - GLB acima de ~1 MB com meshopt ou Draco e quantização; o script de bake declarar
     a extensão não prova que o arquivo publicado a tem. Em bibliotecas de animação,
     meça também o chunk JSON, que pode dominar o arquivo e escapa do meshopt.
@@ -117,6 +113,71 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
     de produção nos loaders, e a mídia do loader depois dos bytes críticos.
   - Meça bytes transferidos e decodificados até o primeiro quadro jogável; o resto da
     sessão entra por manifesto com prioridade e concorrência limitada.
+
+### Primeiro minuto como pacote
+
+Vale para jogo para celular (inclusive o web empacotado em Capacitor/Electron) e para web de
+carga longa.
+
+- **Quando aplicar.** A primeira carga completa passa do tempo que a pessoa espera parada.
+  Se o jogo inteiro cabe na primeira carga, não há o que cobrir: leve tudo no pacote e use o
+  tutorial só como ensino.
+- **Como.**
+  - **Declare em dado o pacote do primeiro minuto:** a cena ou arena da primeira partida, o kit
+    base do personagem inicial, a UI, os sons do verbo e a voz do tutorial. Uma constante numa
+    tabela de dados que nomeia o local da primeira partida é o que permite garantir que o
+    conteúdo esteja no pacote.
+  - **O resto vai para um manifesto em segundo plano**, na ordem provável do jogador: outras
+    arenas, skins, voz por personagem, música longa, eventos.
+  - **O tutorial roda sem esperar o manifesto,** local e contra bots se for multiplayer.
+  - **O fim do tutorial cai em conteúdo já baixado,** ou num pedido honesto com o tamanho
+    ("<tamanho> para continuar", depois do onboarding).
+  - **Depois do primeiro minuto, catálogo grande vem sob demanda:** cada arena, skin ou item
+    baixa quando é aberto, e o próximo destino provável entra em pré-carga.
+  - **Evite a tela de espera bloqueante.** Uma cena própria que pede mais de um gigabyte, sem
+    nada jogável no pacote, é o padrão a evitar. Se a espera for inevitável, mostre tamanho e
+    progresso e ofereça algo jogável que já esteja no pacote, como um modo de treino no mesmo
+    diálogo do download.
+- **A maquinaria comum em jogos de carga longa.** Ponha estas peças no carregador antes de ter
+  muito conteúdo:
+  - **Adiar só acréscimo.** O adiado nunca é a peça da primeira partida. Adie
+    apenas a alta resolução, as vozes extras e as músicas alternativas, e deixe a base de cada
+    textura no pacote. Vale com o piso visual: o que aparece no primeiro minuto já tem o
+    acabamento aprovado, e trocar por alta resolução depois só é aceitável para conteúdo que
+    ainda não apareceu.
+  - **Manifesto com hash e núcleo marcado.** Hash por arquivo e versão no manifesto. O bootstrap
+    fica marcado para que verificação e reparo nunca o apaguem.
+  - **Camadas com versão própria.** Dados, código e modos versionam separados do app. Arquivo
+    grande estável ganha diff; o resto é checado por hash e baixado de novo. Dado novo tem
+    mensagem própria ("dado atualizado, reiniciando"), distinta de "atualize o app".
+  - **Fila com prioridade e nova tentativa.** Três níveis, obrigatório, importante e opcional,
+    com teto de tentativas e espera crescente. Retomada
+    ligada à reconexão.
+  - **Avisos antes de gastar.** Tamanho sempre. Rede celular e espaço onde a plataforma permite:
+    no navegador, `navigator.storage.estimate()` para espaço; no empacotado, o aviso nativo.
+  - **Em multiplayer, a sala confere o conteúdo de cada jogador** antes de começar, com o
+    estado de download do mapa por jogador.
+  - **Padrões locais primeiro.** A config remota começa pelos valores embarcados e sincroniza
+    sem bloquear. Não condicione a partida offline a uma chamada que pode falhar: capture o
+    erro, registre e siga com os padrões locais.
+  - **A barra mostra o progresso do carregador,** não uma animação independente. A espera pode
+    ensinar: dicas filtradas pelo nível da conta.
+- **O que verificar.**
+  - **Carga fria com rede limitada** (perfil de celular do DevTools): tempo até o primeiro input
+    e bytes até o primeiro quadro jogável.
+  - **Manifesto bloqueado:** o tutorial precisa terminar inteiro sem nenhum arquivo dele.
+  - **Fim do tutorial:** não pode bater em arquivo ausente.
+  - **Veterano:** com save, pula o tutorial e recebe a espera com progresso.
+  - **Rede derrubada no meio:** o download retoma e o jogo abre offline com os padrões locais.
+  - **Reparo:** apagar um arquivo do manifesto faz ele voltar, e o bootstrap nunca some.
+- **O que invalida.**
+  - **Alongar ou travar o tutorial para esconder a carga.** O primeiro minuto precisa ser bom
+    como ensino, e o download só aproveita o tempo dele.
+  - **Rebaixar o acabamento para caber no pacote.** Levar uma versão `_low` do conteúdo no
+    pacote seria corte do piso aprovado. Adie o conteúdo em vez de degradá-lo.
+- **Limites.**
+  - Nenhum tempo de carga foi medido para esta seção.
+  - Retenção não foi medida; "feito para reter" é inferência.
 
 ## Performance e orçamentos
 
@@ -145,8 +206,8 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
   sons, manifestos e bibliotecas chamados dinamicamente; confira disponibilidade,
   decodificação e integridade dos arquivos, sem trocar qualidade por tamanho.
   “HTML único” só é autônomo se suas dependências também forem incorporadas.
-  Caso: Só Um, QA-EXP-C05 (22/09/2026), CSS hoisted sobreposto pelo legado e áudio/
-  PeerJS ausentes no dist. O caso não invalida bundlers nem certifica arte ou áudio.
+  Exemplos do que aparece: CSS hoisted sobreposto pelo legado e áudio/PeerJS ausentes no
+  dist. Isso não invalida bundlers nem certifica arte ou áudio.
 - Cache de assets:
   - **Imutável só com versão:** `immutable` com `max-age` longo só é seguro em URL que muda
     quando o conteúdo muda (hash no nome ou `?v=` com o hash). Manifestos e índices sem versão
@@ -156,14 +217,14 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
     forçar a consulta condicional.
   - **404:** uma regra de cabeçalho por caminho também vale para 404; uma URL errada fica em
     cache pelo mesmo prazo.
-  - **Prova:** uma visita com a cópia antiga guardada recebe a versão nova. Caso Distrito Rabisco
-    (23/09/2026): pedido comum devolveu a cópia velha sem consultar o servidor, e `no-cache`
-    trouxe a nova em Chrome 154, Safari 17.6 e Firefox 156.
+  - **Prova:** uma visita com a cópia antiga guardada recebe a versão nova. Um pedido comum
+    pode devolver a cópia velha sem consultar o servidor, e `no-cache` traz a nova; confira nos
+    navegadores-alvo.
   - **Pasta inteira imutável:** uma regra por pasta (`/(audio|sfx|music)/(.*)`) pega também os
     manifestos e as mídias de nome fixo que ela guarda. Sem versão na URL, a pasta leva `max-age`
-    curto sem `immutable` (1 dia nos jogos do estúdio, 26/09/2026); o `hostinger_deploy.py` serve
-    `.json`, `.md`, `.txt` e `.webmanifest` com `no-cache` em qualquer pasta. Caso Rabisco War
-    (26/09/2026): `voice/manifest.json` e `sfx-map.json` saíam imutáveis por um ano.
+    curto sem `immutable` (um dia, por exemplo); o script de deploy do framework serve
+    `.json`, `.md`, `.txt` e `.webmanifest` com `no-cache` em qualquer pasta. Sem isso,
+    manifestos de nome fixo podem sair imutáveis por um ano.
   - **Limite:** o cabeçalho do host só se confirma num deploy de prévia.
 - Configuração pública do build (`import.meta.env.VITE_*`, flags do `vite.config`):
   - **Falha muda:** o Vite compila sem erro com a variável ausente e o recurso some do ar
@@ -172,11 +233,10 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
   - **Declarar:** `deploy.env` no `workspace.json`: `{"NOME": null}` vem da máquina (ambiente
     ou `.env*` do módulo, nunca do Git); `{"NOME": "valor"}` é fixo e versionado, só para o
     que é público; `""` desliga de propósito. O `gameops deploy` bloqueia variável ausente e
-    `VITE_` lida pelo código sem declaração; o `hostinger_deploy.py`, também no atalho
+    `VITE_` lida pelo código sem declaração; o script de deploy estático, também no atalho
     `npm run deploy`, recusa o build que não contém cada `VITE_` com valor.
-  - **Caso:** a saída da Vercel (25–28/09/2026) publicou rabisco.net, Boom, Fight e Arena sem
-    `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`: placar e comunidade fora do ar, com
-    testes e conferência por hash verdes. Só a leitura do bundle servido mostrou `env={}`.
+  - **Prova:** testes e conferência por hash passam com a variável ausente; só a leitura do
+    bundle servido mostra `env={}`. Leia o bundle publicado depois de trocar de hospedagem.
 - Lojas web (itch.io, Poki, Newgrounds) e wrappers (Electron, Tauri, Capacitor) têm
   requisitos próprios — consulte a fonte oficial.
 - Empacotar o mesmo jogo para desktop, Steam e lojas móveis (fatos de 24/09/2026; o
@@ -200,8 +260,8 @@ não exige adotar o runtime do fornecedor. [Origem](../../references/sources.md#
 
 ## Telemetria de produto
 
-Regras que valem para qualquer jogo web medido (caso de origem: auditoria GA4 do laboratório,
-24/09/2026, 15 cópias da tag e três camadas de eventos). Hipótese de valor, não promessa de ganho.
+Regras que valem para qualquer jogo web medido (auditoria de tag e de camadas de eventos).
+Hipótese de valor, não promessa de ganho.
 
 - **Uma tag, cópias idênticas.** Se cada jogo leva a própria cópia, um teste compara todas
   ignorando só a identidade (`game_id`, `game_name`). Deriva entre cópias foi o defeito mais comum.
@@ -228,21 +288,19 @@ Regras que valem para qualquer jogo web medido (caso de origem: auditoria GA4 do
   `game.test.mjs`, `src/engine/core/loop.js` e `headless/env_server.ts`.
 - Não abre navegador, não mede quadro nem heap; registre medições com
   `record --kind budget` e observações com `record --kind observation`.
-- Captura de WebGL sem navegador aberto (aprendizado Corrida Rabisco, 2026-09-11): em Mac
+- Captura de WebGL sem navegador aberto: em Mac
   com GPU, `chrome --headless=new --use-angle=metal --remote-debugging-port=0` renderiza o
   pipeline completo (SwiftShader em VM não conclui). `--screenshot` sai antes da cena
   carregar e `--virtual-time-budget` nunca termina com `requestAnimationFrame`; conecte pelo
   DevTools Protocol (`WebSocket` nativo do Node ≥ 22), espere um status da própria página
-  informar quadros e só então `Page.captureScreenshot`. Referência:
-  `games/corrida-rabisco/scripts/capture-bench.mjs`.
+  informar quadros e só então `Page.captureScreenshot`.
 
 Núcleo: [ciclo de vida](../../recipes/lifecycle.md), [visual](../../recipes/visual.md),
 [feel](../../recipes/feel.md), [produção](../../recipes/production.md).
 
 ## Aprendizados de renderização e medição
 
-Extraídos de casos WebGL/WebGPU de setembro de 2026; confirmar no carregador e no
-backend instalado. [Origem](../../references/sources.md#aprendizados-de-aplicações).
+Extraídos de casos WebGL/WebGPU; confirmar no carregador e no backend instalado.
 
 - Inspecione os objetos após o carregamento. Nomes normalizados, adaptadores de canvas
   e formatos de textura podem diferir do arquivo exportado. Teste com o carregador
@@ -277,7 +335,7 @@ backend instalado. [Origem](../../references/sources.md#aprendizados-de-aplicaç
   recorte ampliado lado a lado. A regra não vale para peças grandes ou vistas de perto,
   onde o chanfro pega luz.
 - Geometria gerada por grade (marching cubes/tetrahedra, SDF) também precisa seguir o erro
-  na tela da escala em que vai aparecer. Uma grade fixa de 3,5 mm fez as mãos somarem 85%
+  na tela da escala em que vai aparecer. Uma grade fixa fina fez as mãos somarem a maior parte
   dos triângulos de cada personagem numa câmera de cima, onde elas ocupam poucos pixels.
   Gere por escala, mantendo a malha fina onde ela é vista de perto (menu, retrato). Prove
   com pose e câmera fixas, comparando com o ruído de capturas iguais.
@@ -286,7 +344,7 @@ backend instalado. [Origem](../../references/sources.md#aprendizados-de-aplicaç
   na sua porta, em rodadas alternadas, e compare só pares da mesma rodada. O ruído entre
   rodadas pode ser maior que o efeito medido.
 - Renderer de traço por pós-processo (contorno e hachura lidos de um buffer de dados,
-  como o de tinta dos Rabiscos): todo material próprio escreve o mesmo contrato do
+  como um renderer de tinta): todo material próprio escreve o mesmo contrato do
   buffer (tom, caneta, normal). Sombreamento amplo vai como tom que o pós converte em
   hachura; modos de tinta chapada leem como mancha. Linha procedural fina usa um modo
   contínuo (aguada) para não serrilhar. Verifique ampliando a captura em movimento.
@@ -295,7 +353,7 @@ backend instalado. [Origem](../../references/sources.md#aprendizados-de-aplicaç
 - Miniatura ou retrato gerado pelo mesmo renderer: renderize no tamanho de exibição
   (× DPR). Traço medido em pixels afina quando a imagem é reduzida depois.
 - Efeitos num buffer sem transparência somem por escala ou por estágios de tom; a
-  opacidade não participa. Caso e prova: Guerra dos Rabiscos, QA de 23/09/2026.
+  opacidade não participa.
 - Ao passar de câmera lateral para perspectiva 2.5D com terreno extrudado, o plano dos
   personagens precisa ir para cima do bloco (atrás da borda da frente). Mantido à frente da
   fachada, como na vista lateral, o personagem parece flutuar diante do prédio. Uma sombra
@@ -305,8 +363,8 @@ backend instalado. [Origem](../../references/sources.md#aprendizados-de-aplicaç
 - Nomes reservados do GLSL (`patch`, `sample`, `input`, `output`, `filter`) quebram a
   compilação sem erro de JavaScript. Leia o log do programa no console do navegador.
 - Planejador de IA que simula num clone do mundo real: desligue os cálculos que só servem
-  à verificação (hash de 2 MiB do terreno por explosão, por exemplo). Nesse caso a IA
-  passou de 5 s para 0,4 s de CPU por plano. Caso: Guerra dos Rabiscos, 24/09/2026.
+  à verificação (hash de 2 MiB do terreno por explosão, por exemplo). Meça o CPU por
+  plano antes e depois de desligar.
 - Configuração de elenco ou slots copiada com `[...lista]` compartilha os objetos
   internos. Uma partida que reescreve um campo contamina a partida seguinte. Copie cada
   slot (`map((slot) => ({ ...slot }))`) e teste duas criações seguidas.
@@ -317,8 +375,7 @@ Persistência, pausa e descarte dos buffers de animação/áudio seguem as recei
 
 ## Aprendizados de páginas interativas
 
-Extraídos da landing do Universo Rabisco, de 23/9/2026 (caso registrado no laboratório, em
-`apps/universo-rabisco/docs/aprendizados.md`). Valem para landings, hubs e páginas com canvas, camadas e 2.5D; confirmar no navegador de destino.
+Valem para landings, hubs e páginas com canvas, camadas e 2.5D; confirmar no navegador de destino.
 
 - **Layout decidido cedo.** Um modo que muda a altura da página (palco fixo, caderno 3D, galeria
   horizontal) precisa ser aplicado no carregamento, e não quando o código da seção chega. Senão,
@@ -352,4 +409,4 @@ Extraídos da landing do Universo Rabisco, de 23/9/2026 (caso registrado no labo
   e que não devem disparar.
 
 Limites: observado em Chromium de desktop e em emulação de celular; sem aparelho físico
-nem rede móvel real. Os números de peso são do caso e não se transferem.
+nem rede móvel real. Os números de peso são exemplos e não se transferem.

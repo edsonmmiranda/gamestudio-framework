@@ -1,0 +1,20 @@
+{
+  "name": "@alanstudio/gamification",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Gamificação do estúdio: catálogo com hash por seção, livro-razão com origem rotulada, relógios, passe, missões, loja, amortecedores, sorte desligada e proteção de menor por padrão. Sem dependências.",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "simulate": "node tools/simulate.mjs",
+    "rehash": "node tools/rehash.mjs",
+    "schema": "node tools/export-schema.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

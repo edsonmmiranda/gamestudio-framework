@@ -1,0 +1,1620 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alanstudio.local/schemas/gamification-catalog.schema.json",
+  "title": "Catálogo de gamificação do estúdio",
+  "type": "object",
+  "required": [
+    "format",
+    "id",
+    "version",
+    "sections"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "format": {
+      "const": "alanstudio.gamification/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{16}$"
+    },
+    "sections": {
+      "type": "object",
+      "required": [
+        "series",
+        "currencies",
+        "clocks",
+        "season",
+        "pass",
+        "rewards",
+        "missions",
+        "cosmetics",
+        "store",
+        "safety"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "series": {
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "games"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "games": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "event"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "event": {
+                    "type": "string",
+                    "enum": [
+                      "match.finished",
+                      "level.won"
+                    ]
+                  },
+                  "players": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "waves": {
+                    "type": "boolean"
+                  },
+                  "color": {
+                    "type": "string"
+                  },
+                  "art": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "currencies": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "name",
+              "earned",
+              "purchasable"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "earned": {
+                "type": "boolean"
+              },
+              "purchasable": {
+                "type": "boolean"
+              },
+              "expiresWith": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "season",
+                  "weekly",
+                  null
+                ]
+              },
+              "dailyCap": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              },
+              "icon": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "clocks": {
+          "type": "object",
+          "required": [
+            "resetHourUtc",
+            "weekStartsOn",
+            "list"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "resetHourUtc": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 23
+            },
+            "weekStartsOn": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 6
+            },
+            "list": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "period",
+                  "resets",
+                  "accumulates",
+                  "expires"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "period": {
+                    "type": "string",
+                    "enum": [
+                      "daily",
+                      "weekly",
+                      "season"
+                    ]
+                  },
+                  "resets": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "accumulates": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "expires": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "season": {
+          "type": "object",
+          "required": [
+            "id",
+            "version",
+            "name",
+            "validFrom",
+            "validTo",
+            "endWarningDays"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "validFrom": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "validTo": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endWarningDays": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "pass": {
+          "type": "object",
+          "required": [
+            "id",
+            "version",
+            "season",
+            "tiers",
+            "premium",
+            "xp"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "season": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tracks": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "free": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "premium": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "tiers": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "xp",
+                  "free",
+                  "premium"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "xp": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "free": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "currency": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "amount": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "item": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "passXp": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "passTokens": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      }
+                    }
+                  },
+                  "premium": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "currency": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "amount": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "item": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "passXp": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "passTokens": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "premium": {
+              "type": "object",
+              "required": [
+                "price"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "price": {
+                  "type": "object",
+                  "required": [
+                    "currency",
+                    "amount"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            },
+            "xp": {
+              "type": "object",
+              "required": [
+                "match",
+                "level",
+                "dailyCap",
+                "idle"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "match": {
+                  "type": "object",
+                  "required": [
+                    "base",
+                    "cap"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "base": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "topHalf": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "podium": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "win": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "cap": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "level": {
+                  "type": "object",
+                  "required": [
+                    "base",
+                    "cap"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "base": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "perStar": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "cap": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "dailyCap": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1
+                },
+                "idle": {
+                  "type": "object",
+                  "required": [
+                    "minDurationS"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "minDurationS": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "tokens": {
+              "type": "object",
+              "required": [
+                "xpPerToken"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "xpPerToken": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        },
+        "rewards": {
+          "type": "object",
+          "required": [
+            "currency"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "currency": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "match": {
+              "type": "object",
+              "required": [
+                "base"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "base": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "topHalf": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "podium": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "win": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "level": {
+              "type": "object",
+              "required": [
+                "base"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "base": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "perStar": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "missions": {
+          "type": "object",
+          "required": [
+            "daily",
+            "pool"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "daily": {
+              "type": "object",
+              "required": [
+                "slots",
+                "freeRerolls"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "slots": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "freeRerolls": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            "weekly": {
+              "type": "object",
+              "required": [
+                "slots"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "slots": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "pool": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "version",
+                  "cycle",
+                  "title",
+                  "when",
+                  "goal",
+                  "reward"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "version": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "cycle": {
+                    "type": "string",
+                    "enum": [
+                      "daily",
+                      "weekly",
+                      "season"
+                    ]
+                  },
+                  "game": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "when": {
+                    "type": "string",
+                    "enum": [
+                      "match.finished",
+                      "level.won",
+                      "level.lost"
+                    ]
+                  },
+                  "where": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "field",
+                        "op"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "field": {
+                          "type": "string",
+                          "enum": [
+                            "placement",
+                            "players",
+                            "kills",
+                            "durationS",
+                            "wave",
+                            "won",
+                            "mode",
+                            "idle",
+                            "stars",
+                            "level"
+                          ]
+                        },
+                        "op": {
+                          "type": "string",
+                          "enum": [
+                            "==",
+                            "!=",
+                            "<",
+                            "<=",
+                            ">",
+                            ">="
+                          ]
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "string",
+                            "boolean"
+                          ]
+                        },
+                        "ref": {
+                          "type": "string",
+                          "enum": [
+                            "placement",
+                            "players",
+                            "kills",
+                            "durationS",
+                            "wave",
+                            "won",
+                            "mode",
+                            "idle",
+                            "stars",
+                            "level"
+                          ]
+                        },
+                        "times": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  "goal": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "sum": {
+                        "type": "string",
+                        "enum": [
+                          "placement",
+                          "players",
+                          "kills",
+                          "durationS",
+                          "wave",
+                          "won",
+                          "mode",
+                          "idle",
+                          "stars",
+                          "level"
+                        ]
+                      },
+                      "distinct": {
+                        "type": "string",
+                        "enum": [
+                          "game"
+                        ]
+                      },
+                      "target": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  },
+                  "reward": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "currency": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "amount": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "item": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "passXp": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "passTokens": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      }
+                    },
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "firstTime": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "title",
+              "when",
+              "reward"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "when": {
+                "type": "string",
+                "enum": [
+                  "match.finished",
+                  "level.won",
+                  "level.lost"
+                ]
+              },
+              "game": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "where": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "field",
+                    "op"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "placement",
+                        "players",
+                        "kills",
+                        "durationS",
+                        "wave",
+                        "won",
+                        "mode",
+                        "idle",
+                        "stars",
+                        "level"
+                      ]
+                    },
+                    "op": {
+                      "type": "string",
+                      "enum": [
+                        "==",
+                        "!=",
+                        "<",
+                        "<=",
+                        ">",
+                        ">="
+                      ]
+                    },
+                    "value": {
+                      "type": [
+                        "number",
+                        "string",
+                        "boolean"
+                      ]
+                    },
+                    "ref": {
+                      "type": "string",
+                      "enum": [
+                        "placement",
+                        "players",
+                        "kills",
+                        "durationS",
+                        "wave",
+                        "won",
+                        "mode",
+                        "idle",
+                        "stars",
+                        "level"
+                      ]
+                    },
+                    "times": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "reward": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "item": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "passXp": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "passTokens": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "cosmetics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "character",
+              "name",
+              "kind",
+              "rarity",
+              "origin",
+              "duplicate"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "character": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "visual",
+                  "retrato"
+                ]
+              },
+              "rarity": {
+                "type": "string",
+                "enum": [
+                  "comum",
+                  "rara",
+                  "epica",
+                  "lendaria"
+                ]
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "inicio",
+                  "passe",
+                  "loja",
+                  "evento",
+                  "conquista",
+                  "cofre"
+                ]
+              },
+              "season": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "art": {
+                "type": "string"
+              },
+              "validFrom": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "validTo": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "duplicate": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "item": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "passXp": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "passTokens": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "store": {
+          "type": "object",
+          "required": [
+            "currency",
+            "prices",
+            "rotation"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "currency": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "prices": {
+              "type": "object",
+              "required": [
+                "comum",
+                "rara",
+                "epica",
+                "lendaria"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "comum": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "rara": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "epica": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "lendaria": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "rotation": {
+              "type": "object",
+              "required": [
+                "slots",
+                "pool"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "slots": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "pool": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  }
+                }
+              }
+            },
+            "vault": {
+              "type": "object",
+              "required": [
+                "returnsAfterDays",
+                "pool"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "returnsAfterDays": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "pool": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  }
+                }
+              }
+            },
+            "starter": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              }
+            }
+          }
+        },
+        "offers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "title",
+              "validFrom",
+              "validTo",
+              "price",
+              "grants",
+              "limit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "validFrom": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "validTo": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "price": {
+                "type": "object",
+                "required": [
+                  "currency",
+                  "amount"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "currency": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              },
+              "grants": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "item": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                    },
+                    "passXp": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "passTokens": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                },
+                "minItems": 1
+              },
+              "limit": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "dampers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "consolation": {
+              "type": "object",
+              "required": [
+                "afterLosses",
+                "perDay",
+                "reward",
+                "suggest"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "afterLosses": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "perDay": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "reward": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "currency": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "item": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                      },
+                      "passXp": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "passTokens": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  },
+                  "minItems": 1
+                },
+                "suggest": {
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "easier_match"
+                  ]
+                }
+              }
+            },
+            "trail": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "thresholds",
+                "points",
+                "protection"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "thresholds": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "points": {
+                  "type": "object",
+                  "required": [
+                    "played",
+                    "topHalf",
+                    "podium",
+                    "win",
+                    "loss"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "played": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "topHalf": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "podium": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "win": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "loss": {
+                      "type": "integer",
+                      "maximum": 0
+                    }
+                  }
+                },
+                "protection": {
+                  "type": "object",
+                  "required": [
+                    "maxLossPerMatch",
+                    "tierBuffer"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "maxLossPerMatch": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "tierBuffer": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "luck": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "tables"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "tables": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "version",
+                  "name",
+                  "currency",
+                  "cost",
+                  "odds",
+                  "pity"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "version": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "currency": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "cost": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "odds": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "p"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "p": {
+                          "type": "number",
+                          "exclusiveMinimum": 0,
+                          "maximum": 1
+                        },
+                        "item": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        },
+                        "amount": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      }
+                    }
+                  },
+                  "pity": {
+                    "type": "object",
+                    "required": [
+                      "after",
+                      "pool"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "after": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "pool": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "safety": {
+          "type": "object",
+          "required": [
+            "adultAge",
+            "childBelow",
+            "trustSelfDeclaredAdult",
+            "minorNeedsGuardian",
+            "minorMonthlyLimitCents",
+            "luckForMinors",
+            "paidLuck"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "adultAge": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "childBelow": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "trustSelfDeclaredAdult": {
+              "type": "boolean"
+            },
+            "minorNeedsGuardian": {
+              "type": "boolean"
+            },
+            "minorMonthlyLimitCents": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "luckForMinors": {
+              "const": false,
+              "constMessage": "sorte para menor é recusada; o framework não liga isso (ECA Digital, art. 20)"
+            },
+            "paidLuck": {
+              "const": false,
+              "constMessage": "sorte paga é recusada; sorte só com moeda ganha (ECA Digital, art. 20)"
+            }
+          }
+        },
+        "realPurchase": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "products"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "version",
+                  "name",
+                  "priceCents",
+                  "grants"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                  },
+                  "version": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "priceCents": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "grants": {
+                    "type": "string",
+                    "enum": [
+                      "pass.premium"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "experiments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "startsAt",
+              "endsAt",
+              "target",
+              "variants"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "target": {
+                "type": "string",
+                "enum": [
+                  "ui"
+                ],
+                "enumMessage": "teste A/B só de interface; preço, chance e recompensa não entram em teste"
+              },
+              "variants": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
