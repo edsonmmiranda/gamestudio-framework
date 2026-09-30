@@ -113,6 +113,23 @@ o golpe — denuncia a costura. Som é o juice de maior retorno por esforço;
 verbo mudo continua sendo o defeito mais barato de corrigir e o mais caro
 de deixar.
 
+### Auditar eventos compostos antes de ampliar camadas
+
+- Uma lista de arquivos não preserva o contrato de um evento composto. Exporte
+  filhos, bases, curvas e controles com valores integrais e fonte/versionamento;
+  contagens de arrays omitidos não permitem reproduzir seu comportamento.
+- Valide ausências, ciclos, profundidade e total de nós fora do gatilho. Preserve
+  relações desabilitadas para diagnóstico, filhos compartilhados e zeros explícitos.
+  Estrutura válida não prova herança, interpolação, seleção de variantes ou unidades.
+- Confronte o grafo com as chamadas manuais existentes antes de ativá-lo. Um filho
+  já emitido por outra rota pode duplicar som e custo; resolver nomes e referências
+  antecipadamente evita pesquisa recursiva a cada evento.
+- Compare clipe-fonte, evento resolvido e chamada real do runtime. A fixture precisa
+  respeitar aliases, preparação anterior ao clipe e os limites entre ações. Em tempo
+  simulado acelerado, registre separadamente chamadas e vozes admitidas: orçamento
+  baseado no relógio de áudio não avança junto com a simulação. Essa prova não mede
+  latência física, FPS ou escuta.
+
 ## 3. REUSE → ADAPT → CREATE
 
 Ordem:
@@ -242,6 +259,10 @@ Detalhes de navegador ficam no [pack Web](../packs/platforms/web.md#conteúdo-e-
   - *Master PCM:* pode viajar num formato sem perdas, com o master como reserva do mesmo take.
   - *Conferência automática:* a do arquivo tem de ser automática; o FLAC traz o MD5 das
     amostras no cabeçalho.
+  - *Metadados e tamanho:* confira também canais, taxa, bits e duração; a igualdade de
+    samples não prova esses campos. Prefira o derivado apenas quando for menor: cabeçalhos
+    podem fazer um take curto crescer. Guardar masters de reserva aumenta o pacote em
+    disco, embora reduza a transferência normal; não confunda isso com economia de PCM.
   - *Conferência no destino:* uma vez por plataforma, compare as amostras decodificadas com o
     master.
   - *Formato com perda (Opus, AAC, MP3):* é decisão de produto com escuta humana. AAC e MP3
@@ -250,6 +271,56 @@ Detalhes de navegador ficam no [pack Web](../packs/platforms/web.md#conteúdo-e-
 - **A escolha de formato por capacidade declarada precisa de uma saída quando a decodificação
   falha.** Recusa de decodificação troca o formato daquele take e, na sessão, dos seguintes.
   Arquivo ausente só troca aquele take.
+- **Prova de cache antigo exige um controle que realmente permaneça antigo.** Arquivos
+  grandes podem não ficar armazenados ou ser expulsos durante a carga do jogo. Semeie a
+  resposta antiga nas condições de entrega (incluindo compressão), confirme que um fetch
+  default a reutiliza sem rede e só então teste a nova visita/revalidação do consumidor.
+  Um teste que recebeu a versão nova porque não havia cache não aprova invalidação.
+- **Limites de download e decode têm escopos diferentes.** Quando dois bancos compartilham
+  um contexto, um teto em cada carregador não limita o trabalho conjunto. Coordene a
+  decodificação no escopo necessário sem reduzir automaticamente os downloads paralelos.
+  Verifique chamadas reais à API com os bancos concorrentes, falha/retry e descarte;
+  compare tempos e amostras PCM sob limites diferentes. Um mock do contador não demonstra
+  o pico real. Contextos independentes continuam podendo somar trabalho: declare o escopo
+  do teto e prove transições de sessão antes de chamá-lo de limite de toda a aplicação.
+- **Rejeitar a espera não cancela um decoder nativo em andamento.** Quando a API não oferece
+  interrupção, descarte resultados tardios, mas mantenha a vaga até o trabalho terminar.
+  Caso contrário, cancelar e preparar novamente pode ultrapassar o teto. Trabalho ainda
+  na fila deve ser removido sem impedir outro consumidor. Prove cancelamento antes e depois
+  do início, e liberação única quando callback e promessa notificam o mesmo resultado.
+  Limitar tarefas não reduz o PCM final; poucos pontos de RSS não provam pico instantâneo,
+  economia fixa de RAM ou desempenho em aparelho não medido.
+- **Admissão de eventos e fontes reais são grandezas diferentes.** Uma janela curta de
+  admissão pode terminar antes da gravação e cada evento pode iniciar várias camadas.
+  Registre fontes agendadas, em execução pelo relógio, em fade e aguardando `ended`;
+  conte descarte separadamente. Propague o grupo explicitamente pelas receitas compostas,
+  sem depender do último evento global. Identidade ausente permanece desconhecida.
+  Confira os registros contra as chamadas reais à API e não retenha histórico ilimitado.
+  A contagem temporal não certifica audibilidade, e música transmitida exige ciclo próprio.
+- **Disputa de orçamento respeita a composição.** Selecione/verifique as camadas
+  antes da admissão, reserve espaço para o conjunto e remova o grupo antigo inteiro,
+  incluindo fontes agendadas. Uma decisão por camada pode deixar apenas um detalhe
+  tocando; verifique também receitas que chamam outras receitas com admissão própria.
+  Reproduza uma vaga restante, rejeição total e saturação de fontes com saída real.
+  Consistência do grupo não aprova prioridades, fades ou performance: meça o custo
+  e preserve a falha quando o alvo não for atingido.
+- **Compare a mixagem com a própria base antes de exigir igualdade binária.** Buffers
+  decodificados iguais podem produzir pequenas diferenças de ponto flutuante ao somar
+  camadas e processar dinâmica. Repita também cenas densas da mesma versão; fixe e
+  registre limites numéricos antes de revalidar o candidato, preservando as falhas.
+  Arquivo, agenda, velocidade e término continuam exigindo igualdade quando o contrato
+  é preservar o som. Um controle com alteração deliberada deve reprovar o comparador.
+  Tolerância numérica não aprova escuta nem serve para justificar corte de camadas.
+  Separe o custo da instrumentação do produto; menos nós não prova menor tempo.
+- **Reaproveitamento de nós exige propriedade e reset.** Se o perfil apontar custo
+  na criação de controles de volume, compare um cache limitado de nós desconectados.
+  Um controle não pode pertencer a duas fontes ativas; callback atrasado não pode
+  reciclar ou desconectar o nó da próxima reprodução. Cancele a automação anterior
+  antes de definir o novo valor e prove fade, cancelamento e loop em sequência.
+  O limite do cache restringe retenção ociosa, nunca sons. Descarte deve esvaziá-lo
+  e impedir devoluções tardias. Não estenda o resultado a filtros com memória ou
+  fontes de uso único. Menos alocações não prova menor p95 ou economia de RAM;
+  registre essas grandezas separadamente.
 - **Hipóteses com prova pendente:**
   - *Prioridade de vozes:* um teto global que recusa voz nova pode calar o som do próprio
     jogador. A alternativa de middleware é roubar a voz mais distante ou mais baixa. Meça as

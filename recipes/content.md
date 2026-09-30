@@ -164,3 +164,20 @@ em código ou se combinam como colagem animada.
 
 Referências: troca de assets em protótipo Unity, Ink `RE-INK-004/007/009`
 e LDtk `RE-LDTK-005/006/010` ([fontes](../references/sources.md)).
+
+### Peças de rig geradas a partir da arte validada pelo criador
+
+Aplicar quando um gerador de
+imagem produz as peças recortadas de um personagem cuja arte o criador já validou.
+
+- **Muita correção no pós-processamento indica uso errado da ferramenta.** Nesse caso, o problema não é o gerador. Pare de remendar a saída e mude o pedido.
+- **Escreva o prompt para o gerador em uso.** Um prompt escrito para outro modelo vira defeito:
+  - "fundo transparente", num modelo sem alfa, desenha um xadrez;
+  - "grade" e "células" desenham linhas e cartões atrás das peças;
+  - "estilo adesivo" desenha borda branca.
+- **Use o modelo como editor da arte validada.** A referência é o sprite validado pelo criador, com a legenda dizendo o que copiar. Peças escritas do zero perderam o traço e ignoraram a escala. O desmonte do sprite manteve rosto, traço e escala.
+- **Quando a vista importa, use uma referência só.** Uma prancha de várias vistas enviada junto do sprite misturou vistas e trocou a cor dos olhos.
+- **Diga o que não pode mudar,** como a cor dos olhos e a vista.
+- **Não peça uma peça isolada a um modelo de edição.** O pedido de "só uma peça do personagem" devolveu o personagem inteiro.
+- **Fundo:** uma cor lisa que não existe na paleta do personagem, depois o removedor de fundo do próprio serviço, em vez de chroma key caseiro.
+- **Recibo por imagem:** tarefa, prompt enviado, referências, hash, custo e resultado (aceita ou recusada, com o motivo).

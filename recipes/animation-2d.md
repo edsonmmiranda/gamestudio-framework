@@ -41,6 +41,14 @@ um processo que mantenha identidade, proporção, arma e pivô.
 
 ## Montagem e calibração
 
+Ao criar ou adaptar uma identidade, derive aparência, anatomia, equipamento e
+mecânicas das fontes canônicas do personagem. Registre divergências entre versões
+e a escolha adotada no brief existente. Reaproveitamento é uma decisão por
+componente: rig, clipe, arma, efeito e regra podem ter origens diferentes. Uma
+base conveniente não justifica trocar a identidade, fundir personagens ou impor
+uma correspondência exclusiva. Se a anatomia ou o gesto não encaixar, construa
+as peças e ações necessárias.
+
 Reproduza primeiro a pose de referência com o personagem equipado. Inspecione
 alfa, partes já pintadas, margens para sobreposição, chão embutido e contaminação
 por peças vizinhas. Registre fonte, recorte e consumidor no manifesto existente.
@@ -51,6 +59,31 @@ joelho, tornozelo, sola, empunhadura e boca da arma. Centro/borda do retângulo 
 são substitutos: a ponta da trança não é o pescoço. Transforme o ponto junto com
 origem do recorte, escala, orientação e matriz do pai; não calibre só na resolução
 original. Registre os dados onde o renderer realmente os consome.
+
+Não deduza um encaixe anatômico apenas porque dois slots coexistem em algum
+quadro do doador. Vistas de costas, nucas e desenhos alternativos podem usar
+registros independentes. Confira a peça efetivamente usada, o eixo e a escala
+nessa vista; preserve o registro próprio quando a relação herdada não representar
+a anatomia. A validação deve alcançar os clipes que ativam essa troca de desenho.
+
+Não remova famílias de slots apenas pelo nome. Uma peça chamada cabelo pode
+conter a nuca inteira em uma vista traseira. Inspecione a função no quadro
+efetivo antes de excluir um acessório; a prova deve exigir a cabeça nas vistas
+que dependem dessa peça, além de impedir duplicação na vista frontal.
+
+Determine o sentido longitudinal na própria ilustração antes de calibrar o osso.
+Em mangas, braceletes e botas, identifique qual abertura recebe a junta e qual
+termina na mão ou no pé. Uma cadeia IK pode fechar matematicamente com a peça
+invertida e deixar a extremidade pintada longe do membro seguinte. Compare os
+eixos sobre a textura e a montagem sem marcações, nos dois lados; valide também
+escala e sobreposição do encaixe. Repetir nos testes os mesmos pontos errados do
+gerador não constitui verificação independente.
+
+Declare o espaço de cada ponto: pés, centro físico, origem da peça e coordenadas
+do mundo. Uma caixa de dano relativa ao centro não recebe diretamente o Y de um
+socket relativo aos pés. Compare a geometria da simulação com o ponto transformado
+da arte efetivamente desenhada, nos dois sentidos; testar apenas números da mesma
+tabela repete o erro em vez de detectá-lo.
 
 Projétil que se solta da arma guarda o ponto de emissão no disparo. Feixe que
 permanece conectado resolve o encaixe na pose apresentada em cada quadro,
@@ -76,6 +109,11 @@ Defina poses-chave e instante de contato antes dos intervalos. Preparação, con
 recuperação e retorno precisam de silhuetas compreensíveis. Use curvas e arcos
 intencionais; interpolação suave não torna uma pose correta. Preserve o timing
 e as regras do jogo ao refinar o gesto.
+Quando o usuário aponta deformações em uma prova, reabra o julgamento visual
+mesmo com testes aprovados. Encaminhe a imagem exata ao responsável e exija
+antes/depois na mesma escala, corpo inteiro desobstruído e ciclo nos dois lados.
+Separe proporções/articulações de sobreposição ou recorte da câmera; fechar IK
+ou validar matrizes finitas não comprova uma pose convincente.
 
 **FK** controla rotações da hierarquia, útil para gestos livres. **IK** resolve
 juntas para um alvo, útil para mão na empunhadura e pé no apoio. Configure lado
@@ -94,6 +132,36 @@ Projétil/item solto nasce na transformação correta no evento lógico de soltu
 Capa/cauda podem atrasar o corpo, mas equipamento não deve escorregar. Pausa,
 morte, hitstop e reinício governam também os movimentos secundários. Mudar de
 estado encerra ou mistura o gesto conforme seu contrato, sem deixá-lo escondido.
+Congelamento físico não congela automaticamente um clipe visual. Itens soltos
+precisam de relógio de animação que suspenda e retome junto com o contato, sem
+acumular o tempo congelado. Compare quadros/matrizes apresentados, além da posição
+física. O intervalo interpolado de chegada ao impacto precede a janela totalmente
+congelada; distinga os dois ao validar, preservando a reprodução da falha antiga.
+
+Ao trocar um transporte, reveja a pose e o ponto de contato: pendurar um ator e
+apoiá-lo sobre uma asa são contratos diferentes. Origens coincidentes não provam
+solas ou mãos encostadas. Confira o desenho final e faça qualquer deslocamento de
+apresentação terminar sem salto antes da liberação do controle. Transporte que
+concluiu a entrega deve cumprir sua saída, inclusive na reentrada e no reinício.
+Oriente o veículo pela trajetória, não pelo lado para o qual o passageiro olha;
+teste retornos pelas duas laterais. Interpole progresso, deslocamentos e contato
+com os mesmos quadros e fator usados pelo ator. Misturar corpo interpolado com
+tempo discreto do veículo produz trancos mesmo com a física correta. Pausa deve
+conservar a pose, e reinício/teleporte deve descartar o quadro anterior incompatível.
+
+Arma equipada, arremessada e em repouso conserva identidade e multiplicidade.
+Ao trocar peças de um doador, não coloque a imagem do objeto completo em cada
+slot antigo: vários slots podem formar originalmente um único objeto. Confira
+também perfil físico, centro e escala do item solto. Giro e repouso devem usar a
+mesma referência espacial; compare centro desenhado e cápsula na soltura e no
+pouso, inclusive quando a orientação volta a ser igual.
+
+Se copiar um kit com IDs novos, audite o grafo de dependências e regras indexadas
+por nome. Remapear strings não preserva automaticamente sustentação, soltura,
+combos, sons ou efeitos. Preserve essas semânticas explicitamente sem alterar a
+base compartilhada. Teste manter ataque e soltar direção, manter direção e soltar
+ataque, encerramento, colisão e reinício, conforme o contrato do golpe; verificar
+apenas que ele começou não basta.
 
 Na integração, use as **cadências reais** de todos os níveis e variantes. Um ciclo
 isolado pode ser contínuo e ainda saltar quando a recuperação ocupa a preparação
@@ -138,6 +206,18 @@ substitui a cena real nem o movimento.
 Corrija a causa material: imagem, calibração, solver, ordem de desenho, relógio ou
 layout. Escolha uma causa por comparação; não cubra o problema com VFX.
 
+Antes de capturar, espere peças e texturas requeridas estarem decodificadas e o
+quadro ter sido apresentado. A presença de JSON, HTTP 200 ou um elemento no DOM
+não prova imagem carregada: um servidor pode devolver HTML no lugar do asset.
+Distinga atraso de carregamento de defeito de desenho sem aceitar peças ausentes
+na captura final.
+Confirme o renderer real antes dos ciclos: uma tela de depuração ou fallback pode
+preservar menus e simulação mesmo quando a cena final falhou ao carregar.
+Em telas com entrada animada, espere também o fim das transições finitas antes
+da captura de composição. Elementos presentes e texturas carregadas ainda podem
+estar transparentes ou fora de posição. Respeite a opacidade final intencional e
+não espere ciclos contínuos, como repouso do personagem, terminarem.
+
 **Movimento e leitura.** Execute ciclos completos no runtime em velocidade normal;
 reduza a velocidade depois para diagnosticar. Confira entrada/saída da ação, loop,
 pausa/retomada, reinício, variante e direção. Observe no tamanho final — 64/128 px
@@ -145,14 +225,70 @@ são exemplos mobile, não escala universal — e nos fundos relevantes. Verifiq
 contato com chão/alvo, papel, enquadramento e um trecho aprovado que compartilha
 o código. Olhe também o início e o fim do movimento, não só seu quadro bonito.
 
+Preserve a razão de aspecto ao recortar e montar tiras de QA. Esticar cada célula
+para preencher a prancha pode deformar o personagem na evidência. Compare antes
+e depois com escala, câmera e proporção documentadas; afaste o adversário quando
+a inspeção precisar mostrar articulações e empunhaduras sem obstrução.
+
 Não declare uma ação testada apenas porque clicou: confirme o estado resultante
 e espere o carregamento real. Capturas devem corresponder à revisão atual; use
 identificadores distintos para não confundir arquivos ou builds antigos.
+Anúncios visuais e sonoros de início devem acompanhar a liberação efetiva do
+controle. Um cronômetro paralelo pode terminar antes do desembarque; compare os
+eventos da sequência com o estado real, incluindo o arredondamento por tick.
 
 Outra falha pede correção e repetição do cenário afetado. Não repita a matriz
 inteira sem mudança ou dúvida nova. Encerre quando as correções estiverem
 verificadas e não houver defeito material conhecido no recorte. Limitação sem
 solução fica explícita, sem afirmar acabamento concluído.
+
+## Consumidores e renderizadores diferentes
+
+Seleção, retrato, HUD, catálogo e resultado podem ter contratos diferentes do
+renderer da partida. Leia o consumidor antes de exportar. Um PNG pode ser
+desenhado pelo tamanho nativo numa interface e pelas dimensões do quadro na cena;
+incorpore essa conversão antes da matriz local e da matriz do osso. SVGs podem
+já ter a origem normalizada: não desconte o pivô duas vezes. Resolva também
+subquadros e caminhos especiais do pipeline, sem adivinhar o formato pela ausência
+de extensão. Compare limites e posições relativas de peças compostas entre os
+dois renderizadores; ajustar o enquadramento não corrige proporções internas.
+
+Enquadre o ciclo completo da interface, incluindo rotações e armas estendidas;
+a caixa do primeiro quadro pode cortar os seguintes. Depois confira a escala
+percebida: um gesto herdado que percorre área enorme pode reduzir demais o corpo
+para caber no painel. Nesse caso, crie uma atuação compacta adequada à tela,
+mantendo proporções e contato dos pés. Ausência de clipping não garante boa leitura.
+
+Expressões precisam aparecer no consumidor final. Quatro nomes de clipe ou quatro
+caminhos de textura não provam quatro desenhos: compare o recorte renderizado do
+rosto, com escala, fundo e posição estáveis. Diferença de pixels detecta cópias,
+mas deslocar ou girar a mesma cabeça ainda não cria uma expressão; confira olhos,
+boca e intenção no tamanho de uso. Preserve um enquadramento comum aos estados.
+
+Ao reconstruir a interface, derive estados duradouros do snapshot quando ele
+for suficiente, sem depender de ter visto o evento original. Distinga entrada
+inicial, retorno após KO e outros transportes. Teste a reconstrução com eventos
+vazios e registre se foi acionada pelo fluxo público ou por instrumentação;
+uma reprodução isolada não comprova que o atalho citado seja acessível no jogo.
+
+Em KO, eliminação e reinício, confira também execuções secundárias e seus efeitos.
+Uma sequência suspensa durante o transporte pode reaparecer depois do retorno.
+Verifique a política de persistência do jogo; ao cancelar uma sequência, encerre
+as instâncias visuais/sonoras e impeça novos elos, além de limpar a lista lógica.
+
+Exercite mudanças repetidas de personagem e reabertura da tela. Elementos criados
+fora da árvore gerenciada podem sobreviver à limpeza do widget e se acumular.
+Confira nomes, armas, expressões, seleção salva e variantes antigas. Numa migração
+de elenco, percorra os consumidores reais — sorteio, adversários, treino,
+tutoriais e recompensas quando existirem — além da grade principal. Referências
+internas de reaproveitamento não são automaticamente identidades oferecidas ao
+jogador.
+
+Ao trocar o carregamento compartilhado, confira também personagens com diretórios
+próprios fora do catálogo de skins. Preload removido pode revelar uma rota de
+resolução incompleta e trocar o equipamento por arte genérica. Prove o diretório
+efetivamente desenhado em voo, contato e repouso; com a carga autoral atrasada,
+não apresente outra identidade como fallback transitório.
 
 ## Prova e limites
 
@@ -171,6 +307,13 @@ Registre no QA existente: personagem/cenário; fase, escala e fundo; defeito;
 causa e arquivo; correção; prova no runtime; regressão conferida; limites e quem
 avaliou. Binários de evidência seguem o destino do workspace. Separe validado por
 teste, inspecionado pelo agente e aprovado pelo criador.
+
+Um pacote integrado ainda pode ser estudo. Faça a matriz de conclusão refletir
+o kit e os consumidores exigidos pelo brief; não derive o universo esperado da
+própria lista que a prova pode omitir. Amostra de ataques, retratos ou teste
+estrutural não certifica movimento completo. Identifique personagem, ação, direção,
+versão e cobertura em cada prova; preserve recibos antigos e invalide somente as
+conclusões afetadas por mudanças posteriores.
 
 ## Fontes e condições de aplicação
 
